@@ -17,7 +17,7 @@ public static MiConexion miConexion;
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
+        MiConexion.cargarPropiedades(); // Cargar las propiedades antes de intentar la conexión
         miConexion=new MiConexion();
         miConexion.obtenerConexion();
     }
