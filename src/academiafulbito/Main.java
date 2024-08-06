@@ -6,6 +6,10 @@
 package academiafulbito;
 
 import academiafulbito.modelo.conexion.MiConexion;
+import academiafulbito.vista.interfaces.jifCategorias;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,6 +24,16 @@ public static MiConexion miConexion;
         MiConexion.cargarPropiedades(); // Cargar las propiedades antes de intentar la conexión
         miConexion=new MiConexion();
         miConexion.obtenerConexion();
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    new jifCategorias().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
 
 }

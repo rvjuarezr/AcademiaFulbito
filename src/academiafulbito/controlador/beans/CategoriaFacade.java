@@ -6,10 +6,13 @@
 package academiafulbito.controlador.beans;
 
 import academiafulbito.modelo.entidades.Categoria;
+import java.sql.SQLException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
 
 /**
  *
@@ -17,22 +20,13 @@ import javax.persistence.Persistence;
  */
 public class CategoriaFacade {
 
-    private EntityManagerFactory emf;
-    private EntityManager em;
+    EntityManager em=Persistence.createEntityManagerFactory("AcademiaFulbitoPU").createEntityManager();
 
-    public CategoriaFacade() {
-        emf = Persistence.createEntityManagerFactory("AcademiaFulbitoPU");
-        em = emf.createEntityManager();
-    }
-
-
-
-    public List<Categoria> obtenerTodasLasCategorias() {
-        return em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
-    }
-
-    public void cerrar() {
-        em.close();
-        emf.close();
+    public List<Categoria> obtenerTodasLasCategorias()  throws SQLException{
+        //return em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(Categoria.class));
+        Query q = (Query) em.createQuery(cq);
+        return q.getResultList();
     }
 }

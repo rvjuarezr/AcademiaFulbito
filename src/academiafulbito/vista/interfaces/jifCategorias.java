@@ -11,7 +11,14 @@
 
 package academiafulbito.vista.interfaces;
 
+import academiafulbito.controlador.beans.CategoriaFacade;
+import academiafulbito.modelo.entidades.Categoria;
+import academiafulbito.vista.utilidades.Utils;
+import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JDesktopPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,10 +27,14 @@ import javax.swing.JDesktopPane;
 public class jifCategorias extends javax.swing.JInternalFrame {
 
     JDesktopPane jdp;
+    public static CategoriaFacade categoriaFacade;
+    DefaultTableModel modelo;
     /** Creates new form jifCategorias */
-    public jifCategorias(JDesktopPane jdpModAF) {
+    public jifCategorias(/*JDesktopPane jdpModAF*/)  throws SQLException{
         initComponents();
-        jdp=jdpModAF;
+        //jdp=jdpModAF;
+        categoriaFacade = new CategoriaFacade();
+        listarCategorias(categoriaFacade.obtenerTodasLasCategorias());
     }
 
     /** This method is called from within the constructor to
@@ -84,7 +95,39 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     private org.edisoncor.gui.tabbedPane.TabbedPaneHeader tphCategorias;
     // End of variables declaration//GEN-END:variables
 
-    private void listarCategorias(){
+    private void listarCategorias(List<Categoria> listaCategorias){
+        // Selecciona el primer tab en un JTabbedPane
+        tphCategorias.setSelectedIndex(0);
 
+        // Obtiene el modelo de la tabla
+        modelo=(DefaultTableModel)tblCategorias.getModel();
+
+        // limpia los datos existentes en la tabla.
+        Utils.limpiarModeloTabla(modelo, tblCategorias);
+
+        // Verificar si la lista de socios tiene elementos
+        if (listaCategorias.size() > 0) {
+            System.out.println("LISTADO DE CATEGORIAS DESDE LA BBDD");
+            // Iterar sobre la lista de categorias y agregar cada categoria a la tabla
+            for (Categoria categoria : listaCategorias) {      
+
+                System.out.println("categoria.getIdCategoria():"+categoria.getIdCategoria()+" ,categoria.getNombre():"+categoria.getNombre()+" ,categoria.getEdadMax():"+categoria.getEdadMax()+" ,categoria.getEdadMax():"+categoria.getEdadMax());
+
+                // Crea un array de objetos con los datos de la categoria para agregar a la tabla.
+                Object[] fila = new Object[]{
+                    categoria.getIdCategoria(),
+                    categoria.getNombre(),
+                    categoria.getEdadMin(),
+                    categoria.getEdadMax()
+                };
+                modelo.addRow(fila); // Agregar la fila al modelo de la tabla
+            }
+            // Establece un renderizador personalizado para las celdas de la tabla.
+            tblCategorias.setDefaultRenderer(Object.class, new Utils());
+
+            // Establece el modo de selección de filas para permitir solo una selección a la vez.
+            tblCategorias.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        }
     }
 }
