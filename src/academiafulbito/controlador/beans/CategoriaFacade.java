@@ -20,7 +20,7 @@ import javax.persistence.criteria.CriteriaQuery;
  */
 public class CategoriaFacade {
 
-    EntityManager em=Persistence.createEntityManagerFactory("AcademiaFulbitoPU").createEntityManager();
+EntityManager em=Persistence.createEntityManagerFactory("AcademiaFulbitoPU").createEntityManager();
 
     public List<Categoria> obtenerTodasLasCategorias()  throws SQLException{
         //return em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
@@ -28,5 +28,4 @@ public class CategoriaFacade {
         cq.select(cq.from(Categoria.class));
         Query q = (Query) em.createQuery(cq);
         return q.getResultList();
-    }
 }
