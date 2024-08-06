@@ -111,7 +111,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
             // Iterar sobre la lista de categorias y agregar cada categoria a la tabla
             for (Categoria categoria : listaCategorias) {      
 
-                System.out.println("categoria.getIdCategoria():"+categoria.getIdCategoria()+" ,categoria.getNombre():"+categoria.getNombre()+" ,categoria.getEdadMax():"+categoria.getEdadMax()+" ,categoria.getEdadMax():"+categoria.getEdadMax());
+                System.out.println("categoria.getIdCategoria():"+categoria.getIdCategoria()+" ,categoria.getNombre():"+categoria.getNombre()+" ,categoria.getEdadMin():"+categoria.getEdadMin()+" ,categoria.getEdadMax():"+categoria.getEdadMax());
 
                 // Crea un array de objetos con los datos de la categoria para agregar a la tabla.
                 Object[] fila = new Object[]{
