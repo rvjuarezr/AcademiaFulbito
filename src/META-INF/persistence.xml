@@ -3,6 +3,7 @@
   <persistence-unit name="AcademiaFulbitoPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>academiafulbito.modelo.entidades.Categoria</class>
+    <class>academiafulbito.modelo.entidades.Usuario</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/bdacademiafulbito"/>
       <property name="javax.persistence.jdbc.password" value="Siga1234."/>
