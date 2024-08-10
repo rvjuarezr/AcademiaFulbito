@@ -5,8 +5,11 @@
 
 package academiafulbito.controlador.beans;
 
+import academiafulbito.modelo.conexion.MiConexion;
 import academiafulbito.modelo.entidades.Usuario;
 import academiafulbito.modelo.enums.Rol;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
@@ -17,7 +20,10 @@ import javax.persistence.TypedQuery;
  */
 public class UsuarioFacade {
 
-    EntityManager em = Persistence.createEntityManagerFactory("AcademiaFulbitoPU").createEntityManager();
+    
+    // Crear un mapa de propiedades
+    
+    EntityManager em = Persistence.createEntityManagerFactory("AcademiaFulbitoPU",MiConexion.cargarPropiedadesPU()).createEntityManager();
 
     // Método para validar si el usuario existe en la base de datos
     public boolean validarUsuario(String nombreUsuario, String clave, Rol rol) {
@@ -42,4 +48,6 @@ public class UsuarioFacade {
             return false;
         }
     }
+
+    
 }
