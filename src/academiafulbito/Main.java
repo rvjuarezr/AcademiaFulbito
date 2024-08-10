@@ -7,6 +7,7 @@ package academiafulbito;
 
 import academiafulbito.modelo.conexion.MiConexion;
 import academiafulbito.vista.interfaces.jifCategorias;
+import academiafulbito.vista.logueo.JFLogin;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +29,7 @@ public static MiConexion miConexion;
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new jifCategorias().setVisible(true);
+                    new JFLogin().setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }

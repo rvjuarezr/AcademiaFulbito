@@ -11,16 +11,28 @@
 
 package academiafulbito.vista.logueo;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.swing.JButton;
+
 /**
  *
- * @author SISTEMAS3
+ * @author SISTEMAS3/Ronald J
  */
 public class JFLogin extends javax.swing.JFrame {
 
 
     /** Creates new form JFLogin */
-    public JFLogin() {
+    private int passwordLength = 0;
+    private List<JButton> buttons;
+    public JFLogin() throws SQLException{
         initComponents();
+        setLocationRelativeTo(null);
+        setTitle("Login");
+        addBotonesALista();
+        generarBotonesAleatorios();
     }
 
     /** This method is called from within the constructor to
@@ -32,68 +44,337 @@ public class JFLogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        txtUsuario = new org.edisoncor.gui.textField.TextField();
+        panel1 = new org.edisoncor.gui.panel.Panel();
+        jpBotones = new javax.swing.JPanel();
+        btnDos = new javax.swing.JButton();
+        btnCero = new javax.swing.JButton();
+        btnUno = new javax.swing.JButton();
+        btnTres = new javax.swing.JButton();
+        btnCUatro = new javax.swing.JButton();
+        btnCinco = new javax.swing.JButton();
+        btnOcho = new javax.swing.JButton();
+        btnSeis = new javax.swing.JButton();
+        btnSiete = new javax.swing.JButton();
+        btnNueve = new javax.swing.JButton();
+        passwordField = new javax.swing.JPasswordField();
+        lblClave = new javax.swing.JLabel();
         cmbRol = new org.edisoncor.gui.comboBox.ComboBoxRound();
-        btnAcceder = new org.edisoncor.gui.button.ButtonAction();
-        txtClave = new org.edisoncor.gui.passwordField.PasswordField();
+        lblAcademia1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setBackground(new java.awt.Color(51, 102, 255));
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("BIENVENIDO");
-        jLabel1.setOpaque(true);
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, 160, 54));
+        panel1.setColorPrimario(new java.awt.Color(218, 218, 252));
+        panel1.setColorSecundario(new java.awt.Color(218, 218, 252));
+        panel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(51, 102, 255), 1, true));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel1.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 160, 30));
+        jpBotones.setBackground(new java.awt.Color(238, 236, 236));
+        jpBotones.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 255), 1, true));
+        jpBotones.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        cmbRol.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ADMINISTRADOR", "PROFESOR", "ENCARGADO", " " }));
-        jPanel1.add(cmbRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 160, 39));
-
-        btnAcceder.setText("ACCEDER");
-        btnAcceder.addActionListener(new java.awt.event.ActionListener() {
+        btnDos.setBackground(new java.awt.Color(207, 207, 252));
+        btnDos.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnDos.setText("2");
+        btnDos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnDos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAccederActionPerformed(evt);
+                btnDosActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAcceder, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 160, -1));
+        jpBotones.add(btnDos, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 70, 90, 60));
 
-        txtClave.setText("passwordField1");
-        jPanel1.add(txtClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 160, 30));
+        btnCero.setBackground(new java.awt.Color(207, 207, 252));
+        btnCero.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnCero.setText("0");
+        btnCero.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, null));
+        btnCero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCeroActionPerformed(evt);
+            }
+        });
+        jpBotones.add(btnCero, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 90, 60));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(82, 70, 220, 190));
+        btnUno.setBackground(new java.awt.Color(207, 207, 252));
+        btnUno.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnUno.setText("1");
+        btnUno.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnUno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnoActionPerformed(evt);
+            }
+        });
+        jpBotones.add(btnUno, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 90, 60));
+
+        btnTres.setBackground(new java.awt.Color(207, 207, 252));
+        btnTres.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnTres.setText("3");
+        btnTres.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnTres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTresActionPerformed(evt);
+            }
+        });
+        jpBotones.add(btnTres, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 90, 60));
+
+        btnCUatro.setBackground(new java.awt.Color(207, 207, 252));
+        btnCUatro.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnCUatro.setText("4");
+        btnCUatro.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnCUatro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCUatroActionPerformed(evt);
+            }
+        });
+        jpBotones.add(btnCUatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 90, 60));
+
+        btnCinco.setBackground(new java.awt.Color(207, 207, 252));
+        btnCinco.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnCinco.setText("5");
+        btnCinco.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnCinco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCincoActionPerformed(evt);
+            }
+        });
+        jpBotones.add(btnCinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 90, 60));
+
+        btnOcho.setBackground(new java.awt.Color(207, 207, 252));
+        btnOcho.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnOcho.setText("8");
+        btnOcho.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnOcho.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOchoActionPerformed(evt);
+            }
+        });
+        jpBotones.add(btnOcho, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, 90, 60));
+
+        btnSeis.setBackground(new java.awt.Color(207, 207, 252));
+        btnSeis.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnSeis.setText("6");
+        btnSeis.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnSeis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSeisActionPerformed(evt);
+            }
+        });
+        jpBotones.add(btnSeis, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 90, 60));
+
+        btnSiete.setBackground(new java.awt.Color(207, 207, 252));
+        btnSiete.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnSiete.setText("7");
+        btnSiete.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnSiete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSieteActionPerformed(evt);
+            }
+        });
+        jpBotones.add(btnSiete, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, 90, 60));
+
+        btnNueve.setBackground(new java.awt.Color(207, 207, 252));
+        btnNueve.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnNueve.setText("9");
+        btnNueve.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnNueve.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNueveActionPerformed(evt);
+            }
+        });
+        jpBotones.add(btnNueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 90, 60));
+
+        passwordField.setBackground(new java.awt.Color(204, 255, 204));
+        passwordField.setEditable(false);
+        passwordField.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        passwordField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        passwordField.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        passwordField.setOpaque(false);
+        jpBotones.add(passwordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 140, 40));
+
+        lblClave.setBackground(new java.awt.Color(107, 107, 250));
+        lblClave.setFont(new java.awt.Font("Yu Gothic UI", 1, 18)); // NOI18N
+        lblClave.setForeground(new java.awt.Color(91, 91, 250));
+        lblClave.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblClave.setText("Ingresa tu clave");
+        jpBotones.add(lblClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 310, 30));
+
+        panel1.add(jpBotones, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 310, 350));
+
+        cmbRol.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ADMIN", "USER", " " }));
+        cmbRol.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        panel1.add(cmbRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, 310, 50));
+
+        lblAcademia1.setBackground(new java.awt.Color(107, 107, 250));
+        lblAcademia1.setFont(new java.awt.Font("Tahoma", 3, 32)); // NOI18N
+        lblAcademia1.setForeground(new java.awt.Color(91, 91, 250));
+        lblAcademia1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAcademia1.setText("ACADEMIAS 1.0 ");
+        panel1.add(lblAcademia1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 310, 50));
+
+        getContentPane().add(panel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 510));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccederActionPerformed
+    private void btnOchoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOchoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnAccederActionPerformed
+        accionClicBoton(btnOcho);
+    }//GEN-LAST:event_btnOchoActionPerformed
 
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JFLogin().setVisible(true);
-            }
-        });
-    }
+    private void btnCincoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCincoActionPerformed
+        // TODO add your handling code here:
+        accionClicBoton(btnCinco);
+    }//GEN-LAST:event_btnCincoActionPerformed
+
+    private void btnCeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCeroActionPerformed
+        // TODO add your handling code here:
+        accionClicBoton(btnCero);
+    }//GEN-LAST:event_btnCeroActionPerformed
+
+    private void btnUnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnoActionPerformed
+        // TODO add your handling code here:
+        accionClicBoton(btnUno);
+    }//GEN-LAST:event_btnUnoActionPerformed
+
+    private void btnDosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDosActionPerformed
+        // TODO add your handling code here:
+        accionClicBoton(btnDos);
+    }//GEN-LAST:event_btnDosActionPerformed
+
+    private void btnTresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTresActionPerformed
+        // TODO add your handling code here:
+        accionClicBoton(btnTres);
+    }//GEN-LAST:event_btnTresActionPerformed
+
+    private void btnCUatroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCUatroActionPerformed
+        // TODO add your handling code here:
+        accionClicBoton(btnCUatro);
+    }//GEN-LAST:event_btnCUatroActionPerformed
+
+    private void btnSeisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeisActionPerformed
+        // TODO add your handling code here:
+        accionClicBoton(btnSeis);
+    }//GEN-LAST:event_btnSeisActionPerformed
+
+    private void btnSieteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSieteActionPerformed
+        // TODO add your handling code here:
+        accionClicBoton(btnSiete);
+    }//GEN-LAST:event_btnSieteActionPerformed
+
+    private void btnNueveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNueveActionPerformed
+        // TODO add your handling code here:
+        accionClicBoton(btnNueve);
+    }//GEN-LAST:event_btnNueveActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.edisoncor.gui.button.ButtonAction btnAcceder;
+    private javax.swing.JButton btnCUatro;
+    private javax.swing.JButton btnCero;
+    private javax.swing.JButton btnCinco;
+    private javax.swing.JButton btnDos;
+    private javax.swing.JButton btnNueve;
+    private javax.swing.JButton btnOcho;
+    private javax.swing.JButton btnSeis;
+    private javax.swing.JButton btnSiete;
+    private javax.swing.JButton btnTres;
+    private javax.swing.JButton btnUno;
     private org.edisoncor.gui.comboBox.ComboBoxRound cmbRol;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private org.edisoncor.gui.passwordField.PasswordField txtClave;
-    private org.edisoncor.gui.textField.TextField txtUsuario;
+    private javax.swing.JPanel jpBotones;
+    private javax.swing.JLabel lblAcademia1;
+    private javax.swing.JLabel lblClave;
+    private org.edisoncor.gui.panel.Panel panel1;
+    private javax.swing.JPasswordField passwordField;
     // End of variables declaration//GEN-END:variables
+
+    private void validateUser() {
+        String clave = new String(passwordField.getPassword());
+        String rolUser = (String) cmbRol.getSelectedItem();
+        System.out.println("rolUser:" + rolUser + " - clave: " + clave);
+        //invocar metodo para llamar a facade usuario y enviar clave, user y rol
+        // Resetear la clave
+        passwordField.setText("");
+        passwordLength = 0;
+    }
+
+    private void accionClicBoton(JButton button) {
+        if (passwordLength < 4) {
+            passwordField.setText(passwordField.getText() + button.getText());
+            passwordLength++;
+        }
+        if (passwordLength == 4) {
+            validateUser();
+        }
+    }
+
+    private void addBotonesALista() {
+        // Añadir todos los botones a la lista
+        buttons = new ArrayList<JButton>();
+        buttons.add(btnCero);
+        buttons.add(btnUno);
+        buttons.add(btnDos);
+        buttons.add(btnTres);
+        buttons.add(btnCUatro);
+        buttons.add(btnCinco);
+        buttons.add(btnSeis);
+        buttons.add(btnSiete);
+        buttons.add(btnOcho);
+        buttons.add(btnNueve);
+    }
+
+    private void generarBotonesAleatorios() {
+        // Barajar los botones
+        Collections.shuffle(buttons);
+
+        // Limpiar y volver a añadir los botones barajados al panel
+        jpBotones.removeAll();
+
+        // Definir dimensiones de los botones y otros componentes
+        int buttonWidth = 90;
+        int buttonHeight = 60;
+        int numColumns = 3; // 3 columnas para las primeras 3 filas
+
+        // Calcular el ancho total del área de los botones
+        int totalWidth = numColumns * buttonWidth;
+
+        // Calcular la posición inicial para centrar los botones y componentes
+        int startX = (jpBotones.getWidth() - totalWidth) / 2;
+        int startY = 0; // Ajusta el valor si quieres cambiar el margen superior
+
+        // Añadir el lblClave centrado en la parte superior
+        int lblClaveWidth = jpBotones.getWidth() - 40; // Ancho del label (ajustable)
+        int lblClaveHeight = 30;
+        int lblClaveX = (jpBotones.getWidth() - lblClaveWidth) / 2;
+        jpBotones.add(lblClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(lblClaveX, startY, lblClaveWidth, lblClaveHeight));
+
+        // Añadir el passwordField centrado justo debajo del lblClave
+        int passwordFieldWidth = jpBotones.getWidth() - 40; // Ancho del campo de contraseña (ajustable)
+        int passwordFieldHeight = 30;
+        int passwordFieldX = (jpBotones.getWidth() - passwordFieldWidth) / 2;
+        int passwordFieldY = startY + lblClaveHeight + 10; // Espacio de 10px entre lblClave y passwordField
+        jpBotones.add(passwordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(passwordFieldX, passwordFieldY, passwordFieldWidth, passwordFieldHeight));
+
+        // Calcular la posición de inicio para los botones después de lblClave y passwordField
+        int buttonsStartY = passwordFieldY + passwordFieldHeight + 20; // Espacio de 20px entre passwordField y los botones
+
+        // Añadir los botones al panel de manera centrada
+        for (int i = 0; i < buttons.size(); i++) {
+            JButton button = buttons.get(i);
+
+            if (i < 9) {
+                // Para los primeros 9 botones, se distribuyen en 3 columnas y 3 filas
+                int x = startX + (i % numColumns) * buttonWidth;
+                int y = buttonsStartY + (i / numColumns) * buttonHeight;
+                jpBotones.add(button, new org.netbeans.lib.awtextra.AbsoluteConstraints(x, y, buttonWidth, buttonHeight));
+            } else {
+                // El último botón se centra en la fila 4
+                int x = (jpBotones.getWidth() - buttonWidth) / 2; // Centrar el último botón
+                int y = buttonsStartY + 3 * buttonHeight; // Fila 4
+                jpBotones.add(button, new org.netbeans.lib.awtextra.AbsoluteConstraints(x, y, buttonWidth, buttonHeight));
+            }
+        }
+
+        // Volver a renderizar el panel
+        jpBotones.revalidate();
+        jpBotones.repaint();
+    }
+
 
 }
