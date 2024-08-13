@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,9 +23,10 @@ import java.util.logging.Logger;
  * @author SISTEMAS3
  */
 public class MiConexion {
-private static String dbDriver="com.mysql.jdbc.Driver";     //Controlador jdbc para bd relacional
-private static String nombreDeUsuario;
-private static String claveDeUsuario;
+
+    private static String dbDriver = "com.mysql.jdbc.Driver";     //Controlador jdbc para bd relacional
+    private static String nombreDeUsuario;
+    private static String claveDeUsuario;
 
     public static void cargarPropiedades() {
         Properties prop = new Properties();
@@ -55,18 +58,18 @@ private static String claveDeUsuario;
         }
     }
 
-    public static Connection obtenerConexion(){
+    public static Connection obtenerConexion() {
         Connection conexion = null;
-        String urlConexion="jdbc:mysql://localhost:3306/bdacademiafulbito";     // url que se va a utilizar para conectar
+        String urlConexion = "jdbc:mysql://localhost:3306/bdacademiafulbito";     // url que se va a utilizar para conectar
         try {
             Class.forName(dbDriver); // establece el driver de conexion
-            conexion=(Connection) DriverManager.getConnection(urlConexion,nombreDeUsuario,claveDeUsuario);
+            conexion = (Connection) DriverManager.getConnection(urlConexion, nombreDeUsuario, claveDeUsuario);
             System.out.println("Conexion exitosa!!");
 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MiConexion.class.getName()).log(Level.SEVERE, "Driver no encontrado", ex);
-            conexion=null;
-        } catch(SQLException ex){
+            conexion = null;
+        } catch (SQLException ex) {
             if (ex.getSQLState().equals("42000")) {
                 System.out.println("ERROR: La base de datos no está creada: " + ex.getMessage());
             } else if (ex.getSQLState().equals("08S01") || ex.getSQLState().equals("08001")) {
@@ -76,7 +79,7 @@ private static String claveDeUsuario;
             } else {
                 Logger.getLogger(MiConexion.class.getName()).log(Level.SEVERE, "Error de SQL", ex);
             }
-            conexion=null;
+            conexion = null;
         } finally {
             if (conexion == null) {
                 System.out.println("No hay conexión");
@@ -84,5 +87,13 @@ private static String claveDeUsuario;
         }
 
         return conexion;
+    }
+
+    //metodo que envia la clave de usuario a la persistencia
+    public static Map<String, String> cargarPropiedadesPU(){
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put("javax.persistence.jdbc.password", claveDeUsuario);
+        System.out.println("se ha invocado MiConexion.cargarPropiedadesPU - claveDeUsuario: "+claveDeUsuario);
+        return properties;
     }
 }
