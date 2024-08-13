@@ -3,6 +3,9 @@
   <persistence-unit name="AcademiaFulbitoPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>academiafulbito.modelo.entidades.Categoria</class>
+    <class>academiafulbito.modelo.entidades.Alumno</class>
+    <class>academiafulbito.modelo.entidades.Padre</class>
+    <class>academiafulbito.modelo.entidades.Profesor</class>
     <class>academiafulbito.modelo.entidades.Usuario</class>
     <class>academiafulbito.modelo.entidades.Campeonato</class>
     <class>academiafulbito.modelo.entidades.Cancha</class>
