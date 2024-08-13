@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package academiafulbito.modelo.entidades;
 
 import javax.persistence.Column;
@@ -17,12 +16,13 @@ import javax.persistence.Table;
  * @author Walter Jair
  */
 @Entity
-@Table(name="usuario", catalog="bdacademiafulbito", schema="")
+@Table(name = "padre", catalog = "bdacademiafulbito", schema = "")
 public class Padre {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_padre", nullable = false)
-    private int idAlumno;
+    private int idPadre;
     @Column(name = "Nombre", nullable = false, length = 50)
     private String nombrePadre;
     @Column(name = "Apellido", nullable = false, length = 50)
@@ -38,12 +38,12 @@ public class Padre {
         this.apellidoPadre = apellidoPadre;
     }
 
-    public int getIdAlumno() {
-        return idAlumno;
+    public int getIdPadre() {
+        return idPadre;
     }
 
-    public void setIdAlumno(int idAlumno) {
-        this.idAlumno = idAlumno;
+    public void setIdPadre(int idPadre) {
+        this.idPadre = idPadre;
     }
 
     public String getNombrePadre() {
@@ -61,5 +61,4 @@ public class Padre {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-    
 }

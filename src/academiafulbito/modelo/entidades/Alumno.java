@@ -21,10 +21,10 @@ import javax.persistence.Temporal;
  * @author Walter Jair
  */
 @Entity
-@Table(name="usuario", catalog="bdacademiafulbito", schema="")
+@Table(name="alumno", catalog="bdacademiafulbito", schema="")
 public class Alumno {
-@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_alumno", nullable = false)
     private int idAlumno;
     @Column(name = "Nombre", nullable = false, length = 50)
@@ -38,9 +38,7 @@ public class Alumno {
     private int idCategoria;
     @Column(name = "ID_padre", nullable = false, length = 11)
     private int idPadre;
-    private Rol rol;
-    private Estado estado;
-
+    
     public int getIdAlumno() {
         return idAlumno;
     }
@@ -88,8 +86,4 @@ public class Alumno {
     public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
-
-
-
-
 }
