@@ -11,11 +11,15 @@
 
 package academiafulbito.vista.logueo;
 
+import academiafulbito.controlador.beans.UsuarioFacade;
+import academiafulbito.modelo.entidades.Usuario;
+import academiafulbito.modelo.enums.Rol;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,12 +31,15 @@ public class JFLogin extends javax.swing.JFrame {
     /** Creates new form JFLogin */
     private int passwordLength = 0;
     private List<JButton> buttons;
+    public static Usuario usuario;
+    public static UsuarioFacade usuarioFacade;
     public JFLogin() throws SQLException{
         initComponents();
         setLocationRelativeTo(null);
         setTitle("Login");
         addBotonesALista();
         generarBotonesAleatorios();
+        usuarioFacade = new UsuarioFacade();
     }
 
     /** This method is called from within the constructor to
@@ -73,7 +80,7 @@ public class JFLogin extends javax.swing.JFrame {
         jpBotones.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnDos.setBackground(new java.awt.Color(207, 207, 252));
-        btnDos.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnDos.setFont(new java.awt.Font("Tahoma", 1, 24));
         btnDos.setText("2");
         btnDos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnDos.addActionListener(new java.awt.event.ActionListener() {
@@ -84,7 +91,7 @@ public class JFLogin extends javax.swing.JFrame {
         jpBotones.add(btnDos, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 70, 90, 60));
 
         btnCero.setBackground(new java.awt.Color(207, 207, 252));
-        btnCero.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnCero.setFont(new java.awt.Font("Tahoma", 1, 24));
         btnCero.setText("0");
         btnCero.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, null));
         btnCero.addActionListener(new java.awt.event.ActionListener() {
@@ -95,7 +102,7 @@ public class JFLogin extends javax.swing.JFrame {
         jpBotones.add(btnCero, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 90, 60));
 
         btnUno.setBackground(new java.awt.Color(207, 207, 252));
-        btnUno.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnUno.setFont(new java.awt.Font("Tahoma", 1, 24));
         btnUno.setText("1");
         btnUno.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnUno.addActionListener(new java.awt.event.ActionListener() {
@@ -106,7 +113,7 @@ public class JFLogin extends javax.swing.JFrame {
         jpBotones.add(btnUno, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 90, 60));
 
         btnTres.setBackground(new java.awt.Color(207, 207, 252));
-        btnTres.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnTres.setFont(new java.awt.Font("Tahoma", 1, 24));
         btnTres.setText("3");
         btnTres.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnTres.addActionListener(new java.awt.event.ActionListener() {
@@ -117,7 +124,7 @@ public class JFLogin extends javax.swing.JFrame {
         jpBotones.add(btnTres, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 90, 60));
 
         btnCUatro.setBackground(new java.awt.Color(207, 207, 252));
-        btnCUatro.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnCUatro.setFont(new java.awt.Font("Tahoma", 1, 24));
         btnCUatro.setText("4");
         btnCUatro.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnCUatro.addActionListener(new java.awt.event.ActionListener() {
@@ -128,7 +135,7 @@ public class JFLogin extends javax.swing.JFrame {
         jpBotones.add(btnCUatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 90, 60));
 
         btnCinco.setBackground(new java.awt.Color(207, 207, 252));
-        btnCinco.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnCinco.setFont(new java.awt.Font("Tahoma", 1, 24));
         btnCinco.setText("5");
         btnCinco.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnCinco.addActionListener(new java.awt.event.ActionListener() {
@@ -139,7 +146,7 @@ public class JFLogin extends javax.swing.JFrame {
         jpBotones.add(btnCinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 90, 60));
 
         btnOcho.setBackground(new java.awt.Color(207, 207, 252));
-        btnOcho.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnOcho.setFont(new java.awt.Font("Tahoma", 1, 24));
         btnOcho.setText("8");
         btnOcho.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnOcho.addActionListener(new java.awt.event.ActionListener() {
@@ -150,7 +157,7 @@ public class JFLogin extends javax.swing.JFrame {
         jpBotones.add(btnOcho, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, 90, 60));
 
         btnSeis.setBackground(new java.awt.Color(207, 207, 252));
-        btnSeis.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnSeis.setFont(new java.awt.Font("Tahoma", 1, 24));
         btnSeis.setText("6");
         btnSeis.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnSeis.addActionListener(new java.awt.event.ActionListener() {
@@ -161,7 +168,7 @@ public class JFLogin extends javax.swing.JFrame {
         jpBotones.add(btnSeis, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 90, 60));
 
         btnSiete.setBackground(new java.awt.Color(207, 207, 252));
-        btnSiete.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnSiete.setFont(new java.awt.Font("Tahoma", 1, 24));
         btnSiete.setText("7");
         btnSiete.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnSiete.addActionListener(new java.awt.event.ActionListener() {
@@ -172,7 +179,7 @@ public class JFLogin extends javax.swing.JFrame {
         jpBotones.add(btnSiete, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, 90, 60));
 
         btnNueve.setBackground(new java.awt.Color(207, 207, 252));
-        btnNueve.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btnNueve.setFont(new java.awt.Font("Tahoma", 1, 24));
         btnNueve.setText("9");
         btnNueve.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnNueve.addActionListener(new java.awt.event.ActionListener() {
@@ -184,14 +191,14 @@ public class JFLogin extends javax.swing.JFrame {
 
         passwordField.setBackground(new java.awt.Color(204, 255, 204));
         passwordField.setEditable(false);
-        passwordField.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        passwordField.setFont(new java.awt.Font("Tahoma", 1, 36));
         passwordField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         passwordField.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         passwordField.setOpaque(false);
         jpBotones.add(passwordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 140, 40));
 
         lblClave.setBackground(new java.awt.Color(107, 107, 250));
-        lblClave.setFont(new java.awt.Font("Yu Gothic UI", 1, 18)); // NOI18N
+        lblClave.setFont(new java.awt.Font("Yu Gothic UI", 1, 18));
         lblClave.setForeground(new java.awt.Color(91, 91, 250));
         lblClave.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblClave.setText("Ingresa tu clave");
@@ -199,12 +206,12 @@ public class JFLogin extends javax.swing.JFrame {
 
         panel1.add(jpBotones, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 310, 350));
 
-        cmbRol.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ADMIN", "USER", " " }));
-        cmbRol.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        cmbRol.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ADMINISTRADOR", "USUARIO", " " }));
+        cmbRol.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         panel1.add(cmbRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, 310, 50));
 
         lblAcademia1.setBackground(new java.awt.Color(107, 107, 250));
-        lblAcademia1.setFont(new java.awt.Font("Tahoma", 3, 32)); // NOI18N
+        lblAcademia1.setFont(new java.awt.Font("Tahoma", 3, 32));
         lblAcademia1.setForeground(new java.awt.Color(91, 91, 250));
         lblAcademia1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAcademia1.setText("ACADEMIAS 1.0 ");
@@ -286,9 +293,25 @@ public class JFLogin extends javax.swing.JFrame {
 
     private void validateUser() {
         String clave = new String(passwordField.getPassword());
-        String rolUser = (String) cmbRol.getSelectedItem();
-        System.out.println("rolUser:" + rolUser + " - clave: " + clave);
-        //invocar metodo para llamar a facade usuario y enviar clave, user y rol
+        String selectedRol = (String) cmbRol.getSelectedItem(); // Obtén el valor como String
+
+        Rol rolUser;
+        try {
+            rolUser = Rol.valueOf(selectedRol); // Convierte el String a Rol
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, "Rol no válido seleccionado.");
+            return; // Sal del método si el rol no es válido
+        }
+        System.out.println("rolUser:" + rolUser.toString() + " - clave: " + clave);
+
+        boolean usuarioValido = usuarioFacade.validarUsuario("root", clave, rolUser);
+
+        if (usuarioValido) {
+            JOptionPane.showMessageDialog(this, "Usuario válido. ¡Bienvenido!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos.");
+        }
+
         // Resetear la clave
         passwordField.setText("");
         passwordLength = 0;
