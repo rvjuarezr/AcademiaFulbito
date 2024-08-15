@@ -5,6 +5,9 @@
 
 package academiafulbito.vista.utilidades;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +15,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -25,8 +29,10 @@ public class Utils extends DefaultTableCellRenderer{
 
     DecimalFormat df;
 
-    public Utils(){
+    int tamanioLetra=12;//valor por defecto
+    public Utils(int tamLetra){
         df=new DecimalFormat("##0.00");
+        tamanioLetra = tamLetra;
     }
 
     public static void limpiarModeloTabla(DefaultTableModel modelo, JTable tabla){
@@ -101,5 +107,26 @@ public class Utils extends DefaultTableCellRenderer{
 
     public static int posicionY(JInternalFrame jif, JDesktopPane dpMostrar){
         return (dpMostrar.getHeight()/2)-(jif.getHeight()/2);
+    }
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {
+        //variables para el metodo formato tabla
+        Font normal = new Font("Bookman Old Style", Font.BOLD + Font.ITALIC, tamanioLetra);
+        Font negrilla = new Font("Verdana", Font.BOLD, tamanioLetra);
+        Font cursiva = new Font("Times new roman", Font.ITALIC, tamanioLetra);
+        boolean fila_con_color = (row % 2 == 0);
+        Color color_de_fila = new Color(178,206, 252);
+        setBackground(Color.white);//color de fondo
+        table.setFont(normal);//tipo de fuente
+        table.setForeground(Color.black);//color de texto
+        table.setRowHeight(40);
+        setHorizontalAlignment(SwingConstants.RIGHT);//derecha
+
+        if (fila_con_color) {
+            setBackground(color_de_fila);
+        }
+        super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+        return this;
     }
 }

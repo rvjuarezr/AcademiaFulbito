@@ -28,4 +28,8 @@ public class CategoriaFacade {
         Query q = (Query) em.createQuery(cq);
         return q.getResultList();
     }
+
+    public List<Categoria> getListadoCategorias() {
+        return em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
+    }
 }
