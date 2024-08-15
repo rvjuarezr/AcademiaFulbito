@@ -13,9 +13,12 @@ package academiafulbito.vista.interfaces;
 
 import academiafulbito.controlador.beans.CategoriaFacade;
 import academiafulbito.modelo.entidades.Categoria;
+import academiafulbito.vista.utilidades.ButtonEditor;
+import academiafulbito.vista.utilidades.ButtonRenderer;
 import academiafulbito.vista.utilidades.Utils;
 import java.sql.SQLException;
 import java.util.List;
+import javax.swing.JCheckBox;
 import javax.swing.JDesktopPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -30,11 +33,14 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     public static CategoriaFacade categoriaFacade;
     DefaultTableModel modelo;
     /** Creates new form jifCategorias */
-    public jifCategorias(/*JDesktopPane jdpModAF*/)  throws SQLException{
+    public jifCategorias(JDesktopPane jdpModAF){
         initComponents();
-        //jdp=jdpModAF;
+        jdp=jdpModAF;
+        int[] anchoColumnas = {15,55, 20, 20, 80}; // Anchos específicos para cada columna
+        jfPrincipal.utils.setAnchoColumnas(tblCategorias, anchoColumnas);
+        jfPrincipal.utils.ocultarColumnas(tblCategorias, 0);
         categoriaFacade = new CategoriaFacade();
-        listarCategorias(categoriaFacade.obtenerTodasLasCategorias());
+        listarCategorias(categoriaFacade.getListadoCategorias());
     }
 
     /** This method is called from within the constructor to
@@ -52,6 +58,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         tblCategorias = new javax.swing.JTable();
         panel2 = new org.edisoncor.gui.panel.Panel();
 
+        setClosable(true);
         setTitle("MANTENIMIENTO CATEGORIAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -61,13 +68,13 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
         tblCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "CATEGORIA", "EDAD MIN", "EDAD MAX"
+                "ID", "CATEGORIA", "EDAD MIN", "EDAD MAX", "Acciones"
             }
         ));
         jScrollPane1.setViewportView(tblCategorias);
@@ -123,7 +130,11 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
-            tblCategorias.setDefaultRenderer(Object.class, new Utils());
+            tblCategorias.setDefaultRenderer(Object.class, new Utils(18));
+
+            // Agregar botones en la última columna
+            tblCategorias.getColumn("Acciones").setCellRenderer(new ButtonRenderer());
+            tblCategorias.getColumn("Acciones").setCellEditor(new ButtonEditor(new JCheckBox()));
 
             // Establece el modo de selección de filas para permitir solo una selección a la vez.
             tblCategorias.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

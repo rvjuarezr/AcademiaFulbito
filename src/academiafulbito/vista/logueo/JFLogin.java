@@ -14,6 +14,7 @@ package academiafulbito.vista.logueo;
 import academiafulbito.controlador.beans.UsuarioFacade;
 import academiafulbito.modelo.entidades.Usuario;
 import academiafulbito.modelo.enums.Rol;
+import academiafulbito.vista.interfaces.jfPrincipal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -307,7 +308,11 @@ public class JFLogin extends javax.swing.JFrame {
         boolean usuarioValido = usuarioFacade.validarUsuario("root", clave, rolUser);
 
         if (usuarioValido) {
-            JOptionPane.showMessageDialog(this, "Usuario válido. ¡Bienvenido!");
+            setVisible(false);//se oculta la ventana
+            jfPrincipal.utils.mensajeInformacion("Usuario válido. ¡Bienvenido!");
+            jfPrincipal principal = new jfPrincipal();
+            principal.setVisible(true);
+            principal.setTitle("ACADEMIA DE FULBTIO");
         } else {
             JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos.");
         }
