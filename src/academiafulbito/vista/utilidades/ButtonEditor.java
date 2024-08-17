@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
+
 /**
  *
  * @author Ronald J
@@ -36,7 +37,6 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
                 isPushed = true;
                 fireEditingStopped();// Indica que la edición de la celda terminó
             }
-
         });
     }
 
@@ -46,6 +46,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         isPushed = false;
         selectedRow = row; // Guarda la fila seleccionada
         System.out.println("selectedrow: "+selectedRow);
+
         return button;
     }
 
@@ -55,6 +56,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if (isPushed) {
             // Usa selectedRow para acceder a la fila seleccionada
             JOptionPane.showMessageDialog(button, label + ": Fila " + selectedRow + " seleccionada.");
+
         }
         isPushed = false;
         return label;
@@ -65,4 +67,5 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         isPushed = false;
         return super.stopCellEditing();
     }
+
 }

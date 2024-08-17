@@ -41,7 +41,6 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     public jifCategorias(JDesktopPane jdpModAF){
         initComponents();
         jdp=jdpModAF;
-        
         categoriaFacade = new CategoriaFacade();
         listarCategorias(categoriaFacade.getListadoCategorias());
     }
@@ -70,6 +69,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         btnCancelar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(135, 135, 246));
+
         setClosable(true);
         setTitle("MANTENIMIENTO CATEGORIAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -85,10 +85,8 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
         tblCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
             },
             new String [] {
-
             }
         ));
         tblCategorias.setOpaque(false);

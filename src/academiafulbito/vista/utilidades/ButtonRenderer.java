@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+
 import javax.swing.table.TableCellRenderer;
 
 /**
@@ -22,6 +23,7 @@ public class ButtonRenderer extends JButton implements TableCellRenderer{
     public ButtonRenderer(String label) {
         setText(label);
         setOpaque(false); // Para mantener la transparencia
+
     }
 
     @Override
