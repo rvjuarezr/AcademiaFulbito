@@ -13,14 +13,17 @@ package academiafulbito.vista.interfaces;
 
 import academiafulbito.controlador.beans.CategoriaFacade;
 import academiafulbito.modelo.entidades.Categoria;
+import academiafulbito.modelo.enums.Estado;
 import academiafulbito.vista.utilidades.ButtonEditor;
 import academiafulbito.vista.utilidades.ButtonRenderer;
+import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
-import java.sql.SQLException;
+import java.awt.Dimension;
 import java.util.List;
-import javax.swing.JCheckBox;
 import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -32,13 +35,12 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     JDesktopPane jdp;
     public static CategoriaFacade categoriaFacade;
     DefaultTableModel modelo;
+    String[] nombreColumnas = {"ID","Nombre","Edad Min.","Edad Max.",LiteralesTexto.LITERAL_VER,LiteralesTexto.LITERAL_EDITAR,LiteralesTexto.LITERAL_ELIMINAR};
+    int indicador;//para saber si estamos en modo de edicion
     /** Creates new form jifCategorias */
     public jifCategorias(JDesktopPane jdpModAF){
         initComponents();
         jdp=jdpModAF;
-        int[] anchoColumnas = {15,55, 20, 20, 80}; // Anchos específicos para cada columna
-        jfPrincipal.utils.setAnchoColumnas(tblCategorias, anchoColumnas);
-        jfPrincipal.utils.ocultarColumnas(tblCategorias, 0);
         categoriaFacade = new CategoriaFacade();
         listarCategorias(categoriaFacade.getListadoCategorias());
     }
@@ -52,63 +54,186 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tphCategorias = new org.edisoncor.gui.tabbedPane.TabbedPaneHeader();
-        panel1 = new org.edisoncor.gui.panel.Panel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        tphCategorias = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jspCategorias = new javax.swing.JScrollPane();
         tblCategorias = new javax.swing.JTable();
-        panel2 = new org.edisoncor.gui.panel.Panel();
+        btnNuevaCategoria = new org.edisoncor.gui.button.ButtonRound();
+        jPanel2 = new javax.swing.JPanel();
+        txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtEdadMin = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtEdadMax = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        jchbActivo = new javax.swing.JCheckBox();
+        btnGuardar = new org.edisoncor.gui.button.ButtonRound();
+        jLabel1 = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
+
+        setBackground(new java.awt.Color(135, 135, 246));
 
         setClosable(true);
         setTitle("MANTENIMIENTO CATEGORIAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panel1.setColorPrimario(new java.awt.Color(255, 255, 255));
-        panel1.setColorSecundario(new java.awt.Color(51, 51, 255));
-        panel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jspCategorias.setBackground(new java.awt.Color(255, 255, 255));
+        jspCategorias.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jspCategorias.setOpaque(false);
 
         tblCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "CATEGORIA", "EDAD MIN", "EDAD MAX", "Acciones"
             }
         ));
-        jScrollPane1.setViewportView(tblCategorias);
+        tblCategorias.setOpaque(false);
+        jspCategorias.setViewportView(tblCategorias);
 
-        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 620, 250));
+        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
 
-        tphCategorias.addTab("LISTADO", panel1);
+        btnNuevaCategoria.setBackground(new java.awt.Color(156, 156, 247));
+        btnNuevaCategoria.setText("+ CATEGORIA");
+        btnNuevaCategoria.setFont(new java.awt.Font("Arial", 1, 18));
+        btnNuevaCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevaCategoriaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevaCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 140, 50));
 
-        panel2.setColorPrimario(new java.awt.Color(255, 255, 255));
-        panel2.setColorSecundario(new java.awt.Color(51, 51, 255));
-        panel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        tphCategorias.addTab("CATEGORIAS", panel2);
+        tphCategorias.addTab("LISTADO", jPanel1);
 
-        getContentPane().add(tphCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 300));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        txtNombre.setEditable(false);
+        txtNombre.setDescripcion("Nombre*");
+        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
+
+        txtEdadMin.setEditable(false);
+        txtEdadMin.setDescripcion("Edad Mínima*");
+        txtEdadMin.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        jPanel2.add(txtEdadMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
+
+        txtEdadMax.setEditable(false);
+        txtEdadMax.setDescripcion("Edad Máxima*");
+        txtEdadMax.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        jPanel2.add(txtEdadMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
+
+        jchbActivo.setBackground(new java.awt.Color(255, 255, 255));
+        jchbActivo.setFont(new java.awt.Font("Bookman Old Style", 0, 18)); // NOI18N
+        jchbActivo.setSelected(true);
+        jchbActivo.setText("ACTIVO");
+        jchbActivo.setEnabled(false);
+        jPanel2.add(jchbActivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 120, 40));
+
+        btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
+        btnGuardar.setBorder(null);
+        btnGuardar.setText("AÑADIR");
+        btnGuardar.setBorderPainted(true);
+        btnGuardar.setContentAreaFilled(true);
+        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnGuardar.setOpaque(true);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 265, 170, 70));
+
+        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("NUEVA CATEGORIA");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 250, 20));
+
+        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
+        btnCancelar.setText("VOLVER");
+        btnCancelar.setContentAreaFilled(false);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
+
+        tphCategorias.addTab("REGISTRO", jPanel2);
+
+        getContentPane().add(tphCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 400));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnNuevaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaCategoriaActionPerformed
+        // TODO add your handling code here:
+        indicador = 0;//para poder guardar
+        tphCategorias.setSelectedIndex(1);
+        limpiarCampos();
+        habilitarCampos(true);
+    }//GEN-LAST:event_btnNuevaCategoriaActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO) == JOptionPane.YES_OPTION) {
+            Categoria categoria = getDatosCategoria();
+            switch(indicador){
+                case 0://registrar categoria
+                    categoriaFacade.guardarCategoria(categoria);
+                    Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                    break;
+                case 1://actualizar categoria
+                    break;
+            }
+
+            listarCategorias(categoriaFacade.getListadoCategorias());
+            limpiarCampos();
+            habilitarCampos(false);
+            indicador = 0;
+            tphCategorias.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        limpiarCampos();
+        habilitarCampos(false);
+        tphCategorias.setSelectedIndex(0);
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private org.edisoncor.gui.panel.Panel panel1;
-    private org.edisoncor.gui.panel.Panel panel2;
+    private javax.swing.JButton btnCancelar;
+    private org.edisoncor.gui.button.ButtonRound btnGuardar;
+    private org.edisoncor.gui.button.ButtonRound btnNuevaCategoria;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JCheckBox jchbActivo;
+    private javax.swing.JScrollPane jspCategorias;
     private javax.swing.JTable tblCategorias;
-    private org.edisoncor.gui.tabbedPane.TabbedPaneHeader tphCategorias;
+    private javax.swing.JTabbedPane tphCategorias;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtEdadMax;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtEdadMin;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
     // End of variables declaration//GEN-END:variables
 
     private void listarCategorias(List<Categoria> listaCategorias){
         // Selecciona el primer tab en un JTabbedPane
         tphCategorias.setSelectedIndex(0);
 
-        // Obtiene el modelo de la tabla
-        modelo=(DefaultTableModel)tblCategorias.getModel();
+        modelo = Utils.generarModeloTabla(nombreColumnas);
 
+        // Asignar el modelo a la tabla
+        tblCategorias.setModel(modelo);
+
+        int[] anchoColumnas = {15, 60, 20, 20, 20, 30, 30}; // Anchos específicos para cada columna
+        Utils.setAnchoColumnas(tblCategorias, anchoColumnas);
+        Utils.ocultarColumnas(tblCategorias, 0);
+        
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblCategorias);
 
@@ -125,20 +250,57 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                     categoria.getIdCategoria(),
                     categoria.getNombre(),
                     categoria.getEdadMin(),
-                    categoria.getEdadMax()
+                    categoria.getEdadMax(),
+                    LiteralesTexto.LITERAL_VER,
+                    LiteralesTexto.LITERAL_EDITAR,
+                    LiteralesTexto.LITERAL_ELIMINAR
                 };
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
             tblCategorias.setDefaultRenderer(Object.class, new Utils(18));
 
-            // Agregar botones en la última columna
-            tblCategorias.getColumn("Acciones").setCellRenderer(new ButtonRenderer());
-            tblCategorias.getColumn("Acciones").setCellEditor(new ButtonEditor(new JCheckBox()));
-
             // Establece el modo de selección de filas para permitir solo una selección a la vez.
             tblCategorias.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+            tblCategorias.setOpaque(false); // Hace la tabla transparente
+            ((DefaultTableCellRenderer) tblCategorias.getDefaultRenderer(Object.class)).setOpaque(false); // Hace las celdas transparentes
+            tblCategorias.setShowGrid(false); // Desactiva el grid para ocultar los bordes predeterminados
+            tblCategorias.setIntercellSpacing(new Dimension(0, 0)); // Elimina el espacio entre celdas
+            jspCategorias.getViewport().setOpaque(false); // Hace el viewport transparente
+
+            // Agregar boton ver
+            tblCategorias.getColumn(LiteralesTexto.LITERAL_VER).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_VER));
+            tblCategorias.getColumn(LiteralesTexto.LITERAL_VER).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_VER));
+
+            // Agregar boton Editar
+            tblCategorias.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_EDITAR));
+            tblCategorias.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_EDITAR));
+
+            // Agregar boton Eliminar
+            tblCategorias.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_ELIMINAR));
+            tblCategorias.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_ELIMINAR));
+
         }
+    }
+
+    private Categoria getDatosCategoria(){
+        String nombre = txtNombre.getText();
+        int edadMin = Integer.parseInt(txtEdadMin.getText());
+        int edadMax = Integer.parseInt(txtEdadMax.getText());
+
+        return new Categoria(nombre, edadMin, edadMax, Estado.ACTIVO);
+    }
+
+    private void limpiarCampos() {
+        txtNombre.setText("");
+        txtEdadMin.setText("");
+        txtEdadMax.setText("");
+    }
+
+    private void habilitarCampos(boolean band){
+        txtNombre.setEditable(band);
+        txtEdadMin.setEditable(band);
+        txtEdadMax.setEditable(band);
     }
 }

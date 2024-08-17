@@ -7,10 +7,12 @@ package academiafulbito.vista.utilidades;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.BorderFactory;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -18,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -111,22 +114,54 @@ public class Utils extends DefaultTableCellRenderer{
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {
+
         //variables para el metodo formato tabla
         Font normal = new Font("Bookman Old Style", Font.BOLD + Font.ITALIC, tamanioLetra);
         Font negrilla = new Font("Verdana", Font.BOLD, tamanioLetra);
         Font cursiva = new Font("Times new roman", Font.ITALIC, tamanioLetra);
         boolean fila_con_color = (row % 2 == 0);
+
+        // Personalizar la cabecera
+        JTableHeader header = table.getTableHeader();
+        if (header != null) {
+            header.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK)); // Borde completo para la cabecera
+            header.setBackground(new Color(240, 240, 240));
+            header.setPreferredSize(new Dimension(100, 50)); // Ajusta la altura de la cabecera
+            header.setFont(negrilla); // Tu fuente personalizada
+        }
+
         Color color_de_fila = new Color(178,206, 252);
         setBackground(Color.white);//color de fondo
         table.setFont(normal);//tipo de fuente
         table.setForeground(Color.black);//color de texto
         table.setRowHeight(40);
-        setHorizontalAlignment(SwingConstants.RIGHT);//derecha
 
         if (fila_con_color) {
             setBackground(color_de_fila);
         }
         super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+
+        // Configura el borde inferior para cada fila
+        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK)); // Solo borde inferior
+        setHorizontalAlignment(SwingConstants.CENTER); // Centra el contenido en la celda
+
         return this;
+    }
+
+    /**
+     * Genera un DefaultTableModel personalizado para una tabla.
+     *
+     * @param nombreColumnas Arreglo con los nombres de las columnas.
+     * @return Un DefaultTableModel configurado para permitir la edición en las últimas tres columnas.
+     */
+    public static DefaultTableModel generarModeloTabla(String[] nombreColumnas) {
+        return new DefaultTableModel(nombreColumnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Permitir la edición solo para las últimas tres columnas:
+                // column 4: Ver, column 5: Editar, column 6: Eliminar
+                return column >= 4 && column <= 6;
+            }
+        };
     }
 }
