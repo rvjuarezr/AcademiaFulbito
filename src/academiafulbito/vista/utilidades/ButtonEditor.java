@@ -8,46 +8,53 @@ package academiafulbito.vista.utilidades;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.DefaultCellEditor;
+import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.TableCellEditor;
 
 /**
  *
  * @author Ronald J
  */
-public class ButtonEditor extends DefaultCellEditor{
+public class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
 
-    private String label;
     private JButton button;
+    private String label;
     private boolean isPushed;
+    private int selectedRow;
 
-    public ButtonEditor(JCheckBox checkBox) {
-        super(checkBox);
-        button = new JButton();
-        button.setOpaque(true);
-        button.addActionListener(new ActionListener() {
+    public ButtonEditor(String label) {
+        this.label = label;
+        button = new JButton(label);
+        button.setOpaque(false); // Para mantener la transparencia
+        button.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e) {
-                fireEditingStopped();
+                System.out.println("accion al clic");
+                isPushed = true;
+                fireEditingStopped();// Indica que la edición de la celda terminó
             }
+
         });
     }
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        label = (value == null) ? "Ver" : value.toString();
         button.setText(label);
-        isPushed = true;
+        isPushed = false;
+        selectedRow = row; // Guarda la fila seleccionada
+        System.out.println("selectedrow: "+selectedRow);
         return button;
     }
 
     @Override
     public Object getCellEditorValue() {
+        System.out.println("entro al getCellEditorValue");
         if (isPushed) {
-            // Aquí se puede manejar la acción de los botones
-            JOptionPane.showMessageDialog(button, label + ": Opción seleccionada.");
+            // Usa selectedRow para acceder a la fila seleccionada
+            JOptionPane.showMessageDialog(button, label + ": Fila " + selectedRow + " seleccionada.");
         }
         isPushed = false;
         return label;
@@ -57,10 +64,5 @@ public class ButtonEditor extends DefaultCellEditor{
     public boolean stopCellEditing() {
         isPushed = false;
         return super.stopCellEditing();
-    }
-
-    @Override
-    protected void fireEditingStopped() {
-        super.fireEditingStopped();
     }
 }

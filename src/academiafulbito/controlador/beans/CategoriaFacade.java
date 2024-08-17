@@ -6,12 +6,10 @@
 package academiafulbito.controlador.beans;
 
 import academiafulbito.modelo.entidades.Categoria;
-import java.sql.SQLException;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
 
 /**
  *
@@ -19,17 +17,41 @@ import javax.persistence.criteria.CriteriaQuery;
  */
 public class CategoriaFacade {
 
-    EntityManager em = Persistence.createEntityManagerFactory("AcademiaFulbitoPU").createEntityManager();
+    EntityManagerFactory emf;
+    
 
-    public List<Categoria> obtenerTodasLasCategorias() throws SQLException {
-        //return em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(Categoria.class));
-        Query q = (Query) em.createQuery(cq);
-        return q.getResultList();
+    public CategoriaFacade(){
+        emf = Persistence.createEntityManagerFactory("AcademiaFulbitoPU");
     }
 
+    // Método para listar las categorías
     public List<Categoria> getListadoCategorias() {
-        return em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
+        EntityManager em = emf.createEntityManager();
+        List<Categoria> categorias = null;
+        try {
+            categorias = em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close(); // Siempre cerrar el EntityManager al final
+        }
+        return categorias;
+    }
+
+    // Método para guardar una categoría
+    public void guardarCategoria(Categoria categoria) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(categoria); // Guardar la entidad
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();// Siempre cerrar el EntityManager al final
+        }
     }
 }

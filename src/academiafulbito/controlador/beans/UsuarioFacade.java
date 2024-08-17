@@ -8,8 +8,6 @@ package academiafulbito.controlador.beans;
 import academiafulbito.modelo.conexion.MiConexion;
 import academiafulbito.modelo.entidades.Usuario;
 import academiafulbito.modelo.enums.Rol;
-import java.util.HashMap;
-import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
