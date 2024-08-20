@@ -15,6 +15,7 @@ import academiafulbito.controlador.beans.UsuarioFacade;
 import academiafulbito.modelo.entidades.Usuario;
 import academiafulbito.modelo.enums.Rol;
 import academiafulbito.vista.interfaces.jfPrincipal;
+import academiafulbito.vista.utilidades.Utils;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +35,7 @@ public class JFLogin extends javax.swing.JFrame {
     private List<JButton> buttons;
     public static Usuario usuario;
     public static UsuarioFacade usuarioFacade;
+    public static jfPrincipal principal;
     public JFLogin() throws SQLException{
         initComponents();
         setLocationRelativeTo(null);
@@ -309,8 +311,8 @@ public class JFLogin extends javax.swing.JFrame {
 
         if (usuarioValido) {
             setVisible(false);//se oculta la ventana
-            jfPrincipal.utils.mensajeInformacion("Usuario válido. ¡Bienvenido!");
-            jfPrincipal principal = new jfPrincipal();
+            Utils.mensajeInformacion("Usuario válido. ¡Bienvenido!");
+            principal = new jfPrincipal();
             principal.setVisible(true);
             principal.setTitle("ACADEMIA DE FULBTIO");
         } else {
