@@ -8,7 +8,6 @@
  *
  * Created on 14/08/2024, 12:41:52 AM
  */
-
 package academiafulbito.vista.interfaces;
 
 import academiafulbito.vista.utilidades.Utils;
@@ -30,6 +29,9 @@ public class jfPrincipal extends javax.swing.JFrame {
     /** Creates new form jfPrincipal */
     public static Utils utils;
     public static jifCategorias menuCategorias;
+    public static jifPadres menuPadres;
+    public static jifProfesores menuProfesores;
+
     public jfPrincipal() {
         initComponents();
 
@@ -37,19 +39,25 @@ public class jfPrincipal extends javax.swing.JFrame {
 
         setLocationRelativeTo(null);
         jpMenuVertical.setLayout(new BoxLayout(jpMenuVertical, BoxLayout.Y_AXIS));// Disposición vertical
-        jpMenuVertical.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));//margen
+        jpMenuVertical.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));//margen
 
         // Crear botones para el menú
         JButton btnEmpresa = createMenuButton("   EMPRESA      ", "/academiafulbito/vista/imagenes/maestras/empresa.png");
         JButton btnCategoria = createMenuButton("   CATEGORIA   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
+        JButton btnPadre = createMenuButton("   PADRES   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
+        JButton btnProfesor = createMenuButton("   PROFESORES   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
 
         // Agregar botones al JPanel
         jpMenuVertical.add(btnEmpresa);
         jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4))); // Espacio entre botones
         jpMenuVertical.add(btnCategoria);
         jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
+        jpMenuVertical.add(btnPadre);
+        jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
+        jpMenuVertical.add(btnProfesor);
+        jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
 
-        btnCategoria.addActionListener(new ActionListener(){
+        btnCategoria.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,6 +68,34 @@ public class jfPrincipal extends javax.swing.JFrame {
                 menuCategorias.setLocation(utils.posicionX(menuCategorias, jdpAcademias), utils.posicionY(menuCategorias, jdpAcademias));
                 menuCategorias.show();
                 menuCategorias.toFront();
+            }
+        });
+
+        btnPadre.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuPadres == null || menuPadres.isClosed()) {
+                    menuPadres = new jifPadres(jdpAcademias);
+                    jdpAcademias.add(menuPadres);
+                }
+                menuPadres.setLocation(utils.posicionX(menuPadres, jdpAcademias), utils.posicionY(menuPadres, jdpAcademias));
+                menuPadres.show();
+                menuPadres.toFront();
+            }
+        });
+
+        btnProfesor.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuProfesores == null || menuProfesores.isClosed()) {
+                    menuProfesores = new jifProfesores(jdpAcademias);
+                    jdpAcademias.add(menuProfesores);
+                }
+                menuProfesores.setLocation(utils.posicionX(menuProfesores, jdpAcademias), utils.posicionY(menuProfesores, jdpAcademias));
+                menuProfesores.show();
+                menuProfesores.toFront();
             }
         });
     }
@@ -108,16 +144,16 @@ public class jfPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-    * @param args the command line arguments
-    */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 new jfPrincipal().setVisible(true);
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JDesktopPane jdpAcademias;
