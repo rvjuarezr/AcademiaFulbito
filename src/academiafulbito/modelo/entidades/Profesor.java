@@ -30,6 +30,15 @@ public class Profesor {
     @Column(name = "Telefono", nullable = true, length = 15)
     private String telefono;
 
+    public Profesor() {
+    }
+
+    public Profesor(String nombre, String apellido, String telefono) {
+        this.nombreProfesor = nombre;
+        this.apellidoProfesor = apellido;
+        this.telefono = telefono;
+    }
+
     public String getApellidoProfesor() {
         return apellidoProfesor;
     }
