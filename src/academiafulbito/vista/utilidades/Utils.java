@@ -5,18 +5,30 @@
 
 package academiafulbito.vista.utilidades;
 
+import academiafulbito.modelo.entidades.Categoria;
+import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.interfaces.jfPrincipal;
+import academiafulbito.vista.interfaces.jifCategorias;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -145,6 +157,9 @@ public class Utils extends DefaultTableCellRenderer{
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK)); // Solo borde inferior
         setHorizontalAlignment(SwingConstants.CENTER); // Centra el contenido en la celda
 
+        // Establece el modo de selección de filas para permitir solo una selección a la vez.
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
         return this;
     }
 
@@ -163,5 +178,56 @@ public class Utils extends DefaultTableCellRenderer{
                 return column >= 4 && column <= 6;
             }
         };
+    }
+
+    // Método para configurar la transparencia y estilo de la tabla
+    public static void configurarEstiloTabla(JTable tabla, JScrollPane contenedor) {
+        tabla.setOpaque(false);// Hace la tabla transparente
+        ((DefaultTableCellRenderer) tabla.getDefaultRenderer(Object.class)).setOpaque(false);// Hace las celdas transparentes
+        tabla.setShowGrid(false);// Desactiva el grid para ocultar los bordes predeterminados
+        tabla.setIntercellSpacing(new Dimension(0, 0));// Elimina el espacio entre celdas
+        contenedor.getViewport().setOpaque(false);// Hace el viewport transparente
+        contenedor.setPreferredSize(new Dimension(600, 400)); // Cambia las dimensiones a tu gusto.
+        contenedor.setMinimumSize(new Dimension(600, 400));   // Garantiza un tamaño mínimo.
+        contenedor.setMaximumSize(new Dimension(600, 400));   // Limita el tamaño máximo.
+        contenedor.getParent().repaint();    // Redibuja la interfaz.
+
+    }
+
+    // Método para agregar los botones a las columnas
+    public static void configurarBotonesAccion(JTable tabla) {
+        // Agregar boton ver
+        tabla.getColumn(LiteralesTexto.LITERAL_VER).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_VER));
+        tabla.getColumn(LiteralesTexto.LITERAL_VER).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_VER));
+
+
+        // Agregar boton Editar
+        tabla.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_EDITAR));
+        tabla.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_EDITAR));
+
+
+        // Agregar boton Eliminar
+        tabla.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_ELIMINAR));
+        tabla.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_ELIMINAR));
+    }
+
+    public static void cargarComboEstado(JComboBox cmbEstado) {
+        for (Estado estado : Estado.values()) {
+            cmbEstado.addItem(estado);
+        }
+    }
+
+    public static List<Categoria> cargarPaginado(int numeroPagina, int totalDePaginas, JLabel lblPaginaActual) {
+
+        lblPaginaActual.setText("Página " + numeroPagina + " de " + totalDePaginas);
+        if (jfPrincipal.menuCategorias instanceof jifCategorias) {
+            System.out.println("entro en el metodo cargarPaginado");
+            //totalDePaginas = jifCategorias.categoriaFacade.obtenerTotalPaginas(tamanioPagina);
+            return jifCategorias.categoriaFacade.listarCategoriasPaginadas(numeroPagina, totalDePaginas);
+        }
+        
+        //listarCategorias(categoriasPaginadas);
+        return null;
+
     }
 }

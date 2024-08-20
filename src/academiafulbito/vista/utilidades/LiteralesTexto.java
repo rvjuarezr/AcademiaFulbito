@@ -23,6 +23,7 @@ public class LiteralesTexto {
     public static final String ERROR_FECHA_RANGO = "La fecha seleccionada no está en el rango permitido.";
     public static final String ERROR_FECHA_NO_VALIDA = "Debe seleccionar una fecha válida.";
     public static final String ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO = "¿ESTA SEGURO DE GUARDAR\nEL NUEVO REGISTRO?";
+    public static final String ESTA_SEGURO_MODIFICAR_REGISTRO = "¿ESTA SEGURO DE MODIFICAR\nEL REGISTRO?";
     public static final String REGISTRO_GUARDADO_CORRECTAMENTE = "EL REGISTRO SE HA GUARDADO CORRECTAMENTE";
     public static final String NO_HAY_SOCIOS_PARA_MOSTRAR = "NO HAY SOCIOS PARA LISTAR";
     public static final String ESTA_SEGURO_ELIMINAR_REGISTRO = "¿ESTA SEGURO DE ELIMINAR EL REGISTRO?";
@@ -34,5 +35,11 @@ public class LiteralesTexto {
     public static final String LITERAL_VER = "Ver";
     public static final String LITERAL_EDITAR = "Editar";
     public static final String LITERAL_ELIMINAR = "Eliminar";
+    public static final String LITERAL_ID = "ID";
+    public static final String LITERAL_NOMBRE = "Nombre";
+    public static final String LITERAL_EDAD_MIN = "Edad Min.";
+    public static final String LITERAL_EDAD_MAX = "Edad Max.";
+    public static final String LITERAL_ESTADO = "Estado";
+    public static final String LITERAL_CADENA_VACIA = "";
 
 }
