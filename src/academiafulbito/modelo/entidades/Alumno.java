@@ -2,11 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package academiafulbito.modelo.entidades;
 
-import academiafulbito.modelo.enums.Estado;
-import academiafulbito.modelo.enums.Rol;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,8 +18,9 @@ import javax.persistence.Temporal;
  * @author Walter Jair
  */
 @Entity
-@Table(name="alumno", catalog="bdacademiafulbito", schema="")
+@Table(name = "alumno", catalog = "bdacademiafulbito", schema = "")
 public class Alumno {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_alumno", nullable = false)
@@ -38,7 +36,18 @@ public class Alumno {
     private int idCategoria;
     @Column(name = "ID_padre", nullable = false, length = 11)
     private int idPadre;
-    
+
+    public Alumno() {
+    }
+
+    public Alumno(String nombre, String apellido, Date fechaNacimiento, int IdCategoria, int IdPadre) {
+        this.nombreAlumno = nombre;
+        this.apellidoAlumno = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.idCategoria = IdCategoria;
+        this.idPadre = IdPadre;
+    }
+
     public int getIdAlumno() {
         return idAlumno;
     }
