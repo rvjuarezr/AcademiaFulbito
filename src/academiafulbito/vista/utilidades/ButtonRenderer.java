@@ -7,6 +7,7 @@ package academiafulbito.vista.utilidades;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -23,6 +24,7 @@ public class ButtonRenderer extends JButton implements TableCellRenderer{
     public ButtonRenderer(String label) {
         setText(label);
         setOpaque(false); // Para mantener la transparencia
+        setCursor(new Cursor(Cursor.HAND_CURSOR)); // Establece la "manito"
 
     }
 

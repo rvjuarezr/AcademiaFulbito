@@ -78,4 +78,13 @@ public class Categoria {
     public void setEdadMax(int edadMax) {
         this.edadMax = edadMax;
     }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+    
 }
