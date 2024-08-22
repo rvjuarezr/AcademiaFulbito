@@ -4,7 +4,7 @@
  */
 
 /*
- * jifCategorias.java
+ * jifCampeonatos.java
  *
  * Created on 02/08/2024, 02:42:40 PM
  */
@@ -13,32 +13,42 @@ package academiafulbito.vista.interfaces;
 
 import academiafulbito.controlador.beans.CampeonatoFacade;
 import academiafulbito.modelo.entidades.Campeonato;
-import academiafulbito.vista.utilidades.ButtonEditor;
-import academiafulbito.vista.utilidades.ButtonRenderer;
+import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
-import java.sql.SQLException;
 import java.util.List;
-import javax.swing.JCheckBox;
 import javax.swing.JDesktopPane;
-import javax.swing.ListSelectionModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Ronald J
+ * @author Jose CHeca
  */
 public class jifCampeonatos extends javax.swing.JInternalFrame {
 
     JDesktopPane jdp;
     public static CampeonatoFacade campeonatoFacade;
     DefaultTableModel modelo;
-    /** Creates new form jifCategorias */
+    String[] nombreColumnas = {
+        LiteralesTexto.LITERAL_ID,
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_TEMPORADA,
+        LiteralesTexto.LITERAL_ESTADO,
+        LiteralesTexto.LITERAL_VER,
+        LiteralesTexto.LITERAL_EDITAR,
+        LiteralesTexto.LITERAL_ELIMINAR
+    };
+    int indicador;//para saber si estamos en modo de edicion
+    private int idSeleccionada; // Variable para almacenar la ID de la compeonato seleccionada
+    private int paginaActual = 1;
+    private int tamanioPagina = 5;//para el paginado de tabla
+    /** Creates new form jifCampeonatos */
     public jifCampeonatos(JDesktopPane jdpModAF){
         initComponents();
         jdp=jdpModAF;
-        int[] anchoColumnas = {15,80, 20, 80}; // Anchos específicos para cada columna
-        jfPrincipal.utils.setAnchoColumnas(tblCampeonatos, anchoColumnas);
-        jfPrincipal.utils.ocultarColumnas(tblCampeonatos, 0);
+        Utils.cargarComboEstado(jcbEstado);
+        accionBotones(false, false);
         campeonatoFacade = new CampeonatoFacade();
         listarCampeonatos(campeonatoFacade.getListadoCampeonatos());
     }
@@ -52,92 +62,327 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tphCampeonatos = new org.edisoncor.gui.tabbedPane.TabbedPaneHeader();
-        panel1 = new org.edisoncor.gui.panel.Panel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        tphCampeonatos = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jspCampeonatos = new javax.swing.JScrollPane();
         tblCampeonatos = new javax.swing.JTable();
-        panel2 = new org.edisoncor.gui.panel.Panel();
+        btnNuevaCampeonato = new org.edisoncor.gui.button.ButtonRound();
+        lblPaginaActual = new javax.swing.JLabel();
+        btnAnterior = new org.edisoncor.gui.button.ButtonRound();
+        btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
+        jPanel2 = new javax.swing.JPanel();
+        txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtTemporada = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtEdadMax = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        btnGuardar = new org.edisoncor.gui.button.ButtonRound();
+        jLabel1 = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
+        jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
 
+        setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
         setTitle("MANTENIMIENTO CAMPEONATOS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panel1.setColorPrimario(new java.awt.Color(255, 255, 255));
-        panel1.setColorSecundario(new java.awt.Color(51, 51, 255));
-        panel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        tphCampeonatos.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jspCampeonatos.setBackground(new java.awt.Color(255, 255, 255));
+        jspCampeonatos.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jspCampeonatos.setOpaque(false);
 
         tblCampeonatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "ID", "CAMPEONATO", "TEMPORADA", "Acciones"
+
             }
         ));
-        jScrollPane1.setViewportView(tblCampeonatos);
+        tblCampeonatos.setOpaque(false);
+        jspCampeonatos.setViewportView(tblCampeonatos);
 
-        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 620, 250));
+        jPanel1.add(jspCampeonatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
 
-        tphCampeonatos.addTab("LISTADO", panel1);
+        btnNuevaCampeonato.setBackground(new java.awt.Color(156, 156, 247));
+        btnNuevaCampeonato.setText("+ CAMPEONATO");
+        btnNuevaCampeonato.setFont(new java.awt.Font("Arial", 1, 18));
+        btnNuevaCampeonato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevaCampeonatoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevaCampeonato, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 160, 50));
 
-        panel2.setColorPrimario(new java.awt.Color(255, 255, 255));
-        panel2.setColorSecundario(new java.awt.Color(51, 51, 255));
-        panel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        tphCampeonatos.addTab("CAMPEONATOS", panel2);
+        lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPaginaActual.setText("10");
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 330, 50, 50));
 
-        getContentPane().add(tphCampeonatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 300));
+        btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
+        btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
+        btnAnterior.setText("<<");
+        btnAnterior.setFont(new java.awt.Font("Arial", 1, 24));
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 330, -1, 50));
+
+        btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
+        btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
+        btnSiguiente.setText(">>");
+        btnSiguiente.setFont(new java.awt.Font("Arial", 1, 24));
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, -1, 50));
+
+        tphCampeonatos.addTab("LISTADO", jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        txtNombre.setEditable(false);
+        txtNombre.setDescripcion("Nombre*");
+        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
+
+        txtTemporada.setEditable(false);
+        txtTemporada.setDescripcion("Edad Mínima*");
+        txtTemporada.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(txtTemporada, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
+
+        txtEdadMax.setEditable(false);
+        txtEdadMax.setDescripcion("Edad Máxima*");
+        txtEdadMax.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(txtEdadMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
+
+        btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
+        btnGuardar.setBorder(null);
+        btnGuardar.setText("AÑADIR");
+        btnGuardar.setBorderPainted(true);
+        btnGuardar.setContentAreaFilled(true);
+        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 270, 170, 70));
+
+        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        jLabel1.setForeground(new java.awt.Color(103, 98, 98));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("NUEVO CAMPEONATO");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 290, 20));
+
+        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
+        btnCancelar.setText("VOLVER");
+        btnCancelar.setContentAreaFilled(false);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
+
+        jcbEstado.setEnabled(false);
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
+
+        tphCampeonatos.addTab("REGISTRO", jPanel2);
+
+        getContentPane().add(tphCampeonatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 430));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnNuevaCampeonatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaCampeonatoActionPerformed
+        // TODO add your handling code here:
+        indicador = 0;//para poder guardar
+        tphCampeonatos.setSelectedIndex(1);
+        limpiarCampos();
+        habilitarCampos(true);
+        accionBotones(true, true);
+    }//GEN-LAST:event_btnNuevaCampeonatoActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+        if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+            Campeonato campeonato;
+            switch(indicador){
+                case 0://registrar campeonato
+                    campeonato = new Campeonato();
+                    campeonatoFacade.guardarCampeonato(getDatosCampeonato(campeonato));
+                    Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                    break;
+                case 1://actualizar campeonato
+                    campeonato = campeonatoFacade.findCampeonatoById(idSeleccionada);
+                    campeonatoFacade.actualizarCampeonato(getDatosCampeonato(campeonato));
+                    Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                    break;
+            }
+
+            listarCampeonatos(campeonatoFacade.getListadoCampeonatos());
+            limpiarCampos();
+            habilitarCampos(false);
+            accionBotones(false, false);
+            btnGuardar.setText("Añadir");
+            indicador = 0;
+            tphCampeonatos.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        limpiarCampos();
+        habilitarCampos(false);
+        tphCampeonatos.setSelectedIndex(0);
+        accionBotones(false, false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        // TODO add your handling code here:
+        int totalDePaginas = campeonatoFacade.obtenerTotalPaginas(tamanioPagina);
+        if (paginaActual < totalDePaginas) {
+            paginaActual++;
+            /*listarCampeonatos(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual)); */
+        }
+    }//GEN-LAST:event_btnSiguienteActionPerformed
+
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        // TODO add your handling code here:
+        if (paginaActual > 1) {
+            paginaActual--;
+           /* listarCampeonatos(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual)); */
+        }
+    }//GEN-LAST:event_btnAnteriorActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private org.edisoncor.gui.panel.Panel panel1;
-    private org.edisoncor.gui.panel.Panel panel2;
+    private org.edisoncor.gui.button.ButtonRound btnAnterior;
+    private javax.swing.JButton btnCancelar;
+    private org.edisoncor.gui.button.ButtonRound btnGuardar;
+    private org.edisoncor.gui.button.ButtonRound btnNuevaCampeonato;
+    private org.edisoncor.gui.button.ButtonRound btnSiguiente;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
+    private javax.swing.JScrollPane jspCampeonatos;
+    private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblCampeonatos;
-    private org.edisoncor.gui.tabbedPane.TabbedPaneHeader tphCampeonatos;
+    private javax.swing.JTabbedPane tphCampeonatos;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtEdadMax;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtTemporada;
     // End of variables declaration//GEN-END:variables
 
     private void listarCampeonatos(List<Campeonato> listaCampeonatos){
         // Selecciona el primer tab en un JTabbedPane
         tphCampeonatos.setSelectedIndex(0);
+        
+        modelo = Utils.generarModeloTabla(nombreColumnas);
 
-        // Obtiene el modelo de la tabla
-        modelo=(DefaultTableModel)tblCampeonatos.getModel();
+        // Asignar el modelo a la tabla
+        tblCampeonatos.setModel(modelo);
 
+        int[] anchoColumnas = {15, 105, 20, 20, 8, 10, 18}; // Anchos específicos para cada columna
+        Utils.setAnchoColumnas(tblCampeonatos, anchoColumnas);
+        Utils.ocultarColumnas(tblCampeonatos, 0);//ocultar la primera columna
+        Utils.ocultarColumnas(tblCampeonatos, 3);//ocultar columna estado
+        
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblCampeonatos);
 
-        // Verificar si la lista de socios tiene elementos
+        // Verificar si la lista tiene elementos
         if (listaCampeonatos.size() > 0) {
-            System.out.println("LISTADO DE CAMPEONATOS DESDE LA BBDD");
-            // Iterar sobre la lista de categorias y agregar cada categoria a la tabla
+            // Iterar sobre la lista y agregar cada objeto a la tabla
             for (Campeonato campeonato : listaCampeonatos) {
 
-                System.out.println("campeonato.getIdCampeonato():"+campeonato.getIdCampeonato()+" ,campeonato.getNombre():"+campeonato.getNombre()+" ,campeonato.getTemporada():"+campeonato.getTemporada());
-
-                // Crea un array de objetos con los datos de la categoria para agregar a la tabla.
+                // Crea un array de objetos con los datos del objeto para agregar a la tabla.
                 Object[] fila = new Object[]{
                     campeonato.getIdCampeonato(),
                     campeonato.getNombre(),
-                    campeonato.getTemporada()
+                    campeonato.getTemporada(),
+                    campeonato.getEstado(),
+                    LiteralesTexto.LITERAL_VER,
+                    LiteralesTexto.LITERAL_EDITAR,
+                    LiteralesTexto.LITERAL_ELIMINAR
                 };
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
             tblCampeonatos.setDefaultRenderer(Object.class, new Utils(18));
+            
+            Utils.configurarEstiloTabla(tblCampeonatos, jspCampeonatos);
+            Utils.configurarBotonesAccion(tblCampeonatos);
+        }
+    }
 
-            // Agregar botones en la última columna
-            tblCampeonatos.getColumn("Acciones").setCellRenderer(new ButtonRenderer("Acciones"));
-            tblCampeonatos.getColumn("Acciones").setCellEditor(new ButtonEditor("Acciones"));
+    private Campeonato getDatosCampeonato(Campeonato campeonato){
+        campeonato.setNombre(txtNombre.getText());
+        campeonato.setTemporada(txtTemporada.getText());
+        campeonato.setEstado((Estado)jcbEstado.getSelectedItem());
 
-            // Establece el modo de selección de filas para permitir solo una selección a la vez.
-            tblCampeonatos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        return campeonato;
+    }
 
+    private void limpiarCampos() {
+        txtNombre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtTemporada.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+    }
+
+    private void habilitarCampos(boolean band){
+        txtNombre.setEditable(band);
+        txtTemporada.setEditable(band);
+        if(indicador == 0){
+            jcbEstado.setSelectedIndex(0);
+            jcbEstado.setEnabled(!band);
+        } else{
+            jcbEstado.setEnabled(band);
+        }
+        
+    }
+
+    private void accionBotones(boolean d, boolean e) {
+        btnCancelar.setEnabled(d);
+        btnGuardar.setEnabled(e);
+    }
+
+    public void cargarDatosEnFormulario(int row) {
+        if (row != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblCampeonatos.getValueAt(row, 0).toString()); // Supone que la ID está en la primera columna
+
+            // Obtener los datos de la fila seleccionada
+            String nombre = (String) tblCampeonatos.getValueAt(row, 1);
+            String temporada = (String)tblCampeonatos.getValueAt(row, 2);
+            Estado estado = (Estado)tblCampeonatos.getValueAt(row, 3);
+
+            // Asignar los datos a los JTextField en el segundo panel
+            txtNombre.setText(nombre);
+            txtTemporada.setText(temporada);
+
+            // Seleccionar el estado en el JComboBox
+            jcbEstado.setSelectedItem(estado);
+
+            // Cambiar al segundo panel donde están los JTextField
+            tphCampeonatos.setSelectedIndex(1);
+            btnGuardar.setText("Modificar");
+            indicador = 1;
+            accionBotones(true, true);
+            habilitarCampos(true);
+        } else{
+            //colocar alguna alerta
         }
     }
 }

@@ -41,5 +41,6 @@ public class LiteralesTexto {
     public static final String LITERAL_EDAD_MAX = "Edad Max.";
     public static final String LITERAL_ESTADO = "Estado";
     public static final String LITERAL_CADENA_VACIA = "";
+    public static final String LITERAL_TEMPORADA = "Temporada";
 
 }
