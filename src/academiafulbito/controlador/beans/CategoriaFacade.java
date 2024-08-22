@@ -6,17 +6,17 @@
 package academiafulbito.controlador.beans;
 
 import academiafulbito.modelo.entidades.Categoria;
+import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
  *
  * @author Ronald J
  */
-public class CategoriaFacade {
+public class CategoriaFacade implements EntityFacade<Categoria>{
 
     EntityManagerFactory emf;
     
@@ -88,20 +88,22 @@ public class CategoriaFacade {
         }
     }
 
-    public List<Categoria> listarCategoriasPaginadas(int paginaActual, int tamanioPagina) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.createQuery("SELECT c FROM Categoria c", Categoria.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
+    @Override
     public int obtenerTotalPaginas(int tamanioPagina) {
         EntityManager em = getEntityManager();
         try {
             long totalCategorias = em.createQuery("SELECT COUNT(c) FROM Categoria c", Long.class).getSingleResult();
             return (int) Math.ceil((double) totalCategorias / tamanioPagina);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<Categoria> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT c FROM Categoria c", Categoria.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
         } finally {
             em.close();
         }
