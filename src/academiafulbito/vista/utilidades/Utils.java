@@ -5,13 +5,10 @@
 
 package academiafulbito.vista.utilidades;
 
-import academiafulbito.modelo.entidades.Categoria;
 import academiafulbito.modelo.enums.Estado;
-import academiafulbito.vista.interfaces.jfPrincipal;
-import academiafulbito.vista.interfaces.jifCategorias;
+import academiafulbito.modelo.interfaces.EntityFacade;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
@@ -19,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -27,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -215,19 +211,5 @@ public class Utils extends DefaultTableCellRenderer{
         for (Estado estado : Estado.values()) {
             cmbEstado.addItem(estado);
         }
-    }
-
-    public static List<Categoria> cargarPaginado(int numeroPagina, int totalDePaginas, JLabel lblPaginaActual) {
-
-        lblPaginaActual.setText("Página " + numeroPagina + " de " + totalDePaginas);
-        if (jfPrincipal.menuCategorias instanceof jifCategorias) {
-            System.out.println("entro en el metodo cargarPaginado");
-            //totalDePaginas = jifCategorias.categoriaFacade.obtenerTotalPaginas(tamanioPagina);
-            return jifCategorias.categoriaFacade.listarCategoriasPaginadas(numeroPagina, totalDePaginas);
-        }
-        
-        //listarCategorias(categoriasPaginadas);
-        return null;
-
     }
 }

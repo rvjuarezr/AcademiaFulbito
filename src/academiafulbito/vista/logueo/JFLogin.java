@@ -315,6 +315,7 @@ public class JFLogin extends javax.swing.JFrame {
             principal = new jfPrincipal();
             principal.setVisible(true);
             principal.setTitle("ACADEMIA DE FULBTIO");
+            principal.lblSesionUsuario.setText("HOLA : "+ rolUser.toString());
         } else {
             JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos.");
         }
