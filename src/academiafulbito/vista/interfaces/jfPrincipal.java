@@ -30,6 +30,8 @@ public class jfPrincipal extends javax.swing.JFrame {
     /** Creates new form jfPrincipal */
     public static Utils utils;
     public static jifCategorias menuCategorias;
+    public static jifCanchas menuCanchas;
+    public static jifCampeonatos menuCampeonatos;
     public static jifPadres menuPadres;
     public static jifProfesores menuProfesores;
 
@@ -54,6 +56,8 @@ public class jfPrincipal extends javax.swing.JFrame {
         // Crear botones para el menú
         JButton btnEmpresa = createMenuButton("   EMPRESA      ", "/academiafulbito/vista/imagenes/maestras/empresa.png");
         JButton btnCategoria = createMenuButton("   CATEGORIA   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
+        JButton btnCancha = createMenuButton("   CANCHA   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
+        JButton btnCampeonato = createMenuButton("   CAMPEONATO   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
         JButton btnPadre = createMenuButton("   PADRES   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
         JButton btnProfesor = createMenuButton("   PROFESORES   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
 
@@ -62,6 +66,9 @@ public class jfPrincipal extends javax.swing.JFrame {
         jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4))); // Espacio entre botones
         jpMenuVertical.add(btnCategoria);
         jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
+        jpMenuVertical.add(btnCancha);
+        jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
+        jpMenuVertical.add(btnCampeonato);
         jpMenuVertical.add(btnPadre);
         jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
         jpMenuVertical.add(btnProfesor);
@@ -78,6 +85,33 @@ public class jfPrincipal extends javax.swing.JFrame {
                 menuCategorias.setLocation(utils.posicionX(menuCategorias, jdpAcademias), utils.posicionY(menuCategorias, jdpAcademias));
                 menuCategorias.show();
                 menuCategorias.toFront();
+            }
+        });
+
+        btnCancha.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuCanchas == null || menuCanchas.isClosed()) {
+                    menuCanchas = new jifCanchas(jdpAcademias);
+                    jdpAcademias.add(menuCanchas);
+                }
+                menuCanchas.setLocation(utils.posicionX(menuCanchas, jdpAcademias), utils.posicionY(menuCanchas, jdpAcademias));
+                menuCanchas.show();
+                menuCanchas.toFront();
+            }
+        });
+        btnCampeonato.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuCampeonatos == null || menuCampeonatos.isClosed()) {
+                    menuCampeonatos = new jifCampeonatos(jdpAcademias);
+                    jdpAcademias.add(menuCampeonatos);
+                }
+                menuCampeonatos.setLocation(utils.posicionX(menuCampeonatos, jdpAcademias), utils.posicionY(menuCampeonatos, jdpAcademias));
+                menuCampeonatos.show();
+                menuCampeonatos.toFront();
             }
         });
 
