@@ -46,5 +46,7 @@ public class LiteralesTexto {
     public static final String REGISTRO_NO_ENCONTRADO_EN_LA_BBDD = "NO SE HA ENCONTRADO EL REGISTRO EN LA BASE DE DATOS.";
     public static final String ERROR_AL_ELIMINAR_EL_REGISTRO = "ERROR AL ELIMINAR EL REGISTRO.";
     public static final String LITERAL_ERROR = "ERROR.";
+    public static final String LITERAL_APELLIDO = "Apellido";
+    public static final String LITERAL_TELEFONO = "Telefono";
 
 }

@@ -4,13 +4,15 @@
  */
 package academiafulbito.modelo.entidades;
 
+import academiafulbito.modelo.enums.Estado;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 /**
  *
  * @author Walter Jair
@@ -29,14 +31,18 @@ public class Padre {
     private String apellidoPadre;
     @Column(name = "Telefono", nullable = true, length = 15)
     private String telefono;
+    @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
+    @Column(name = "estado")
+    private Estado estado;
 
     public Padre() {
     }
 
-    public Padre(String nombre, String apellido, String telefono) {
+    public Padre(String nombre, String apellido, String telefono,Estado estado) {
         this.nombrePadre = nombre;
         this.apellidoPadre = apellido;
         this.telefono = telefono;
+        this.estado=estado;
     }
 
     public String getApellidoPadre() {
@@ -69,5 +75,13 @@ public class Padre {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 }
