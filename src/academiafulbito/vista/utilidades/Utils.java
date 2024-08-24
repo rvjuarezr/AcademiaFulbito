@@ -101,15 +101,15 @@ public class Utils extends DefaultTableCellRenderer{
     }
 
     public static void mensajeInformacion(String mensaje) {
-        JOptionPane.showMessageDialog(null, mensaje, "Capacitacion SIGA", 1);
+        JOptionPane.showMessageDialog(null, mensaje, "Academia Fulbito", 1);
     }
 
     public static void mensajeError(String mensaje){
-        JOptionPane.showMessageDialog(null, mensaje, "Capacitacion SIGA", 0);
+        JOptionPane.showMessageDialog(null, mensaje, "Academia Fulbito", 0);
     }
 
     public static int mensajeConfirmacion(String mensaje){
-        return JOptionPane.showConfirmDialog(null, mensaje, "Capacitacion SIGA", 0);
+        return JOptionPane.showConfirmDialog(null, mensaje, "Academia Fulbito", 0);
     }
 
     public static int posicionX(JInternalFrame jif, JDesktopPane dpMostrar){
@@ -171,7 +171,8 @@ public class Utils extends DefaultTableCellRenderer{
             public boolean isCellEditable(int row, int column) {
                 // Permitir la edición solo para las últimas tres columnas:
                 // column 4: Ver, column 5: Editar, column 6: Eliminar
-                return column >= 4 && column <= 6;
+                int totalColumnas = getColumnCount();
+                return column >= totalColumnas - 3 && column < totalColumnas;
             }
         };
     }
