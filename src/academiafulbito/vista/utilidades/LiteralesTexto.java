@@ -41,8 +41,12 @@ public class LiteralesTexto {
     public static final String LITERAL_EDAD_MAX = "Edad Max.";
     public static final String LITERAL_ESTADO = "Estado";
     public static final String LITERAL_CADENA_VACIA = "";
-    public static final String LITERAL_NOMBREPADRE = "Nombre";
-    public static final String LITERAL_APELLIDOPADRE = "Apellido";
+    public static final String LITERAL_TEMPORADA = "Temporada";
+    public static final String POR_FAVOR_SELECCIONE_UNA_REGISTRO_PARA_ELIMINAR = "POR FAVOR, SELECCIONA UN REGISTRO PARA ELIMINAR.";
+    public static final String REGISTRO_NO_ENCONTRADO_EN_LA_BBDD = "NO SE HA ENCONTRADO EL REGISTRO EN LA BASE DE DATOS.";
+    public static final String ERROR_AL_ELIMINAR_EL_REGISTRO = "ERROR AL ELIMINAR EL REGISTRO.";
+    public static final String LITERAL_ERROR = "ERROR.";
+    public static final String LITERAL_APELLIDO = "Apellido";
     public static final String LITERAL_TELEFONO = "Telefono";
 
 }

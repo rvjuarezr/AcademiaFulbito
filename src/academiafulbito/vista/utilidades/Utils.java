@@ -5,13 +5,10 @@
 
 package academiafulbito.vista.utilidades;
 
-import academiafulbito.modelo.entidades.Categoria;
 import academiafulbito.modelo.enums.Estado;
-import academiafulbito.vista.interfaces.jfPrincipal;
-import academiafulbito.vista.interfaces.jifCategorias;
+import academiafulbito.modelo.interfaces.EntityFacade;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
@@ -19,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -27,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -105,15 +101,15 @@ public class Utils extends DefaultTableCellRenderer{
     }
 
     public static void mensajeInformacion(String mensaje) {
-        JOptionPane.showMessageDialog(null, mensaje, "Capacitacion SIGA", 1);
+        JOptionPane.showMessageDialog(null, mensaje, "Academia Fulbito", 1);
     }
 
     public static void mensajeError(String mensaje){
-        JOptionPane.showMessageDialog(null, mensaje, "Capacitacion SIGA", 0);
+        JOptionPane.showMessageDialog(null, mensaje, "Academia Fulbito", 0);
     }
 
     public static int mensajeConfirmacion(String mensaje){
-        return JOptionPane.showConfirmDialog(null, mensaje, "Capacitacion SIGA", 0);
+        return JOptionPane.showConfirmDialog(null, mensaje, "Academia Fulbito", 0);
     }
 
     public static int posicionX(JInternalFrame jif, JDesktopPane dpMostrar){
@@ -175,7 +171,8 @@ public class Utils extends DefaultTableCellRenderer{
             public boolean isCellEditable(int row, int column) {
                 // Permitir la edición solo para las últimas tres columnas:
                 // column 4: Ver, column 5: Editar, column 6: Eliminar
-                return column >= 4 && column <= 6;
+                int totalColumnas = getColumnCount();
+                return column >= totalColumnas - 3 && column < totalColumnas;
             }
         };
     }
@@ -215,19 +212,5 @@ public class Utils extends DefaultTableCellRenderer{
         for (Estado estado : Estado.values()) {
             cmbEstado.addItem(estado);
         }
-    }
-
-    public static List<Categoria> cargarPaginado(int numeroPagina, int totalDePaginas, JLabel lblPaginaActual) {
-
-        lblPaginaActual.setText("Página " + numeroPagina + " de " + totalDePaginas);
-        if (jfPrincipal.menuCategorias instanceof jifCategorias) {
-            System.out.println("entro en el metodo cargarPaginado");
-            //totalDePaginas = jifCategorias.categoriaFacade.obtenerTotalPaginas(tamanioPagina);
-            return jifCategorias.categoriaFacade.listarCategoriasPaginadas(numeroPagina, totalDePaginas);
-        }
-        
-        //listarCategorias(categoriasPaginadas);
-        return null;
-
     }
 }

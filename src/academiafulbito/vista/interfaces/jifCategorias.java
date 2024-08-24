@@ -14,7 +14,6 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.CategoriaFacade;
 import academiafulbito.modelo.entidades.Categoria;
 import academiafulbito.modelo.enums.Estado;
-import academiafulbito.vista.logueo.JFLogin;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
 import java.util.List;
@@ -45,6 +44,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     private int idSeleccionada; // Variable para almacenar la ID de la categoría seleccionada
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
+    private int totalPaginas;
     /** Creates new form jifCategorias */
     public jifCategorias(JDesktopPane jdpModAF){
         initComponents();
@@ -52,8 +52,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         Utils.cargarComboEstado(jcbEstado);
         accionBotones(false, false);
         categoriaFacade = new CategoriaFacade();
-        listarCategorias(categoriaFacade.getListadoCategorias());
-        //listarCategorias(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual));
+        listarCategorias(paginaActual, tamanioPagina);
     }
 
     /** This method is called from within the constructor to
@@ -119,26 +118,26 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         });
         jPanel1.add(btnNuevaCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 140, 50));
 
-        lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+        lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
-        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 330, 50, 50));
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, 220, 50));
 
         btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
         btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
         btnAnterior.setText("<<");
-        btnAnterior.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        btnAnterior.setFont(new java.awt.Font("Arial", 1, 24));
         btnAnterior.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 330, -1, 50));
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 330, -1, 50));
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
         btnSiguiente.setText(">>");
-        btnSiguiente.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        btnSiguiente.setFont(new java.awt.Font("Arial", 1, 24));
         btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSiguienteActionPerformed(evt);
@@ -179,7 +178,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 270, 170, 70));
 
-        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVA CATEGORIA");
@@ -197,7 +196,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
 
         jcbEstado.setEnabled(false);
-        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
 
         tphCategorias.addTab("REGISTRO", jPanel2);
@@ -234,7 +233,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                     break;
             }
 
-            listarCategorias(categoriaFacade.getListadoCategorias());
+            listarCategorias(paginaActual, tamanioPagina);
             limpiarCampos();
             habilitarCampos(false);
             accionBotones(false, false);
@@ -254,10 +253,9 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
         // TODO add your handling code here:
-        int totalDePaginas = categoriaFacade.obtenerTotalPaginas(tamanioPagina);
-        if (paginaActual < totalDePaginas) {
+        if (paginaActual < totalPaginas) {
             paginaActual++;
-            listarCategorias(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual));
+            listarCategorias(paginaActual, tamanioPagina);
         }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -265,7 +263,8 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (paginaActual > 1) {
             paginaActual--;
-            listarCategorias(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual));
+            //listarCategorias(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual, jfPrincipal.menuCategorias));
+            listarCategorias(paginaActual, tamanioPagina);
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
@@ -394,4 +393,62 @@ public class jifCategorias extends javax.swing.JInternalFrame {
             //colocar alguna alerta
         }
     }
+
+    private void listarCategorias(int paginaActual, int tamanioPagina) {
+        totalPaginas = categoriaFacade.obtenerTotalPaginas(tamanioPagina);
+
+        List<Categoria> listaCategorias = categoriaFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+
+        // Actualizar el JLabel con la página actual
+        lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
+
+        // Mostrar las categorías en la tabla
+        listarCategorias(listaCategorias);
+        actualizarEstadoBotones();// Actualizar el estado de los botones
+    }
+
+    private void actualizarEstadoBotones() {
+        btnAnterior.setEnabled(paginaActual > 1);
+        btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
+    public void eliminarCategoriaSeleccionada(int filaSeleccionada) {
+        if (filaSeleccionada != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblCategorias.getValueAt(filaSeleccionada, 0).toString()); // Supone que la ID está en la primera columna
+            if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO) == JOptionPane.YES_OPTION) {
+                Categoria categoriaAEliminar = categoriaFacade.findCategoriaById(idSeleccionada);
+                if(categoriaAEliminar != null){
+                    try {
+                        // Llamar al método para eliminar
+                        categoriaFacade.eliminarCategoria(categoriaAEliminar);
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_ELIMINADO_CORRECTAMENTE);
+
+                        // Actualizar la tabla después de eliminar
+                        totalPaginas = categoriaFacade.obtenerTotalPaginas(tamanioPagina);
+
+                        // Verificar si la página actual es mayor que el total de páginas después de la eliminación
+                        if (paginaActual > totalPaginas) {
+                            paginaActual = totalPaginas; // Ajustar la página actual a la última disponible
+                        }
+
+                        // Actualizar la tabla después de eliminar
+                        listarCategorias(paginaActual, tamanioPagina); // Volver a listar las categorías después de la eliminación
+
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.ERROR_AL_ELIMINAR_EL_REGISTRO+ " : " + e.getMessage(), LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_NO_ENCONTRADO_EN_LA_BBDD, LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                }
+                
+                
+            }
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, LiteralesTexto.POR_FAVOR_SELECCIONE_UNA_REGISTRO_PARA_ELIMINAR);
+        }
+    }
+
+
 }

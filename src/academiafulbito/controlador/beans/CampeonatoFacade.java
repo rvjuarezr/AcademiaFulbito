@@ -2,24 +2,26 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package academiafulbito.controlador.beans;
 
-import academiafulbito.modelo.entidades.Profesor;
-import academiafulbito.modelo.interfaces.EntityFacade;
+import academiafulbito.modelo.entidades.Campeonato;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
  *
- * @author Walter Jair
+ * @author Ronald J
  */
-public class ProfesorFacade implements EntityFacade<Profesor> {
+public class CampeonatoFacade {
 
     EntityManagerFactory emf;
+    
 
-    public ProfesorFacade() {
+    public CampeonatoFacade(){
         emf = Persistence.createEntityManagerFactory("AcademiaFulbitoPU");
     }
 
@@ -27,26 +29,26 @@ public class ProfesorFacade implements EntityFacade<Profesor> {
         return emf.createEntityManager();
     }
 
-    // Método para listar las profesores
-    public List<Profesor> getListadoProfesores() {
+    // Método para listar las categorías
+    public List<Campeonato> getListadoCampeonatos() {
         EntityManager em = getEntityManager();
-        List<Profesor> profesores = null;
+        List<Campeonato> campeonatos = null;
         try {
-            profesores = em.createQuery("SELECT p FROM Profesor p", Profesor.class).getResultList();
+            campeonatos = em.createQuery("SELECT c FROM Campeonato c", Campeonato.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             em.close(); // Siempre cerrar el EntityManager al final
         }
-        return profesores;
+        return campeonatos;
     }
 
-    // Método para guardar un profesor
-    public void guardarProfesor(Profesor profesor) {
+    // Método para guardar una categoría
+    public void guardarCampeonato(Campeonato campeonato) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(profesor); // Guardar la entidad
+            em.persist(campeonato); // Guardar la entidad
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
@@ -58,22 +60,22 @@ public class ProfesorFacade implements EntityFacade<Profesor> {
         }
     }
 
-    public Profesor findProfesorById(int idProfesor) {
+    public Campeonato findCampeonatoById(int idCampeonato) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Profesor.class, idProfesor);
+            return em.find(Campeonato.class, idCampeonato);
         } finally {
             em.close();
         }
     }
 
-    public void actualizarProfesor(Profesor profesor) {
+    public void actualizarCampeonato(Campeonato campeonato) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
 
             // Simplemente se realiza el merge para actualizar la entidad
-            em.merge(profesor);
+            em.merge(campeonato);
 
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -86,24 +88,24 @@ public class ProfesorFacade implements EntityFacade<Profesor> {
         }
     }
 
-    @Override
-    public int obtenerTotalPaginas(int tamanioPagina) {
+    public List<Campeonato> listarCampeonatosPaginadas(int paginaActual, int tamanioPagina) {
         EntityManager em = getEntityManager();
         try {
-            long totalProfesores = em.createQuery("SELECT COUNT(p) FROM Profesor p", Long.class).getSingleResult();
-            return (int) Math.ceil((double) totalProfesores / tamanioPagina);
+            return em.createQuery("SELECT c FROM Campeonato c", Campeonato.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
         } finally {
             em.close();
         }
     }
 
-    @Override
-    public List<Profesor> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
+    public int obtenerTotalPaginas(int tamanioPagina) {
         EntityManager em = getEntityManager();
         try {
-            return em.createQuery("SELECT p FROM Profesor p", Profesor.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
+            long totalCampeonatos = em.createQuery("SELECT COUNT(c) FROM Campeonato c", Long.class).getSingleResult();
+            return (int) Math.ceil((double) totalCampeonatos / tamanioPagina);
         } finally {
             em.close();
         }
     }
+
+
 }

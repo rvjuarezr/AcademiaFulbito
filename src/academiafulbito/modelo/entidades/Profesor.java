@@ -4,8 +4,11 @@
  */
 package academiafulbito.modelo.entidades;
 
+import academiafulbito.modelo.enums.Estado;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,14 +32,18 @@ public class Profesor {
     private String apellidoProfesor;
     @Column(name = "Telefono", nullable = true, length = 15)
     private String telefono;
+    @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
+    @Column(name = "estado")
+    private Estado estado;
 
     public Profesor() {
     }
 
-    public Profesor(String nombre, String apellido, String telefono) {
+    public Profesor(String nombre, String apellido, String telefono,Estado estado) {
         this.nombreProfesor = nombre;
         this.apellidoProfesor = apellido;
         this.telefono = telefono;
+        this.estado=estado;
     }
 
     public String getApellidoProfesor() {
@@ -70,4 +77,14 @@ public class Profesor {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+
 }

@@ -4,7 +4,7 @@
  */
 
 /*
- * jifCategorias.java
+ * jifProfesores.java
  *
  * Created on 02/08/2024, 02:42:40 PM
  */
@@ -13,16 +13,11 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.ProfesorFacade;
 import academiafulbito.modelo.entidades.Profesor;
 import academiafulbito.modelo.enums.Estado;
-import academiafulbito.vista.utilidades.ButtonEditor;
-import academiafulbito.vista.utilidades.ButtonRenderer;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
-import java.awt.Dimension;
 import java.util.List;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -34,15 +29,30 @@ public class jifProfesores extends javax.swing.JInternalFrame {
     JDesktopPane jdp;
     public static ProfesorFacade profesorFacade;
     DefaultTableModel modelo;
-    String[] nombreColumnas = {"ID", "Nombre", "Apellido", "Telefono", LiteralesTexto.LITERAL_VER, LiteralesTexto.LITERAL_EDITAR, LiteralesTexto.LITERAL_ELIMINAR};
+    String[] nombreColumnas = {
+        LiteralesTexto.LITERAL_ID,
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_APELLIDO,
+        LiteralesTexto.LITERAL_TELEFONO,
+        LiteralesTexto.LITERAL_ESTADO,
+        LiteralesTexto.LITERAL_VER,
+        LiteralesTexto.LITERAL_EDITAR,
+        LiteralesTexto.LITERAL_ELIMINAR
+    };
     int indicador;//para saber si estamos en modo de edicion
+    private int idSeleccionada; // Variable para almacenar la ID del profesor seleccionado
+    private int paginaActual = 1;
+    private int tamanioPagina = 5;//para el paginado de tabla
+    private int totalPaginas;
 
-    /** Creates new form jifCategorias */
+    /** Creates new form jifProfesores */
     public jifProfesores(JDesktopPane jdpModAF) {
         initComponents();
         jdp = jdpModAF;
+        Utils.cargarComboEstado(jcbEstado);
+        accionBotones(false, false);
         profesorFacade = new ProfesorFacade();
-        listarProfesores(profesorFacade.getListadoProfesores());
+        listarProfesores(paginaActual, tamanioPagina);
     }
 
     /** This method is called from within the constructor to
@@ -56,9 +66,12 @@ public class jifProfesores extends javax.swing.JInternalFrame {
 
         tphProfesores = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jspCategorias = new javax.swing.JScrollPane();
+        jspProfesores = new javax.swing.JScrollPane();
         tblProfesores = new javax.swing.JTable();
         btnNuevoProfesor = new org.edisoncor.gui.button.ButtonRound();
+        btnAnterior = new org.edisoncor.gui.button.ButtonRound();
+        lblPaginaActual = new javax.swing.JLabel();
+        btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
         jPanel2 = new javax.swing.JPanel();
         txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtApellido = new org.edisoncor.gui.textField.TextFieldRoundBackground();
@@ -66,6 +79,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         btnGuardar = new org.edisoncor.gui.button.ButtonRound();
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
+        jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -77,9 +91,9 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jspCategorias.setBackground(new java.awt.Color(255, 255, 255));
-        jspCategorias.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jspCategorias.setOpaque(false);
+        jspProfesores.setBackground(new java.awt.Color(255, 255, 255));
+        jspProfesores.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jspProfesores.setOpaque(false);
 
         tblProfesores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -90,9 +104,9 @@ public class jifProfesores extends javax.swing.JInternalFrame {
             }
         ));
         tblProfesores.setOpaque(false);
-        jspCategorias.setViewportView(tblProfesores);
+        jspProfesores.setViewportView(tblProfesores);
 
-        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
+        jPanel1.add(jspProfesores, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 270));
 
         btnNuevoProfesor.setBackground(new java.awt.Color(156, 156, 247));
         btnNuevoProfesor.setText("+ PROFESOR");
@@ -103,6 +117,33 @@ public class jifProfesores extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(btnNuevoProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 140, 50));
+
+        btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
+        btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
+        btnAnterior.setText("<<");
+        btnAnterior.setFont(new java.awt.Font("Arial", 1, 24));
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 350, -1, 50));
+
+        lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPaginaActual.setText("10");
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 350, 220, 50));
+
+        btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
+        btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
+        btnSiguiente.setText(">>");
+        btnSiguiente.setFont(new java.awt.Font("Arial", 1, 24));
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 350, -1, 50));
 
         tphProfesores.addTab("LISTADO", jPanel1);
 
@@ -135,7 +176,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 265, 170, 70));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 310, 170, 70));
 
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -151,11 +192,15 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 320, 220, 70));
+
+        jcbEstado.setEnabled(false);
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
 
         tphProfesores.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphProfesores, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 400));
+        getContentPane().add(tphProfesores, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 450));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -166,24 +211,32 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         tphProfesores.setSelectedIndex(1);
         limpiarCampos();
         habilitarCampos(true);
+        accionBotones(true, true);
     }//GEN-LAST:event_btnNuevoProfesorActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO) == JOptionPane.YES_OPTION) {
-            Profesor profesor = getDatosProfesor();
+        String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+        if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+            Profesor profesor;
             switch (indicador) {
-                case 0://registrar categoria
-                    profesorFacade.guardarProfesor(profesor);
+                case 0://registrar profesor
+                    profesor = new Profesor();
+                    profesorFacade.guardarProfesor(getDatosProfesor(profesor));
                     Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
                     break;
-                case 1://actualizar categoria
+                case 1://actualizar profesor
+                    profesor = profesorFacade.findProfesorById(idSeleccionada);
+                    profesorFacade.actualizarProfesor(getDatosProfesor(profesor));
+                    Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
                     break;
             }
 
-            listarProfesores(profesorFacade.getListadoProfesores());
+            listarProfesores(paginaActual, tamanioPagina);
             limpiarCampos();
             habilitarCampos(false);
+            accionBotones(false, false);
+            btnGuardar.setText("Añadir");
             indicador = 0;
             tphProfesores.setSelectedIndex(0);
         }
@@ -195,14 +248,34 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         habilitarCampos(false);
         tphProfesores.setSelectedIndex(0);
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        // TODO add your handling code here:
+        if (paginaActual > 1) {
+            paginaActual--;
+            listarProfesores(paginaActual, tamanioPagina);
+        }
+}//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        // TODO add your handling code here:
+        if (paginaActual < totalPaginas) {
+            paginaActual++;
+            listarProfesores(paginaActual, tamanioPagina);
+        }
+}//GEN-LAST:event_btnSiguienteActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
     private org.edisoncor.gui.button.ButtonRound btnNuevoProfesor;
+    private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jspCategorias;
+    private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
+    private javax.swing.JScrollPane jspProfesores;
+    private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblProfesores;
     private javax.swing.JTabbedPane tphProfesores;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtApellido;
@@ -219,27 +292,26 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         // Asignar el modelo a la tabla
         tblProfesores.setModel(modelo);
 
-        int[] anchoColumnas = {15, 60, 20, 20, 20, 30, 30}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {15, 60, 20, 20, 20, 15, 25, 25}; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblProfesores, anchoColumnas);
-        Utils.ocultarColumnas(tblProfesores, 0);
+        Utils.ocultarColumnas(tblProfesores, 0);//ocultar la primera columna
+        Utils.ocultarColumnas(tblProfesores, 4);//ocultar columna estado
 
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblProfesores);
 
-        // Verificar si la lista de socios tiene elementos
+        // Verificar si la lista tiene elementos
         if (listaProfesores.size() > 0) {
-            System.out.println("LISTADO DE PROFESORES DESDE LA BBDD");
-            // Iterar sobre la lista de categorias y agregar cada categoria a la tabla
+            // Iterar sobre la lista y agregar cada objeto a la tabla
             for (Profesor profesor : listaProfesores) {
 
-                System.out.println("profesor.getIdProfesor():" + profesor.getIdProfesor() + " ,profesor.getNombreProfesor():" + profesor.getNombreProfesor() + " ,profesor.getApellidoProfesor():" + profesor.getApellidoProfesor() + " ,profesor.getTelefono():" + profesor.getTelefono());
-
-                // Crea un array de objetos con los datos de la categoria para agregar a la tabla.
+                // Crea un array de objetos con los datos del objeto para agregar a la tabla.
                 Object[] fila = new Object[]{
                     profesor.getIdProfesor(),
                     profesor.getNombreProfesor(),
                     profesor.getApellidoProfesor(),
                     profesor.getTelefono(),
+                    profesor.getEstado(),
                     LiteralesTexto.LITERAL_VER,
                     LiteralesTexto.LITERAL_EDITAR,
                     LiteralesTexto.LITERAL_ELIMINAR
@@ -249,47 +321,88 @@ public class jifProfesores extends javax.swing.JInternalFrame {
             // Establece un renderizador personalizado para las celdas de la tabla.
             tblProfesores.setDefaultRenderer(Object.class, new Utils(18));
 
-            // Establece el modo de selección de filas para permitir solo una selección a la vez.
-            tblProfesores.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-            tblProfesores.setOpaque(false); // Hace la tabla transparente
-            ((DefaultTableCellRenderer) tblProfesores.getDefaultRenderer(Object.class)).setOpaque(false); // Hace las celdas transparentes
-            tblProfesores.setShowGrid(false); // Desactiva el grid para ocultar los bordes predeterminados
-            tblProfesores.setIntercellSpacing(new Dimension(0, 0)); // Elimina el espacio entre celdas
-            jspCategorias.getViewport().setOpaque(false); // Hace el viewport transparente
-
-            // Agregar boton ver
-            tblProfesores.getColumn(LiteralesTexto.LITERAL_VER).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_VER));
-            tblProfesores.getColumn(LiteralesTexto.LITERAL_VER).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_VER));
-
-            // Agregar boton Editar
-            tblProfesores.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_EDITAR));
-            tblProfesores.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_EDITAR));
-
-            // Agregar boton Eliminar
-            tblProfesores.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_ELIMINAR));
-            tblProfesores.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_ELIMINAR));
-
+            Utils.configurarEstiloTabla(tblProfesores, jspProfesores);
+            Utils.configurarBotonesAccion(tblProfesores);
         }
     }
 
-    private Profesor getDatosProfesor() {
-        String nombre = txtNombre.getText();
-        String apellido = txtApellido.getText();
-        String telefono = txtTelefono.getText();
+    private Profesor getDatosProfesor(Profesor profesor) {
+        profesor.setNombreProfesor(txtNombre.getText());
+        profesor.setApellidoProfesor(txtApellido.getText());
+        profesor.setTelefono(txtTelefono.getText());
+        profesor.setEstado((Estado) jcbEstado.getSelectedItem());
 
-        return new Profesor(nombre, apellido, telefono);
+        return profesor;
     }
 
     private void limpiarCampos() {
-        txtNombre.setText("");
-        txtApellido.setText("");
-        txtTelefono.setText("");
+        txtNombre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtApellido.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtTelefono.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
     }
 
     private void habilitarCampos(boolean band) {
         txtNombre.setEditable(band);
         txtApellido.setEditable(band);
         txtTelefono.setEditable(band);
+        if (indicador == 0) {
+            jcbEstado.setSelectedIndex(0);
+            jcbEstado.setEnabled(!band);
+        } else {
+            jcbEstado.setEnabled(band);
+        }
+    }
+
+    private void accionBotones(boolean d, boolean e) {
+        btnCancelar.setEnabled(d);
+        btnGuardar.setEnabled(e);
+    }
+
+    public void cargarDatosEnFormulario(int row) {
+        if (row != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblProfesores.getValueAt(row, 0).toString()); // Supone que la ID está en la primera columna
+
+            // Obtener los datos de la fila seleccionada
+            String nombre = (String) tblProfesores.getValueAt(row, 1);
+            String apellido = (String) tblProfesores.getValueAt(row, 2);
+            String telefono = (String) tblProfesores.getValueAt(row, 3);
+            Estado estado = (Estado) tblProfesores.getValueAt(row, 4);
+
+            // Asignar los datos a los JTextField en el segundo panel
+            txtNombre.setText(nombre);
+            txtApellido.setText(apellido);
+            txtTelefono.setText(telefono);
+
+            // Seleccionar el estado en el JComboBox
+            jcbEstado.setSelectedItem(estado);
+
+            // Cambiar al segundo panel donde están los JTextField
+            tphProfesores.setSelectedIndex(1);
+            btnGuardar.setText("Modificar");
+            indicador = 1;
+            accionBotones(true, true);
+            habilitarCampos(true);
+        } else {
+            //colocar alguna alerta
+        }
+    }
+
+    private void listarProfesores(int paginaActual, int tamanioPagina) {
+        totalPaginas = profesorFacade.obtenerTotalPaginas(tamanioPagina);
+
+        List<Profesor> listaprofesores = profesorFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+
+        // Actualizar el JLabel con la página actual
+        lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
+
+        // Mostrar las categorías en la tabla
+        listarProfesores(listaprofesores);
+        actualizarEstadoBotones();// Actualizar el estado de los botones
+    }
+
+    private void actualizarEstadoBotones() {
+        btnAnterior.setEnabled(paginaActual > 1);
+        btnSiguiente.setEnabled(paginaActual < totalPaginas);
     }
 }

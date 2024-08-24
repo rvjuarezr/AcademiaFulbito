@@ -6,7 +6,7 @@
       <Color blue="f6" green="87" red="87" type="rgb"/>
     </Property>
     <Property name="closable" type="boolean" value="true"/>
-    <Property name="title" type="java.lang.String" value="MANTENIMIENTO CATEGORIAS"/>
+    <Property name="title" type="java.lang.String" value="MANTENIMIENTO CAMPEONATOS"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -28,7 +28,7 @@
     <Property name="useNullLayout" type="boolean" value="false"/>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JTabbedPane" name="tphCategorias">
+    <Container class="javax.swing.JTabbedPane" name="tphCampeonatos">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Bookman Old Style" size="24" style="1"/>
@@ -60,7 +60,7 @@
             <Property name="useNullLayout" type="boolean" value="false"/>
           </Layout>
           <SubComponents>
-            <Container class="javax.swing.JScrollPane" name="jspCategorias">
+            <Container class="javax.swing.JScrollPane" name="jspCampeonatos">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -83,7 +83,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tblCategorias">
+                <Component class="javax.swing.JTable" name="tblCampeonatos">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="0" rowCount="0"/>
@@ -125,22 +125,22 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="org.edisoncor.gui.button.ButtonRound" name="btnNuevaCategoria">
+            <Component class="org.edisoncor.gui.button.ButtonRound" name="btnNuevaCampeonato">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f7" green="9c" red="9c" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="+ CATEGORIA"/>
+                <Property name="text" type="java.lang.String" value="+ CAMPEONATO"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="18" style="1"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNuevaCategoriaActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNuevaCampeonatoActionPerformed"/>
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="700" y="10" width="140" height="50"/>
+                  <AbsoluteConstraints x="700" y="10" width="160" height="50"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -154,7 +154,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="570" y="330" width="220" height="50"/>
+                  <AbsoluteConstraints x="740" y="330" width="50" height="50"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -176,7 +176,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="510" y="330" width="-1" height="50"/>
+                  <AbsoluteConstraints x="680" y="330" width="-1" height="50"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -236,7 +236,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtEdadMin">
+            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtTemporada">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="descripcion" type="java.lang.String" value="Edad M&#xed;nima*"/>
@@ -297,7 +297,7 @@
                   <Color blue="62" green="62" red="67" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="NUEVA CATEGORIA"/>
+                <Property name="text" type="java.lang.String" value="NUEVO CAMPEONATO"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
