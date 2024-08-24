@@ -42,6 +42,10 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
                 if (label.equals(LiteralesTexto.LITERAL_EDITAR)) {
                     enviarFilaSeleccionada(); // Método para enviar la fila seleccionada
                 }
+
+                if(label.equals(LiteralesTexto.LITERAL_ELIMINAR)){
+                    eliminarFilaSeleccionada();
+                }
                 fireEditingStopped();// Indica que la edición de la celda terminó
             }
         });
@@ -61,6 +65,12 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
     private void enviarFilaSeleccionada() {        
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
             jfPrincipal.menuCategorias.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
+        }
+    }
+
+    private void eliminarFilaSeleccionada(){
+        if (jfPrincipal.menuCategorias instanceof jifCategorias) {
+            jfPrincipal.menuCategorias.eliminarCategoriaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
         }
     }
 }
