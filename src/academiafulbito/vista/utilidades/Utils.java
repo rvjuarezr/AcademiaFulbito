@@ -6,7 +6,6 @@
 package academiafulbito.vista.utilidades;
 
 import academiafulbito.modelo.enums.Estado;
-import academiafulbito.modelo.interfaces.EntityFacade;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -14,9 +13,7 @@ import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -26,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -212,5 +210,36 @@ public class Utils extends DefaultTableCellRenderer{
         for (Estado estado : Estado.values()) {
             cmbEstado.addItem(estado);
         }
+    }
+
+    /**
+     * Método para crear un JLabel con estilo HTML personalizado.
+     *
+     * @param labelBold Texto en negrita (etiqueta).
+     * @param labelNormal Texto normal (valor).
+     * @return Un JLabel con el texto y estilo especificado.
+     */
+    public static JLabel createStyledLabel(String labelBold, String labelNormal, int tamLetra, int longitudFijaCadena) {
+
+        // Rellenar el primer parámetro con espacios si es necesario
+        while (labelBold.length() < longitudFijaCadena) {
+            labelBold += ".";
+        }
+
+        String htmlText = "<html>  \n\t<style type=\"text/css\">  " +
+                "\n\t\t.estilo1{font-family:Bookman Old Style;font-weight:bold; font-size:"+tamLetra+"px;color:rgb(51,51,51);}  " +
+                "\n\t\t.estilo2{font-family:Bookman Old Style; font-size:"+tamLetra+"px;color:rgb(103,98,98);}  " +
+                "\n\t</style>  \n\t<span class=\"estilo1\">" + labelBold + "</span>" +
+                "\n\t<span class=\"estilo2\">" + labelNormal + "</span> \n</html>";
+
+        return new JLabel(htmlText);
+    }
+
+    public static void aplicarEstiloButtonJOptionPane(String nombreBtn, int tamLetra, int ancho, int altura){
+        // Configurar el tamaño y estilo del botón "Aceptar"
+        UIManager.put("OptionPane.okButtonText", nombreBtn);
+        UIManager.put("Button.font", new Font("Bookman Old Style", Font.BOLD, tamLetra)); // Cambiar la fuente y tamaño
+        UIManager.put("Button.minimumSize", new Dimension(100, 40)); // Cambiar el tamaño mínimo
+        UIManager.put("Button.preferredSize", new Dimension(ancho, altura)); // Cambiar el tamaño preferido
     }
 }
