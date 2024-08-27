@@ -47,6 +47,10 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
                 if (label.equals(LiteralesTexto.LITERAL_ELIMINAR)) {
                     eliminarFilaSeleccionada();
                 }
+
+                if(label.equals(LiteralesTexto.LITERAL_VER)){
+                    mostrarFilaSeleccionada();
+                }
                 fireEditingStopped();// Indica que la edición de la celda terminó
             }
         });
@@ -78,6 +82,12 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
     private void eliminarFilaSeleccionada() {
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
             jfPrincipal.menuCategorias.eliminarCategoriaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
+        }
+    }
+
+    private void mostrarFilaSeleccionada(){
+        if (jfPrincipal.menuCategorias instanceof jifCategorias) {
+            jfPrincipal.menuCategorias.mostrarInformacionCategoria(selectedRow); // Llama al método en el JInternalFrame
         }
     }
 }

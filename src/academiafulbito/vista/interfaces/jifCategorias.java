@@ -14,9 +14,12 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.CategoriaFacade;
 import academiafulbito.modelo.entidades.Categoria;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -178,7 +181,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 270, 170, 70));
 
-        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVA CATEGORIA");
@@ -440,8 +443,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_NO_ENCONTRADO_EN_LA_BBDD, LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
-                }
-                
+                }                
                 
             }
             limpiarCampos();
@@ -450,5 +452,24 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         }
     }
 
+    public void mostrarInformacionCategoria(int filaSeleccionada) {
+
+        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        String nombreCategoria = (String) tblCategorias.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
+        int edadMin = Integer.parseInt(tblCategorias.getValueAt(filaSeleccionada, 2).toString());
+        int edadMax = Integer.parseInt(tblCategorias.getValueAt(filaSeleccionada, 3).toString());
+        Estado estado = (Estado)tblCategorias.getValueAt(filaSeleccionada, 4);
+
+        // Crear un mapa con los datos a mostrar
+        Map<String, String> datos = new HashMap<String, String>(5);
+        datos.put("Categoría:", nombreCategoria);
+        datos.put("Edad Mínima:", String.valueOf(edadMin));
+        datos.put("Edad Máxima:", String.valueOf(edadMax));
+        datos.put("Estado:", estado.toString());
+
+        // Llamar al método genérico para mostrar la información
+        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
+        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE LA CATEGORÍA", datos, 18, 20);
+    }
 
 }
