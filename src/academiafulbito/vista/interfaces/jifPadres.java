@@ -13,9 +13,12 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.PadreFacade;
 import academiafulbito.modelo.entidades.Padre;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -422,5 +425,62 @@ public class jifPadres extends javax.swing.JInternalFrame {
     private void actualizarEstadoBotones() {
         btnAnterior.setEnabled(paginaActual > 1);
         btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
+    public void eliminarPadreSeleccionada(int filaSeleccionada) {
+        if (filaSeleccionada != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblPadres.getValueAt(filaSeleccionada, 0).toString()); // Supone que la ID está en la primera columna
+            if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO) == JOptionPane.YES_OPTION) {
+                Padre padreAEliminar = padreFacade.findPadreById(idSeleccionada);
+                if(padreAEliminar != null){
+                    try {
+                        // Llamar al método para eliminar
+                        padreFacade.eliminarPadre(padreAEliminar);
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_ELIMINADO_CORRECTAMENTE);
+
+                        // Actualizar la tabla después de eliminar
+                        totalPaginas = padreFacade.obtenerTotalPaginas(tamanioPagina);
+
+                        // Verificar si la página actual es mayor que el total de páginas después de la eliminación
+                        if (paginaActual > totalPaginas) {
+                            paginaActual = totalPaginas; // Ajustar la página actual a la última disponible
+                        }
+
+                        // Actualizar la tabla después de eliminar
+                        listarPadres(paginaActual, tamanioPagina); // Volver a listar los padres después de la eliminación
+
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.ERROR_AL_ELIMINAR_EL_REGISTRO+ " : " + e.getMessage(), LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_NO_ENCONTRADO_EN_LA_BBDD, LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, LiteralesTexto.POR_FAVOR_SELECCIONE_UNA_REGISTRO_PARA_ELIMINAR);
+        }
+    }
+
+    public void mostrarInformacionPadre(int filaSeleccionada) {
+
+        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        String nombrePadre = (String) tblPadres.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
+        String apellidoPadre = (String) tblPadres.getValueAt(filaSeleccionada, 2).toString();
+        String telefono = (String) tblPadres.getValueAt(filaSeleccionada, 3).toString();
+        Estado estado = (Estado)tblPadres.getValueAt(filaSeleccionada, 4);
+
+        // Crear un mapa con los datos a mostrar
+        Map<String, String> datos = new HashMap<String, String>(5);
+        datos.put("Nombre:", nombrePadre);
+        datos.put("Apellido:",apellidoPadre );
+        datos.put("Telefono:", telefono);
+        datos.put("Estado:", estado.toString());
+
+        // Llamar al método genérico para mostrar la información
+        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
+        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL PADRE", datos, 18, 20);
     }
 }

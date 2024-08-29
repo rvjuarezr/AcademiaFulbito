@@ -13,9 +13,12 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.ProfesorFacade;
 import academiafulbito.modelo.entidades.Profesor;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -404,5 +407,63 @@ public class jifProfesores extends javax.swing.JInternalFrame {
     private void actualizarEstadoBotones() {
         btnAnterior.setEnabled(paginaActual > 1);
         btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
+    public void eliminarProfesorSeleccionada(int filaSeleccionada) {
+        if (filaSeleccionada != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblProfesores.getValueAt(filaSeleccionada, 0).toString()); // Supone que la ID está en la primera columna
+            if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO) == JOptionPane.YES_OPTION) {
+                Profesor profesorAEliminar = profesorFacade.findProfesorById(idSeleccionada);
+                if(profesorAEliminar != null){
+                    try {
+                        // Llamar al método para eliminar
+                        profesorFacade.eliminarProfesor(profesorAEliminar);
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_ELIMINADO_CORRECTAMENTE);
+
+                        // Actualizar la tabla después de eliminar
+                        totalPaginas = profesorFacade.obtenerTotalPaginas(tamanioPagina);
+
+                        // Verificar si la página actual es mayor que el total de páginas después de la eliminación
+                        if (paginaActual > totalPaginas) {
+                            paginaActual = totalPaginas; // Ajustar la página actual a la última disponible
+                        }
+
+                        // Actualizar la tabla después de eliminar
+                        listarProfesores(paginaActual, tamanioPagina); // Volver a listar los profesores después de la eliminación
+
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.ERROR_AL_ELIMINAR_EL_REGISTRO+ " : " + e.getMessage(), LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_NO_ENCONTRADO_EN_LA_BBDD, LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, LiteralesTexto.POR_FAVOR_SELECCIONE_UNA_REGISTRO_PARA_ELIMINAR);
+        }
+    }
+
+    public void mostrarInformacionProfesor(int filaSeleccionada) {
+
+        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        String nombreProfesor = (String) tblProfesores.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
+        String apellidoProfesor = (String) tblProfesores.getValueAt(filaSeleccionada, 2).toString();
+        String telefono = (String) tblProfesores.getValueAt(filaSeleccionada, 3).toString();
+        Estado estado = (Estado) tblProfesores.getValueAt(filaSeleccionada, 4);
+
+        // Crear un mapa con los datos a mostrar
+        Map<String, String> datos = new HashMap<String, String>(5);
+        datos.put("Nombre:", nombreProfesor);
+        datos.put("Apellido:", apellidoProfesor);
+        datos.put("Telefono:", telefono);
+        datos.put("Estado:", estado.toString());
+
+
+        // Llamar al método genérico para mostrar la información
+        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
+        DialogUtils.mostrarInformacion("Aceptar", "INFORMACIÓN DE LOS PROFESORES", datos, 18, 20);
     }
 }
