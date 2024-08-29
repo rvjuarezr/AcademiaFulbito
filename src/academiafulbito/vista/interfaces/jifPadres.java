@@ -4,7 +4,7 @@
  */
 
 /*
- * jifCategorias.java
+ * jifPadres.java
  *
  * Created on 02/08/2024, 02:42:40 PM
  */
@@ -13,16 +13,11 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.PadreFacade;
 import academiafulbito.modelo.entidades.Padre;
 import academiafulbito.modelo.enums.Estado;
-import academiafulbito.vista.utilidades.ButtonEditor;
-import academiafulbito.vista.utilidades.ButtonRenderer;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
-import java.awt.Dimension;
 import java.util.List;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -34,15 +29,30 @@ public class jifPadres extends javax.swing.JInternalFrame {
     JDesktopPane jdp;
     public static PadreFacade padreFacade;
     DefaultTableModel modelo;
-    String[] nombreColumnas = {"ID", "Nombre", "Apellido", "Telefono", LiteralesTexto.LITERAL_VER, LiteralesTexto.LITERAL_EDITAR, LiteralesTexto.LITERAL_ELIMINAR};
+    String[] nombreColumnas = {
+        LiteralesTexto.LITERAL_ID,
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_APELLIDO,
+        LiteralesTexto.LITERAL_TELEFONO,
+        LiteralesTexto.LITERAL_ESTADO,
+        LiteralesTexto.LITERAL_VER,
+        LiteralesTexto.LITERAL_EDITAR,
+        LiteralesTexto.LITERAL_ELIMINAR
+    };
     int indicador;//para saber si estamos en modo de edicion
+    private int idSeleccionada; // Variable para almacenar la ID del padre seleccionado
+    private int paginaActual = 1;
+    private int tamanioPagina = 5;//para el paginado de tabla
+    private int totalPaginas;
 
-    /** Creates new form jifCategorias */
+    /** Creates new form jifPadress */
     public jifPadres(JDesktopPane jdpModAF) {
         initComponents();
         jdp = jdpModAF;
+        Utils.cargarComboEstado(jcbEstado);
+        accionBotones(false, false);
         padreFacade = new PadreFacade();
-        listarPadres(padreFacade.getListadoPadres());
+        listarPadres(paginaActual, tamanioPagina);
     }
 
     /** This method is called from within the constructor to
@@ -56,9 +66,12 @@ public class jifPadres extends javax.swing.JInternalFrame {
 
         tphPadres = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jspCategorias = new javax.swing.JScrollPane();
+        jspPadres = new javax.swing.JScrollPane();
         tblPadres = new javax.swing.JTable();
         btnNuevoPadre = new org.edisoncor.gui.button.ButtonRound();
+        btnAnterior = new org.edisoncor.gui.button.ButtonRound();
+        lblPaginaActual = new javax.swing.JLabel();
+        btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
         jPanel2 = new javax.swing.JPanel();
         txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtApellido = new org.edisoncor.gui.textField.TextFieldRoundBackground();
@@ -66,6 +79,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         btnGuardar = new org.edisoncor.gui.button.ButtonRound();
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
+        jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -77,9 +91,9 @@ public class jifPadres extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jspCategorias.setBackground(new java.awt.Color(255, 255, 255));
-        jspCategorias.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jspCategorias.setOpaque(false);
+        jspPadres.setBackground(new java.awt.Color(255, 255, 255));
+        jspPadres.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jspPadres.setOpaque(false);
 
         tblPadres.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -90,12 +104,12 @@ public class jifPadres extends javax.swing.JInternalFrame {
             }
         ));
         tblPadres.setOpaque(false);
-        jspCategorias.setViewportView(tblPadres);
+        jspPadres.setViewportView(tblPadres);
 
-        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
+        jPanel1.add(jspPadres, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
 
         btnNuevoPadre.setBackground(new java.awt.Color(156, 156, 247));
-        btnNuevoPadre.setText("+ PADRE");
+        btnNuevoPadre.setText("+ PADRES");
         btnNuevoPadre.setFont(new java.awt.Font("Arial", 1, 18));
         btnNuevoPadre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -103,6 +117,33 @@ public class jifPadres extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(btnNuevoPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 140, 50));
+
+        btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
+        btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
+        btnAnterior.setText("<<");
+        btnAnterior.setFont(new java.awt.Font("Arial", 1, 24));
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 320, -1, 50));
+
+        lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPaginaActual.setText("10");
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 320, 220, 50));
+
+        btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
+        btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
+        btnSiguiente.setText(">>");
+        btnSiguiente.setFont(new java.awt.Font("Arial", 1, 24));
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 320, -1, 50));
 
         tphPadres.addTab("LISTADO", jPanel1);
 
@@ -121,7 +162,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
 
         txtTelefono.setEditable(false);
         txtTelefono.setDescripcion("Telefono*");
-        txtTelefono.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtTelefono.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
 
         btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
@@ -153,9 +194,13 @@ public class jifPadres extends javax.swing.JInternalFrame {
         });
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
 
+        jcbEstado.setEnabled(false);
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
+
         tphPadres.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphPadres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 400));
+        getContentPane().add(tphPadres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 420));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -166,24 +211,32 @@ public class jifPadres extends javax.swing.JInternalFrame {
         tphPadres.setSelectedIndex(1);
         limpiarCampos();
         habilitarCampos(true);
+        accionBotones(true, true);
     }//GEN-LAST:event_btnNuevoPadreActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO) == JOptionPane.YES_OPTION) {
-            Padre padre = getDatosPadre();
+        String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+        if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+            Padre padre;
             switch (indicador) {
-                case 0://registrar categoria
-                    padreFacade.guardarPadre(padre);
+                case 0://registrar padre
+                    padre = new Padre();
+                    padreFacade.guardarPadre(getDatosPadre(padre));
                     Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
                     break;
-                case 1://actualizar categoria
+                case 1://actualizar padre
+                    padre = padreFacade.findPadreById(idSeleccionada);
+                    padreFacade.actualizarPadre(getDatosPadre(padre));
+                    Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
                     break;
             }
 
-            listarPadres(padreFacade.getListadoPadres());
+            listarPadres(paginaActual, tamanioPagina);
             limpiarCampos();
             habilitarCampos(false);
+            accionBotones(false, false);
+            btnGuardar.setText("Añadir");
             indicador = 0;
             tphPadres.setSelectedIndex(0);
         }
@@ -195,14 +248,34 @@ public class jifPadres extends javax.swing.JInternalFrame {
         habilitarCampos(false);
         tphPadres.setSelectedIndex(0);
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        // TODO add your handling code here:
+        if (paginaActual > 1) {
+            paginaActual--;
+            listarPadres(paginaActual, tamanioPagina);
+        }
+}//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        // TODO add your handling code here:
+        if (paginaActual < totalPaginas) {
+            paginaActual++;
+            listarPadres(paginaActual, tamanioPagina);
+        }
+}//GEN-LAST:event_btnSiguienteActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
     private org.edisoncor.gui.button.ButtonRound btnNuevoPadre;
+    private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jspCategorias;
+    private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
+    private javax.swing.JScrollPane jspPadres;
+    private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblPadres;
     private javax.swing.JTabbedPane tphPadres;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtApellido;
@@ -211,7 +284,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     private void listarPadres(List<Padre> listaPadres) {
-        // Selecciona el primer tab en un JTabbedPane
+         // Selecciona el primer tab en un JTabbedPane
         tphPadres.setSelectedIndex(0);
 
         modelo = Utils.generarModeloTabla(nombreColumnas);
@@ -219,27 +292,26 @@ public class jifPadres extends javax.swing.JInternalFrame {
         // Asignar el modelo a la tabla
         tblPadres.setModel(modelo);
 
-        int[] anchoColumnas = {15, 60, 20, 20, 20, 30, 30}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {15, 60, 20, 20, 20, 15, 25, 25}; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblPadres, anchoColumnas);
-        Utils.ocultarColumnas(tblPadres, 0);
+        Utils.ocultarColumnas(tblPadres, 0);//ocultar la primera columna
+        Utils.ocultarColumnas(tblPadres, 4);//ocultar columna estado
 
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblPadres);
 
-        // Verificar si la lista de socios tiene elementos
+        // Verificar si la lista tiene elementos
         if (listaPadres.size() > 0) {
-            System.out.println("LISTADO DE PADRES DESDE LA BBDD");
-            // Iterar sobre la lista de categorias y agregar cada categoria a la tabla
+            // Iterar sobre la lista y agregar cada objeto a la tabla
             for (Padre padre : listaPadres) {
 
-                System.out.println("padre.getIdPadre():" + padre.getIdPadre() + " ,padre.getNombrePadre():" + padre.getNombrePadre() + " ,padre.getApellidoPadre():" + padre.getApellidoPadre() + " ,padre.getTelefono():" + padre.getTelefono());
-
-                // Crea un array de objetos con los datos de la categoria para agregar a la tabla.
+                // Crea un array de objetos con los datos del objeto para agregar a la tabla.
                 Object[] fila = new Object[]{
                     padre.getIdPadre(),
                     padre.getNombrePadre(),
                     padre.getApellidoPadre(),
                     padre.getTelefono(),
+                    padre.getEstado(),
                     LiteralesTexto.LITERAL_VER,
                     LiteralesTexto.LITERAL_EDITAR,
                     LiteralesTexto.LITERAL_ELIMINAR
@@ -249,47 +321,88 @@ public class jifPadres extends javax.swing.JInternalFrame {
             // Establece un renderizador personalizado para las celdas de la tabla.
             tblPadres.setDefaultRenderer(Object.class, new Utils(18));
 
-            // Establece el modo de selección de filas para permitir solo una selección a la vez.
-            tblPadres.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-            tblPadres.setOpaque(false); // Hace la tabla transparente
-            ((DefaultTableCellRenderer) tblPadres.getDefaultRenderer(Object.class)).setOpaque(false); // Hace las celdas transparentes
-            tblPadres.setShowGrid(false); // Desactiva el grid para ocultar los bordes predeterminados
-            tblPadres.setIntercellSpacing(new Dimension(0, 0)); // Elimina el espacio entre celdas
-            jspCategorias.getViewport().setOpaque(false); // Hace el viewport transparente
-
-            // Agregar boton ver
-            tblPadres.getColumn(LiteralesTexto.LITERAL_VER).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_VER));
-            tblPadres.getColumn(LiteralesTexto.LITERAL_VER).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_VER));
-
-            // Agregar boton Editar
-            tblPadres.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_EDITAR));
-            tblPadres.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_EDITAR));
-
-            // Agregar boton Eliminar
-            tblPadres.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_ELIMINAR));
-            tblPadres.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_ELIMINAR));
-
+            Utils.configurarEstiloTabla(tblPadres, jspPadres);
+            Utils.configurarBotonesAccion(tblPadres);
         }
     }
 
-    private Padre getDatosPadre() {
-        String nombre = txtNombre.getText();
-        String apellido = txtApellido.getText();
-        String telefono = txtTelefono.getText();
+    private Padre getDatosPadre(Padre padre) {
+        padre.setNombrePadre(txtNombre.getText());
+        padre.setApellidoPadre(txtApellido.getText());
+        padre.setTelefono(txtTelefono.getText());
+        padre.setEstado((Estado) jcbEstado.getSelectedItem());
 
-        return new Padre(nombre, apellido, telefono);
+        return padre;
     }
 
     private void limpiarCampos() {
-        txtNombre.setText("");
-        txtApellido.setText("");
-        txtTelefono.setText("");
+        txtNombre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtApellido.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtTelefono.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
     }
 
     private void habilitarCampos(boolean band) {
         txtNombre.setEditable(band);
         txtApellido.setEditable(band);
         txtTelefono.setEditable(band);
+        if (indicador == 0) {
+            jcbEstado.setSelectedIndex(0);
+            jcbEstado.setEnabled(!band);
+        } else {
+            jcbEstado.setEnabled(band);
+        }
+    }
+
+    private void accionBotones(boolean d, boolean e) {
+        btnCancelar.setEnabled(d);
+        btnGuardar.setEnabled(e);
+    }
+
+    public void cargarDatosEnFormulario(int row) {
+        if (row != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblPadres.getValueAt(row, 0).toString()); // Supone que la ID está en la primera columna
+
+            // Obtener los datos de la fila seleccionada
+            String nombre = (String) tblPadres.getValueAt(row, 1);
+            String apellido = (String) tblPadres.getValueAt(row, 2);
+            String telefono = (String) tblPadres.getValueAt(row, 3);
+            Estado estado = (Estado) tblPadres.getValueAt(row, 4);
+
+            // Asignar los datos a los JTextField en el segundo panel
+            txtNombre.setText(nombre);
+            txtApellido.setText(apellido);
+            txtTelefono.setText(telefono);
+
+            // Seleccionar el estado en el JComboBox
+            jcbEstado.setSelectedItem(estado);
+
+            // Cambiar al segundo panel donde están los JTextField
+            tphPadres.setSelectedIndex(1);
+            btnGuardar.setText("Modificar");
+            indicador = 1;
+            accionBotones(true, true);
+            habilitarCampos(true);
+        } else {
+            //colocar alguna alerta
+        }
+    }
+
+    private void listarPadres(int paginaActual, int tamanioPagina) {
+        totalPaginas = padreFacade.obtenerTotalPaginas(tamanioPagina);
+
+        List<Padre> listapadres = padreFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+
+        // Actualizar el JLabel con la página actual
+        lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
+
+        // Mostrar las categorías en la tabla
+        listarPadres(listapadres);
+        actualizarEstadoBotones();// Actualizar el estado de los botones
+    }
+
+    private void actualizarEstadoBotones() {
+        btnAnterior.setEnabled(paginaActual > 1);
+        btnSiguiente.setEnabled(paginaActual < totalPaginas);
     }
 }
