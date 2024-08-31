@@ -13,9 +13,12 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.PadreFacade;
 import academiafulbito.modelo.entidades.Padre;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -40,6 +43,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_ELIMINAR
     };
     int indicador;//para saber si estamos en modo de edicion
+
     private int idSeleccionada; // Variable para almacenar la ID del padre seleccionado
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
@@ -50,6 +54,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         initComponents();
         jdp = jdpModAF;
         Utils.cargarComboEstado(jcbEstado);
+
         accionBotones(false, false);
         padreFacade = new PadreFacade();
         listarPadres(paginaActual, tamanioPagina);
@@ -106,7 +111,9 @@ public class jifPadres extends javax.swing.JInternalFrame {
         tblPadres.setOpaque(false);
         jspPadres.setViewportView(tblPadres);
 
+
         jPanel1.add(jspPadres, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
+
 
         btnNuevoPadre.setBackground(new java.awt.Color(156, 156, 247));
         btnNuevoPadre.setText("+ PADRES");
@@ -127,12 +134,16 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
+
         jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 320, -1, 50));
+
 
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
+
         jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 320, 220, 50));
+
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
@@ -143,7 +154,9 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
+
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 320, -1, 50));
+
 
         tphPadres.addTab("LISTADO", jPanel1);
 
@@ -221,6 +234,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
             Padre padre;
             switch (indicador) {
                 case 0://registrar padre
+
                     padre = new Padre();
                     padreFacade.guardarPadre(getDatosPadre(padre));
                     Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
@@ -264,6 +278,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
             listarPadres(paginaActual, tamanioPagina);
         }
 }//GEN-LAST:event_btnSiguienteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
@@ -273,8 +288,10 @@ public class jifPadres extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+
     private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
     private javax.swing.JScrollPane jspPadres;
+
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblPadres;
     private javax.swing.JTabbedPane tphPadres;
@@ -321,18 +338,22 @@ public class jifPadres extends javax.swing.JInternalFrame {
             // Establece un renderizador personalizado para las celdas de la tabla.
             tblPadres.setDefaultRenderer(Object.class, new Utils(18));
 
+
             Utils.configurarEstiloTabla(tblPadres, jspPadres);
             Utils.configurarBotonesAccion(tblPadres);
+
         }
     }
 
     private Padre getDatosPadre(Padre padre) {
+
         padre.setNombrePadre(txtNombre.getText());
         padre.setApellidoPadre(txtApellido.getText());
         padre.setTelefono(txtTelefono.getText());
         padre.setEstado((Estado) jcbEstado.getSelectedItem());
 
         return padre;
+
     }
 
     private void limpiarCampos() {
@@ -404,5 +425,62 @@ public class jifPadres extends javax.swing.JInternalFrame {
     private void actualizarEstadoBotones() {
         btnAnterior.setEnabled(paginaActual > 1);
         btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
+    public void eliminarPadreSeleccionada(int filaSeleccionada) {
+        if (filaSeleccionada != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblPadres.getValueAt(filaSeleccionada, 0).toString()); // Supone que la ID está en la primera columna
+            if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO) == JOptionPane.YES_OPTION) {
+                Padre padreAEliminar = padreFacade.findPadreById(idSeleccionada);
+                if(padreAEliminar != null){
+                    try {
+                        // Llamar al método para eliminar
+                        padreFacade.eliminarPadre(padreAEliminar);
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_ELIMINADO_CORRECTAMENTE);
+
+                        // Actualizar la tabla después de eliminar
+                        totalPaginas = padreFacade.obtenerTotalPaginas(tamanioPagina);
+
+                        // Verificar si la página actual es mayor que el total de páginas después de la eliminación
+                        if (paginaActual > totalPaginas) {
+                            paginaActual = totalPaginas; // Ajustar la página actual a la última disponible
+                        }
+
+                        // Actualizar la tabla después de eliminar
+                        listarPadres(paginaActual, tamanioPagina); // Volver a listar los padres después de la eliminación
+
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.ERROR_AL_ELIMINAR_EL_REGISTRO+ " : " + e.getMessage(), LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_NO_ENCONTRADO_EN_LA_BBDD, LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, LiteralesTexto.POR_FAVOR_SELECCIONE_UNA_REGISTRO_PARA_ELIMINAR);
+        }
+    }
+
+    public void mostrarInformacionPadre(int filaSeleccionada) {
+
+        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        String nombrePadre = (String) tblPadres.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
+        String apellidoPadre = (String) tblPadres.getValueAt(filaSeleccionada, 2).toString();
+        String telefono = (String) tblPadres.getValueAt(filaSeleccionada, 3).toString();
+        Estado estado = (Estado)tblPadres.getValueAt(filaSeleccionada, 4);
+
+        // Crear un mapa con los datos a mostrar
+        Map<String, String> datos = new HashMap<String, String>(5);
+        datos.put("Nombre:", nombrePadre);
+        datos.put("Apellido:",apellidoPadre );
+        datos.put("Telefono:", telefono);
+        datos.put("Estado:", estado.toString());
+
+        // Llamar al método genérico para mostrar la información
+        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
+        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL PADRE", datos, 18, 20);
     }
 }
