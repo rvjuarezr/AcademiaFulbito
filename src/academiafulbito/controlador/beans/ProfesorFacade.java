@@ -5,6 +5,7 @@
 package academiafulbito.controlador.beans;
 
 import academiafulbito.modelo.entidades.Profesor;
+import academiafulbito.modelo.enums.Estado;
 import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -102,6 +103,34 @@ public class ProfesorFacade implements EntityFacade<Profesor> {
         EntityManager em = getEntityManager();
         try {
             return em.createQuery("SELECT p FROM Profesor p", Profesor.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void eliminarProfesor (Profesor profesor) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            // Asegúrate de que la entidad esté gestionada
+            profesor.setEstado(Estado.INACTIVO);
+            em.merge(profesor);
+
+
+             //otra forma de eliminar de manera fisica
+             /*profesor = em.merge(profesor);
+
+            // Eliminar la entidad
+            em.remove(profesor);*/
+
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback(); // Hacer rollback en caso de error
+            }
+            e.printStackTrace();
         } finally {
             em.close();
         }

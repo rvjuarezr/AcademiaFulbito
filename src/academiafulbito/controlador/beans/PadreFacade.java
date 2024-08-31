@@ -6,6 +6,7 @@
 package academiafulbito.controlador.beans;
 
 import academiafulbito.modelo.entidades.Padre;
+import academiafulbito.modelo.enums.Estado;
 import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -26,6 +27,7 @@ public class PadreFacade implements EntityFacade<Padre> {
     }
 
     private EntityManager getEntityManager() {
+
         return emf.createEntityManager();
     }
 
@@ -60,7 +62,9 @@ public class PadreFacade implements EntityFacade<Padre> {
         }
     }
 
+
     public Padre findPadreById(int idPadre) {
+
         EntityManager em = getEntityManager();
         try {
             return em.find(Padre.class, idPadre);
@@ -88,6 +92,7 @@ public class PadreFacade implements EntityFacade<Padre> {
         }
     }
 
+
     @Override
     public int obtenerTotalPaginas(int tamanioPagina) {
         EntityManager em = getEntityManager();
@@ -101,9 +106,38 @@ public class PadreFacade implements EntityFacade<Padre> {
 
     @Override
     public List<Padre> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
+
         EntityManager em = getEntityManager();
         try {
             return em.createQuery("SELECT p FROM Padre p", Padre.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+        public void eliminarPadre(Padre padre) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            // Asegúrate de que la entidad esté gestionada
+            padre.setEstado(Estado.INACTIVO);
+            em.merge(padre);
+
+
+             //otra forma de eliminar de manera fisica
+             /*padre = em.merge(padre);
+
+            // Eliminar la entidad
+            em.remove(padre);*/
+
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback(); // Hacer rollback en caso de error
+            }
+            e.printStackTrace();
         } finally {
             em.close();
         }
