@@ -6,6 +6,8 @@
 package academiafulbito.controlador.beans;
 
 import academiafulbito.modelo.entidades.Campeonato;
+import academiafulbito.modelo.enums.Estado;
+import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,7 +18,7 @@ import javax.persistence.Persistence;
  *
  * @author Ronald J
  */
-public class CampeonatoFacade {
+public class CampeonatoFacade implements EntityFacade<Campeonato>{
 
     EntityManagerFactory emf;
     
@@ -107,5 +109,45 @@ public class CampeonatoFacade {
         }
     }
 
+
+
+    public void eliminarCampeonato(Campeonato campeonato) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            // Asegúrate de que la entidad esté gestionada
+            campeonato.setEstado(Estado.INACTIVO);
+            em.merge(campeonato);
+
+
+             //otra forma de eliminar de manera fisica
+             /*categoria = em.merge(campeonato);
+
+            // Eliminar la entidad
+            em.remove(campeonato);*/
+
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback(); // Hacer rollback en caso de error
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<Campeonato> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT c FROM Campeonato c", Campeonato.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
+        } finally {
+            em.close();
+        }
+
+    }
 
 }

@@ -88,11 +88,19 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
             jfPrincipal.menuCategorias.eliminarCategoriaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
         }
+        if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
+            jfPrincipal.menuCampeonatos.eliminarCampeonatoSeleccionada(selectedRow);
+        }
+
     }
 
     private void mostrarFilaSeleccionada(){
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
             jfPrincipal.menuCategorias.mostrarInformacionCategoria(selectedRow); // Llama al método en el JInternalFrame
         }
+        if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
+            jfPrincipal.menuCampeonatos.mostrarInformacionCampeonato(selectedRow);
+        }
+
     }
 }

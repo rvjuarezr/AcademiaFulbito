@@ -14,9 +14,12 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.CampeonatoFacade;
 import academiafulbito.modelo.entidades.Campeonato;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -43,6 +46,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
     private int idSeleccionada; // Variable para almacenar la ID de la compeonato seleccionada
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
+    private int totalPaginas;
     /** Creates new form jifCampeonatos */
     public jifCampeonatos(JDesktopPane jdpModAF){
         initComponents();
@@ -50,7 +54,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         Utils.cargarComboEstado(jcbEstado);
         accionBotones(false, false);
         campeonatoFacade = new CampeonatoFacade();
-        listarCampeonatos(campeonatoFacade.getListadoCampeonatos());
+        listarCampeonatos(paginaActual, tamanioPagina);
     }
 
     /** This method is called from within the constructor to
@@ -73,7 +77,6 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtTemporada = new org.edisoncor.gui.textField.TextFieldRoundBackground();
-        txtEdadMax = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         btnGuardar = new org.edisoncor.gui.button.ButtonRound();
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
@@ -84,7 +87,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         setTitle("MANTENIMIENTO CAMPEONATOS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphCampeonatos.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+        tphCampeonatos.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -119,7 +122,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
-        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 330, 50, 50));
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 330, 180, 50));
 
         btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
         btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
@@ -130,7 +133,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 330, -1, 50));
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 330, -1, 50));
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
@@ -154,14 +157,9 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
 
         txtTemporada.setEditable(false);
-        txtTemporada.setDescripcion("Edad Mínima*");
+        txtTemporada.setDescripcion("Temporada*");
         txtTemporada.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(txtTemporada, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
-
-        txtEdadMax.setEditable(false);
-        txtEdadMax.setDescripcion("Edad Máxima*");
-        txtEdadMax.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(txtEdadMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
 
         btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
         btnGuardar.setBorder(null);
@@ -195,7 +193,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 220, 40));
 
         tphCampeonatos.addTab("REGISTRO", jPanel2);
 
@@ -254,7 +252,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         int totalDePaginas = campeonatoFacade.obtenerTotalPaginas(tamanioPagina);
         if (paginaActual < totalDePaginas) {
             paginaActual++;
-            /*listarCampeonatos(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual)); */
+            listarCampeonatos(paginaActual, tamanioPagina);
         }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -262,7 +260,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (paginaActual > 1) {
             paginaActual--;
-           /* listarCampeonatos(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual)); */
+            listarCampeonatos(paginaActual, tamanioPagina);
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
@@ -281,7 +279,6 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblCampeonatos;
     private javax.swing.JTabbedPane tphCampeonatos;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtEdadMax;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtTemporada;
     // End of variables declaration//GEN-END:variables
@@ -385,4 +382,78 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
             //colocar alguna alerta
         }
     }
+
+    public void mostrarInformacionCampeonato(int filaSeleccionada) {
+
+        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        String nombreCampeonato = (String) tblCampeonatos.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
+        String temporada = (String)tblCampeonatos.getValueAt(filaSeleccionada, 2);
+        Estado estado = (Estado)tblCampeonatos.getValueAt(filaSeleccionada, 3);
+
+        // Crear un mapa con los datos a mostrar
+        Map<String, String> datos = new HashMap<String, String>(5);
+        datos.put("Nombre:", nombreCampeonato);
+        datos.put("Temporada:", temporada);
+        datos.put("Estado:", estado.toString());
+
+        // Llamar al método genérico para mostrar la información
+        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
+        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL CAMPEONATO", datos, 18, 20);
+    }
+
+    public void eliminarCampeonatoSeleccionada(int filaSeleccionada) {
+        if (filaSeleccionada != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblCampeonatos.getValueAt(filaSeleccionada, 0).toString()); // Supone que la ID está en la primera columna
+            if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO) == JOptionPane.YES_OPTION) {
+                Campeonato campeonatoAEliminar = campeonatoFacade.findCampeonatoById(idSeleccionada);
+                if(campeonatoAEliminar != null){
+                    try {
+                        // Llamar al método para eliminar
+                        campeonatoFacade.eliminarCampeonato(campeonatoAEliminar);
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_ELIMINADO_CORRECTAMENTE);
+
+                        // Actualizar la tabla después de eliminar
+                        totalPaginas = campeonatoFacade.obtenerTotalPaginas(tamanioPagina);
+
+                        // Verificar si la página actual es mayor que el total de páginas después de la eliminación
+                        if (paginaActual > totalPaginas) {
+                            paginaActual = totalPaginas; // Ajustar la página actual a la última disponible
+                        }
+
+                        // Actualizar la tabla después de eliminar
+                        listarCampeonatos(paginaActual, tamanioPagina); // Volver a listar las campeonatos después de la eliminación
+
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.ERROR_AL_ELIMINAR_EL_REGISTRO+ " : " + e.getMessage(), LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_NO_ENCONTRADO_EN_LA_BBDD, LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, LiteralesTexto.POR_FAVOR_SELECCIONE_UNA_REGISTRO_PARA_ELIMINAR);
+        }
+    }
+
+    private void listarCampeonatos(int paginaActual, int tamanioPagina) {
+        totalPaginas = campeonatoFacade.obtenerTotalPaginas(tamanioPagina);
+
+        List<Campeonato> listaCampeonatos = campeonatoFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+
+        // Actualizar el JLabel con la página actual
+        lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
+
+        // Mostrar los campeonatos en la tabla
+        listarCampeonatos(listaCampeonatos);
+        actualizarEstadoBotones();// Actualizar el estado de los botones
+    }
+
+    private void actualizarEstadoBotones() {
+        btnAnterior.setEnabled(paginaActual > 1);
+        btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
 }
