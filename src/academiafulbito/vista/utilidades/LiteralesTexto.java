@@ -48,5 +48,8 @@ public class LiteralesTexto {
     public static final String LITERAL_ERROR = "ERROR.";
     public static final String LITERAL_APELLIDO = "Apellido";
     public static final String LITERAL_TELEFONO = "Telefono";
+    public static final String LITERAL_DIRECCION = "Direccion";
+    public static final String LITERAL_UBIGEO = "Ubigeo";
+
 
 }

@@ -154,7 +154,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="740" y="330" width="50" height="50"/>
+                  <AbsoluteConstraints x="610" y="330" width="180" height="50"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -176,7 +176,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="680" y="330" width="-1" height="50"/>
+                  <AbsoluteConstraints x="540" y="330" width="-1" height="50"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -239,7 +239,7 @@
             <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtTemporada">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
-                <Property name="descripcion" type="java.lang.String" value="Edad M&#xed;nima*"/>
+                <Property name="descripcion" type="java.lang.String" value="Temporada*"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Bookman Old Style" size="18" style="1"/>
                 </Property>
@@ -247,20 +247,6 @@
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="70" y="120" width="720" height="40"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtEdadMax">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="descripcion" type="java.lang.String" value="Edad M&#xe1;xima*"/>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Bookman Old Style" size="18" style="1"/>
-                </Property>
-              </Properties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="70" y="180" width="720" height="40"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -337,7 +323,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="70" y="240" width="220" height="40"/>
+                  <AbsoluteConstraints x="70" y="180" width="220" height="40"/>
                 </Constraint>
               </Constraints>
             </Component>

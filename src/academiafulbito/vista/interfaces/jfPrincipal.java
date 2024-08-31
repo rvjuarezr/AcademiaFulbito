@@ -89,7 +89,6 @@ public class jfPrincipal extends javax.swing.JFrame {
         });
 
         btnCancha.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (menuCanchas == null || menuCanchas.isClosed()) {
@@ -101,8 +100,8 @@ public class jfPrincipal extends javax.swing.JFrame {
                 menuCanchas.toFront();
             }
         });
-        btnCampeonato.addActionListener(new ActionListener() {
 
+        btnCampeonato.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (menuCampeonatos == null || menuCampeonatos.isClosed()) {
