@@ -22,6 +22,8 @@ public class LiteralesTexto {
     public static final String ERROR_SELECCION_OPCION_INVALIDA = "Debe seleccionar una opción válida. Estado Civil";
     public static final String ERROR_FECHA_RANGO = "La fecha seleccionada no está en el rango permitido.";
     public static final String ERROR_FECHA_NO_VALIDA = "Debe seleccionar una fecha válida.";
+    public static final String ERROR_NOMBRE_CAMPO_VACIO = "Debe de escribir un nombre!";
+    public static final String ERROR_VALOR_EDAD_VACIA = "Debe de escribir una edad valida!";
     public static final String ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO = "¿ESTA SEGURO DE GUARDAR\nEL NUEVO REGISTRO?";
     public static final String ESTA_SEGURO_MODIFICAR_REGISTRO = "¿ESTA SEGURO DE MODIFICAR\nEL REGISTRO?";
     public static final String REGISTRO_GUARDADO_CORRECTAMENTE = "EL REGISTRO SE HA GUARDADO CORRECTAMENTE";
@@ -50,6 +52,7 @@ public class LiteralesTexto {
     public static final String LITERAL_TELEFONO = "Telefono";
     public static final String LITERAL_DIRECCION = "Direccion";
     public static final String LITERAL_UBIGEO = "Ubigeo";
+
 
 
 }
