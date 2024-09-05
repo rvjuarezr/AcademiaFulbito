@@ -13,17 +13,29 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.vista.utilidades.Utils;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 /**
  *
@@ -39,6 +51,10 @@ public class jfPrincipal extends javax.swing.JFrame {
     public static jifCampeonatos menuCampeonatos;
     public static jifPadres menuPadres;
     public static jifProfesores menuProfesores;
+
+    private Timer hideTimer;
+    private boolean isSubMenuVisible = false;
+    JPopupMenu subMenu;
 
     public jfPrincipal() {
         setUndecorated(false);// Configura la ventana sin bordes
@@ -60,7 +76,48 @@ public class jfPrincipal extends javax.swing.JFrame {
 
         // Crear botones para el menú
         JButton btnEmpresa = createMenuButton("   EMPRESA      ", "/academiafulbito/vista/imagenes/inicio.png");
-        JButton btnCategoria = createMenuButton("   CATEGORIA   ", "/academiafulbito/vista/imagenes/maestras.png");
+        final JButton btnMaestras = createMenuButton("   MAESTRAS      ", "/academiafulbito/vista/imagenes/maestras.png");
+
+        // Crear submenú desplegable
+        subMenu = new JPopupMenu();
+        subMenu.setLayout(new BoxLayout(subMenu, BoxLayout.Y_AXIS));
+
+        // Crear las opciones del submenú
+        String[] opciones = {"CATEGORIAS", "CANCHA", "CAMPEONATO", "PADRES", "PROFESORES"};
+        for (String opcion : opciones) {
+            JMenuItem item = createSubMenuItem(opcion);
+            subMenu.add(item);
+        }
+
+        // Mostrar el submenú al pasar el cursor sobre el botón MAESTRAS
+        btnMaestras.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                showSubMenu(btnMaestras);
+            }
+        });
+
+        // Mostrar el submenú al pasar el cursor sobre el submenú
+        subMenu.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                showSubMenu(btnMaestras); // Asegura que el submenú permanezca visible
+            }
+        });
+
+        // Añadir un MouseListener al JFrame para ocultar el submenú cuando se hace clic fuera de él
+        addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (subMenu.isShowing() && !subMenu.getBounds().contains(e.getPoint())) {
+                    subMenu.setVisible(false);
+                }
+            }
+        });
+
+        // Agregar el botón al JPanel
+        jpMenuVertical.add(btnEmpresa);
+        jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4))); // Espacio entre botones
+        jpMenuVertical.add(btnMaestras);
+        jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
+        /*JButton btnCategoria = createMenuButton("   CATEGORIA   ", "/academiafulbito/vista/imagenes/maestras.png");
         JButton btnCancha = createMenuButton("   CANCHA   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
         JButton btnCampeonato = createMenuButton("   CAMPEONATO   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
         JButton btnPadre = createMenuButton("   PADRES   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
@@ -146,7 +203,7 @@ public class jfPrincipal extends javax.swing.JFrame {
                 menuProfesores.show();
                 menuProfesores.toFront();
             }
-        });
+        });*/
     }
 
     /** This method is called from within the constructor to
@@ -162,9 +219,9 @@ public class jfPrincipal extends javax.swing.JFrame {
         jpCabecera = new javax.swing.JPanel();
         lblSesionUsuario = new javax.swing.JLabel();
         lblLogo = new javax.swing.JLabel();
-        jpMenuVertical = new javax.swing.JPanel();
         jpVentanas = new javax.swing.JPanel();
         jdpAcademias = new javax.swing.JDesktopPane();
+        jpMenuVertical = new javax.swing.JPanel();
         jpMostrarOcultar = new javax.swing.JPanel();
         lblMostrarMenu = new javax.swing.JLabel();
 
@@ -187,14 +244,17 @@ public class jfPrincipal extends javax.swing.JFrame {
 
         jpPrincipal.add(jpCabecera, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 0, 1150, 40));
 
+        jpVentanas.setLayout(null);
+
         jpMenuVertical.setBackground(new java.awt.Color(255, 255, 255));
         jpMenuVertical.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jpPrincipal.add(jpMenuVertical, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 140, 440));
+        jpMenuVertical.setBounds(0, 0, 170, 440);
+        jdpAcademias.add(jpMenuVertical, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jpVentanas.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jpVentanas.add(jdpAcademias, new org.netbeans.lib.awtextra.AbsoluteConstraints(-140, 0, 1290, 440));
+        jpVentanas.add(jdpAcademias);
+        jdpAcademias.setBounds(0, 0, 1290, 440);
 
-        jpPrincipal.add(jpVentanas, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 1150, 440));
+        jpPrincipal.add(jpVentanas, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1290, 440));
 
         jpMostrarOcultar.setBackground(new java.awt.Color(50, 121, 193));
         jpMostrarOcultar.setLayout(new java.awt.BorderLayout());
@@ -248,14 +308,46 @@ public class jfPrincipal extends javax.swing.JFrame {
         button.setFocusPainted(false);
         button.setHorizontalTextPosition(SwingConstants.CENTER);
         button.setVerticalTextPosition(SwingConstants.BOTTOM);
-        button.setBorderPainted(false);
+        //button.setBorderPainted(false);
         button.setContentAreaFilled(false); // Hace que el botón sea transparente
         button.setOpaque(true); // Permite el uso de un color de fondo
         button.setBackground(Color.WHITE); // Establece el fondo blanco
-        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80)); // Ajusta el tamaño del botón
+        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100)); // Ajusta el tamaño del botón
         return button;
     }
 
+    private JMenuItem createSubMenuItem(String text) {
+        final JMenuItem item = new JMenuItem(text);
+        item.setOpaque(true);
+        item.setBorderPainted(true);
+        item.setBackground(Color.WHITE);
+        item.setPreferredSize(new Dimension(200, 60));
+        item.setFont(new Font("Bookman Old Style", Font.PLAIN, 18));
+
+        // Cambiar color al pasar el ratón
+        item.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                item.setBackground(Color.LIGHT_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                item.setBackground(Color.WHITE);
+            }
+        });
+        return item;
+    }
+
+    private void showSubMenu(JButton parentButton) {
+        if (parentButton != null) {
+            Point location = parentButton.getLocationOnScreen();
+            Dimension size = subMenu.getPreferredSize();
+            subMenu.setLocation(location.x + parentButton.getWidth(), location.y); // Muestra el submenú a la derecha del botón
+            subMenu.setSize(size);
+            subMenu.setVisible(true);
+        }
+    }
 
     // Método para mostrar/ocultar el menú
     private void toggleMenu() {
