@@ -5,6 +5,7 @@
 
 package academiafulbito.vista.utilidades;
 
+import academiafulbito.modelo.enums.Dia;
 import academiafulbito.modelo.enums.Estado;
 import java.awt.Color;
 import java.awt.Component;
@@ -212,6 +213,13 @@ public class Utils extends DefaultTableCellRenderer{
         }
     }
 
+    public static void cargarComboDiasDeLaSemana(JComboBox cmbDiasDeLaSemana) {
+        cmbDiasDeLaSemana.addItem("SELECCIONA EL DIA DE LA SEMANA");
+        for (Dia dia : Dia.values()) {
+            cmbDiasDeLaSemana.addItem(dia.toString().toUpperCase());
+        }
+    }
+
     /**
      * Método para crear un JLabel con estilo HTML personalizado.
      *
@@ -241,5 +249,11 @@ public class Utils extends DefaultTableCellRenderer{
         UIManager.put("Button.font", new Font("Bookman Old Style", Font.BOLD, tamLetra)); // Cambiar la fuente y tamaño
         UIManager.put("Button.minimumSize", new Dimension(100, 40)); // Cambiar el tamaño mínimo
         UIManager.put("Button.preferredSize", new Dimension(ancho, altura)); // Cambiar el tamaño preferido
+    }
+
+    public static void visualizarInternalFrame(JInternalFrame internalFrame, JDesktopPane desktopPane) {
+        desktopPane.add(internalFrame);
+        internalFrame.setLocation(Utils.posicionX(internalFrame, desktopPane), Utils.posicionY(internalFrame, desktopPane));
+        internalFrame.show();
     }
 }
