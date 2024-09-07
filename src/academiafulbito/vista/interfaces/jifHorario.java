@@ -11,6 +11,11 @@
 
 package academiafulbito.vista.interfaces;
 
+import academiafulbito.vista.utilidades.Utils;
+import javax.swing.JDesktopPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
+
 /**
  *
  * @author Ronald J
@@ -18,8 +23,19 @@ package academiafulbito.vista.interfaces;
 public class jifHorario extends javax.swing.JInternalFrame {
 
     /** Creates new form jifHorario */
-    public jifHorario() {
+    JDesktopPane jDesktopPane;
+
+    int indicador;//para saber si estamos en modo de edicion
+    private int idSeleccionada; // Variable para almacenar la ID de la categoría seleccionada
+    private int paginaActual = 1;
+    private int tamanioPagina = 5;//para el paginado de tabla
+    private int totalPaginas;
+    jifProfesores menuProfesores;
+    jifCanchas menuCanchas;
+    public jifHorario(JDesktopPane jdpModAF) {
         initComponents();
+        jDesktopPane = jdpModAF;
+        Utils.cargarComboDiasDeLaSemana(jcbDiasDeLaSemana);
     }
 
     /** This method is called from within the constructor to
@@ -31,22 +47,328 @@ public class jifHorario extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
-        );
+        tphHorarios = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jspCategorias = new javax.swing.JScrollPane();
+        tblHorarios = new javax.swing.JTable();
+        btnNuevoHorario = new org.edisoncor.gui.button.ButtonRound();
+        lblPaginaActual = new javax.swing.JLabel();
+        btnAnterior = new org.edisoncor.gui.button.ButtonRound();
+        btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jcbDiasDeLaSemana = new org.edisoncor.gui.comboBox.ComboBoxRound();
+        jPanel3 = new javax.swing.JPanel();
+        jsHoraFin = new javax.swing.JSpinner(new SpinnerDateModel());
+        jsHoraInicio = new javax.swing.JSpinner(new SpinnerDateModel());
+        txtNombreProfesor = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtIdProfesor = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        btnBucarProfesor = new javax.swing.JButton();
+        btnBuscarCategoria = new javax.swing.JButton();
+        txtNombreCategoria = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtIdCategoria = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtIdCancha = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        btnBuscarCancha = new javax.swing.JButton();
+        txtNombreCancha = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+
+        setBackground(new java.awt.Color(204, 204, 255));
+        setTitle("MANTENIMIENTO HORARIOS");
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tphHorarios.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jspCategorias.setBackground(new java.awt.Color(255, 255, 255));
+        jspCategorias.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jspCategorias.setOpaque(false);
+
+        tblHorarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tblHorarios.setOpaque(false);
+        jspCategorias.setViewportView(tblHorarios);
+
+        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
+
+        btnNuevoHorario.setBackground(new java.awt.Color(156, 156, 247));
+        btnNuevoHorario.setText("+ HORARIO");
+        btnNuevoHorario.setFont(new java.awt.Font("Arial", 1, 18));
+        btnNuevoHorario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoHorarioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevoHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 140, 50));
+
+        lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPaginaActual.setText("10");
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, 220, 50));
+
+        btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
+        btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
+        btnAnterior.setText("<<");
+        btnAnterior.setFont(new java.awt.Font("Arial", 1, 24));
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 330, -1, 50));
+
+        btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
+        btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
+        btnSiguiente.setText(">>");
+        btnSiguiente.setFont(new java.awt.Font("Arial", 1, 24));
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, -1, 50));
+
+        tphHorarios.addTab("LISTADO", jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        jLabel1.setForeground(new java.awt.Color(103, 98, 98));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("NUEVO HORARIO");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 360, 20));
+
+        jcbDiasDeLaSemana.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        jPanel2.add(jcbDiasDeLaSemana, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 550, 50));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ELIGE TU HORARIO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Bookman Old Style", 1, 18), new java.awt.Color(102, 102, 102))); // NOI18N
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        JSpinner.DateEditor timeEditorHF = new JSpinner.DateEditor(jsHoraFin, "HH:mm");
+        jsHoraFin.setEditor(timeEditorHF);
+        jsHoraFin.setValue(new java.util.Date()); // valor inicial
+        jsHoraFin.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        jPanel3.add(jsHoraFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 160, 40));
+
+        JSpinner.DateEditor timeEditorHI = new JSpinner.DateEditor(jsHoraInicio, "HH:mm");
+        jsHoraInicio.setEditor(timeEditorHI);
+        jsHoraInicio.setValue(new java.util.Date()); // valor inicial
+        jsHoraInicio.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        jPanel3.add(jsHoraInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 170, 40));
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 570, 90));
+
+        txtNombreProfesor.setEditable(false);
+        txtNombreProfesor.setDescripcion("Nombre Profesor*");
+        txtNombreProfesor.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombreProfesor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreProfesorKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtNombreProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 210, 450, 50));
+
+        txtIdProfesor.setEditable(false);
+        txtIdProfesor.setDescripcion("Id*");
+        txtIdProfesor.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtIdProfesor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdProfesorKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtIdProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 110, 50));
+
+        btnBucarProfesor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/lupa.png"))); // NOI18N
+        btnBucarProfesor.setBorderPainted(false);
+        btnBucarProfesor.setContentAreaFilled(false);
+        btnBucarProfesor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBucarProfesorActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnBucarProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 200, 80, 60));
+
+        btnBuscarCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/lupa.png"))); // NOI18N
+        btnBuscarCategoria.setBorderPainted(false);
+        btnBuscarCategoria.setContentAreaFilled(false);
+        btnBuscarCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarCategoriaActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnBuscarCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 260, 80, 60));
+
+        txtNombreCategoria.setEditable(false);
+        txtNombreCategoria.setDescripcion("Nombre Categoria*");
+        txtNombreCategoria.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombreCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreCategoriaKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtNombreCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, 450, 50));
+
+        txtIdCategoria.setEditable(false);
+        txtIdCategoria.setDescripcion("Id*");
+        txtIdCategoria.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtIdCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdCategoriaKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtIdCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, 110, 50));
+
+        txtIdCancha.setEditable(false);
+        txtIdCancha.setDescripcion("Id*");
+        txtIdCancha.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtIdCancha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdCanchaKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtIdCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 110, 50));
+
+        btnBuscarCancha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/lupa.png"))); // NOI18N
+        btnBuscarCancha.setBorderPainted(false);
+        btnBuscarCancha.setContentAreaFilled(false);
+        btnBuscarCancha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarCanchaActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnBuscarCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 320, 80, 60));
+
+        txtNombreCancha.setEditable(false);
+        txtNombreCancha.setDescripcion("Nombre Cancha*");
+        txtNombreCancha.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombreCancha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreCanchaKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtNombreCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, 450, 50));
+
+        tphHorarios.addTab("REGISTRO", jPanel2);
+
+        getContentPane().add(tphHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 450));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnNuevoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoHorarioActionPerformed
+        // TODO add your handling code here:
+        indicador = 0;//para poder guardar
+        /*tphCategorias.setSelectedIndex(1);
+        limpiarCampos();
+        habilitarCampos(true);
+        accionBotones(true, true);*/
+}//GEN-LAST:event_btnNuevoHorarioActionPerformed
+
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        // TODO add your handling code here:
+        if (paginaActual > 1) {
+            paginaActual--;
+            //listarCategorias(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual, jfPrincipal.menuCategorias));
+            //listarCategorias(paginaActual, tamanioPagina);
+        }
+}//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        // TODO add your handling code here:
+        if (paginaActual < totalPaginas) {
+            paginaActual++;
+            //listarCategorias(paginaActual, tamanioPagina);
+        }
+}//GEN-LAST:event_btnSiguienteActionPerformed
+
+    private void txtNombreProfesorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreProfesorKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
+}//GEN-LAST:event_txtNombreProfesorKeyTyped
+
+    private void txtIdProfesorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdProfesorKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdProfesorKeyTyped
+
+    private void txtNombreCategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreCategoriaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreCategoriaKeyTyped
+
+    private void txtIdCategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdCategoriaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdCategoriaKeyTyped
+
+    private void txtIdCanchaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdCanchaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdCanchaKeyTyped
+
+    private void txtNombreCanchaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreCanchaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreCanchaKeyTyped
+
+    private void btnBuscarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCategoriaActionPerformed
+        // TODO add your handling code here:
+        // Si el internalFrame de categorías no existe o está cerrado, lo instanciamos
+        if (jfPrincipal.menuCategorias == null || jfPrincipal.menuCategorias.isClosed()) {
+            jfPrincipal.menuCategorias = new jifCategorias(jDesktopPane); // Instanciamos la ventana de Categorías
+            // Llamamos al método para gestionar la visualización
+            Utils.visualizarInternalFrame(jfPrincipal.menuCategorias, jDesktopPane);
+        }
+        jfPrincipal.menuCategorias.toFront(); // Traer al frente
+    }//GEN-LAST:event_btnBuscarCategoriaActionPerformed
+
+    private void btnBucarProfesorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBucarProfesorActionPerformed
+        // TODO add your handling code here:
+        if(jfPrincipal.menuProfesores == null || jfPrincipal.menuProfesores.isClosed()){
+            jfPrincipal.menuProfesores = new jifProfesores(jDesktopPane);
+            Utils.visualizarInternalFrame(jfPrincipal.menuProfesores, jDesktopPane);
+        }
+        jfPrincipal.menuProfesores.toFront();
+    }//GEN-LAST:event_btnBucarProfesorActionPerformed
+
+    private void btnBuscarCanchaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCanchaActionPerformed
+        // TODO add your handling code here:
+        if(jfPrincipal.menuCanchas == null || jfPrincipal.menuCanchas.isClosed()){
+            jfPrincipal.menuCanchas = new jifCanchas(jDesktopPane);
+            Utils.visualizarInternalFrame(jfPrincipal.menuCanchas, jDesktopPane);
+        }
+        jfPrincipal.menuCanchas.toFront();
+    }//GEN-LAST:event_btnBuscarCanchaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.edisoncor.gui.button.ButtonRound btnAnterior;
+    private javax.swing.JButton btnBucarProfesor;
+    private javax.swing.JButton btnBuscarCancha;
+    private javax.swing.JButton btnBuscarCategoria;
+    private org.edisoncor.gui.button.ButtonRound btnNuevoHorario;
+    private org.edisoncor.gui.button.ButtonRound btnSiguiente;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private org.edisoncor.gui.comboBox.ComboBoxRound jcbDiasDeLaSemana;
+    private javax.swing.JSpinner jsHoraFin;
+    private javax.swing.JSpinner jsHoraInicio;
+    private javax.swing.JScrollPane jspCategorias;
+    private javax.swing.JLabel lblPaginaActual;
+    private javax.swing.JTable tblHorarios;
+    private javax.swing.JTabbedPane tphHorarios;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCancha;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCategoria;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtIdProfesor;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCancha;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCategoria;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreProfesor;
     // End of variables declaration//GEN-END:variables
 
 }
