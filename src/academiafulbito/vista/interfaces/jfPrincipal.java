@@ -18,7 +18,9 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.SwingConstants;
 
 /**
@@ -34,6 +36,7 @@ public class jfPrincipal extends javax.swing.JFrame {
     public static jifCampeonatos menuCampeonatos;
     public static jifPadres menuPadres;
     public static jifProfesores menuProfesores;
+    public static jifHorario menuHorario;
 
     public jfPrincipal() {
         setUndecorated(false);// Configura la ventana sin bordes
@@ -60,6 +63,7 @@ public class jfPrincipal extends javax.swing.JFrame {
         JButton btnCampeonato = createMenuButton("   CAMPEONATO   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
         JButton btnPadre = createMenuButton("   PADRES   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
         JButton btnProfesor = createMenuButton("   PROFESORES   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
+        JButton btnHorario = createMenuButton("   HORARIOS   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
 
         // Agregar botones al JPanel
         jpMenuVertical.add(btnEmpresa);
@@ -73,18 +77,21 @@ public class jfPrincipal extends javax.swing.JFrame {
         jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
         jpMenuVertical.add(btnProfesor);
         jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
+        jpMenuVertical.add(btnHorario);
+        jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
 
         btnCategoria.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Si el internalFrame de categorías no existe o está cerrado, lo instanciamos
                 if (menuCategorias == null || menuCategorias.isClosed()) {
-                    menuCategorias = new jifCategorias(jdpAcademias);
-                    jdpAcademias.add(menuCategorias);
+                    menuCategorias = new jifCategorias(jdpAcademias); // Instanciamos la ventana de Categorías
+                    // Llamamos al método para gestionar la visualización
+                    Utils.visualizarInternalFrame(menuCategorias, jdpAcademias);
                 }
-                menuCategorias.setLocation(utils.posicionX(menuCategorias, jdpAcademias), utils.posicionY(menuCategorias, jdpAcademias));
-                menuCategorias.show();
-                menuCategorias.toFront();
+
+                menuCategorias.toFront(); // Traer al frente
             }
         });
 
@@ -93,10 +100,9 @@ public class jfPrincipal extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (menuCanchas == null || menuCanchas.isClosed()) {
                     menuCanchas = new jifCanchas(jdpAcademias);
-                    jdpAcademias.add(menuCanchas);
+                    // Llamamos al método para gestionar la visualización
+                    Utils.visualizarInternalFrame(menuCanchas, jdpAcademias);
                 }
-                menuCanchas.setLocation(utils.posicionX(menuCanchas, jdpAcademias), utils.posicionY(menuCanchas, jdpAcademias));
-                menuCanchas.show();
                 menuCanchas.toFront();
             }
         });
@@ -134,11 +140,23 @@ public class jfPrincipal extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (menuProfesores == null || menuProfesores.isClosed()) {
                     menuProfesores = new jifProfesores(jdpAcademias);
-                    jdpAcademias.add(menuProfesores);
+                    // Llamamos al método para gestionar la visualización
+                    Utils.visualizarInternalFrame(menuProfesores, jdpAcademias);
                 }
-                menuProfesores.setLocation(utils.posicionX(menuProfesores, jdpAcademias), utils.posicionY(menuProfesores, jdpAcademias));
-                menuProfesores.show();
                 menuProfesores.toFront();
+            }
+        });
+
+        btnHorario.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuHorario == null || menuHorario.isClosed()) {
+                    menuHorario = new jifHorario(jdpAcademias);
+                    // Llamamos al método para gestionar la visualización
+                    Utils.visualizarInternalFrame(menuHorario, jdpAcademias);
+                }
+                menuHorario.toFront();
             }
         });
     }
@@ -222,5 +240,5 @@ public class jfPrincipal extends javax.swing.JFrame {
         button.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, null));
 
         return button;
-    }
+    }    
 }
