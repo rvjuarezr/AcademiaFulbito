@@ -15,7 +15,6 @@ import academiafulbito.vista.utilidades.Utils;
 import javax.swing.JDesktopPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
-
 /**
  *
  * @author Ronald J
@@ -36,6 +35,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
         initComponents();
         jDesktopPane = jdpModAF;
         Utils.cargarComboDiasDeLaSemana(jcbDiasDeLaSemana);
+
     }
 
     /** This method is called from within the constructor to
@@ -263,6 +263,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void btnNuevoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoHorarioActionPerformed
         // TODO add your handling code here:
         indicador = 0;//para poder guardar
@@ -345,7 +346,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBuscarCanchaActionPerformed
 
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBucarProfesor;
     private javax.swing.JButton btnBuscarCancha;
@@ -369,6 +370,8 @@ public class jifHorario extends javax.swing.JInternalFrame {
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCancha;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCategoria;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreProfesor;
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 
 }
