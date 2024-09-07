@@ -90,7 +90,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         setTitle("MANTENIMIENTO CATEGORIAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -197,7 +197,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 270, 170, 70));
 
-        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVA CATEGORIA");
@@ -215,7 +215,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
 
         jcbEstado.setEnabled(false);
-        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
 
         tphCategorias.addTab("REGISTRO", jPanel2);
