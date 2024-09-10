@@ -5,6 +5,7 @@
 package academiafulbito.vista.utilidades;
 
 import academiafulbito.vista.interfaces.jfPrincipal;
+import academiafulbito.vista.interfaces.jifAlumnos;
 import academiafulbito.vista.interfaces.jifCampeonatos;
 import academiafulbito.vista.interfaces.jifCategorias;
 import academiafulbito.vista.interfaces.jifPadres;
@@ -81,6 +82,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
             jfPrincipal.menuCampeonatos.cargarDatosEnFormulario(selectedRow);
         }
+        
 
     }
 
@@ -97,7 +99,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
             jfPrincipal.menuCampeonatos.eliminarCampeonatoSeleccionada(selectedRow);
         }
-
+       
     }
 
     private void mostrarFilaSeleccionada(){
@@ -113,6 +115,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
             jfPrincipal.menuCampeonatos.mostrarInformacionCampeonato(selectedRow);
         }
+        
 
     }
 }

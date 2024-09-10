@@ -37,6 +37,7 @@ public class jfPrincipal extends javax.swing.JFrame {
     public static jifPadres menuPadres;
     public static jifProfesores menuProfesores;
     public static jifHorario menuHorario;
+    public static jifAlumnos menuAlumnos;
 
     public jfPrincipal() {
         setUndecorated(false);// Configura la ventana sin bordes
@@ -64,6 +65,7 @@ public class jfPrincipal extends javax.swing.JFrame {
         JButton btnPadre = createMenuButton("   PADRES   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
         JButton btnProfesor = createMenuButton("   PROFESORES   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
         JButton btnHorario = createMenuButton("   HORARIOS   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
+        JButton btnAlumno = createMenuButton("   ALUMNOS   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
 
         // Agregar botones al JPanel
         jpMenuVertical.add(btnEmpresa);
@@ -78,6 +80,8 @@ public class jfPrincipal extends javax.swing.JFrame {
         jpMenuVertical.add(btnProfesor);
         jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
         jpMenuVertical.add(btnHorario);
+        jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
+        jpMenuVertical.add(btnAlumno);
         jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
 
         btnCategoria.addActionListener(new ActionListener() {
@@ -157,6 +161,19 @@ public class jfPrincipal extends javax.swing.JFrame {
                     Utils.visualizarInternalFrame(menuHorario, jdpAcademias);
                 }
                 menuHorario.toFront();
+            }
+        });
+
+          btnAlumno.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuAlumnos == null || menuAlumnos.isClosed()) {
+                    menuAlumnos = new jifAlumnos(jdpAcademias);
+                    // Llamamos al método para gestionar la visualización
+                    Utils.visualizarInternalFrame(menuAlumnos, jdpAcademias);
+                }
+                menuAlumnos.toFront();
             }
         });
     }
