@@ -152,9 +152,6 @@ public class Utils extends DefaultTableCellRenderer{
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK)); // Solo borde inferior
         setHorizontalAlignment(SwingConstants.CENTER); // Centra el contenido en la celda
 
-        // Establece el modo de selección de filas para permitir solo una selección a la vez.
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
         return this;
     }
 
