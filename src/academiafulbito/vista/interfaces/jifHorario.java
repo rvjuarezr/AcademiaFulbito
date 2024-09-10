@@ -11,6 +11,7 @@
 
 package academiafulbito.vista.interfaces;
 
+import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
 import javax.swing.JDesktopPane;
 import javax.swing.JSpinner;
@@ -70,6 +71,8 @@ public class jifHorario extends javax.swing.JInternalFrame {
         txtIdCancha = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         btnBuscarCancha = new javax.swing.JButton();
         txtNombreCancha = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        btnCancelar = new javax.swing.JButton();
+        btnGuardar = new org.edisoncor.gui.button.ButtonRound();
 
         setBackground(new java.awt.Color(204, 204, 255));
         setTitle("MANTENIMIENTO HORARIOS");
@@ -256,9 +259,33 @@ public class jifHorario extends javax.swing.JInternalFrame {
         });
         jPanel2.add(txtNombreCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, 450, 50));
 
+        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
+        btnCancelar.setText("VOLVER");
+        btnCancelar.setContentAreaFilled(false);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 400, 220, 70));
+
+        btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
+        btnGuardar.setBorder(null);
+        btnGuardar.setText("AÑADIR");
+        btnGuardar.setBorderPainted(true);
+        btnGuardar.setContentAreaFilled(true);
+        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 400, 170, 70));
+
         tphHorarios.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 450));
+        getContentPane().add(tphHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 520));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -267,10 +294,10 @@ public class jifHorario extends javax.swing.JInternalFrame {
     private void btnNuevoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoHorarioActionPerformed
         // TODO add your handling code here:
         indicador = 0;//para poder guardar
-        /*tphCategorias.setSelectedIndex(1);
+        tphHorarios.setSelectedIndex(1);
         limpiarCampos();
         habilitarCampos(true);
-        accionBotones(true, true);*/
+        accionBotones(true, true);
 }//GEN-LAST:event_btnNuevoHorarioActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
@@ -333,6 +360,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
             jfPrincipal.menuProfesores = new jifProfesores(jDesktopPane);
             Utils.visualizarInternalFrame(jfPrincipal.menuProfesores, jDesktopPane);
         }
+        jfPrincipal.menuProfesores.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de profesores
         jfPrincipal.menuProfesores.toFront();
     }//GEN-LAST:event_btnBucarProfesorActionPerformed
 
@@ -345,12 +373,55 @@ public class jifHorario extends javax.swing.JInternalFrame {
         jfPrincipal.menuCanchas.toFront();
     }//GEN-LAST:event_btnBuscarCanchaActionPerformed
 
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        limpiarCampos();
+        habilitarCampos(false);
+        tphHorarios.setSelectedIndex(0);
+        accionBotones(false, false);
+}//GEN-LAST:event_btnCancelarActionPerformed
 
-    // Variables declaration - do not modify                     
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        /*try {
+            if (validarDatosCategoria()) {
+                String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+                if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+                    Categoria categoria;
+                    switch (indicador) {
+                        case 0://registrar categoria
+                            categoria = new Categoria();
+                            categoriaFacade.guardarCategoria(getDatosCategoria(categoria));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                            break;
+                        case 1://actualizar categoria
+                            categoria = categoriaFacade.findCategoriaById(idSeleccionada);
+                            categoriaFacade.actualizarCategoria(getDatosCategoria(categoria));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                            break;
+                    }
+
+                    listarCategorias(paginaActual, tamanioPagina);
+                    limpiarCampos();
+                    habilitarCampos(false);
+                    accionBotones(false, false);
+                    btnGuardar.setText("Añadir");
+                    indicador = 0;
+                    tphCategorias.setSelectedIndex(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }*/
+}//GEN-LAST:event_btnGuardarActionPerformed
+    
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBucarProfesor;
     private javax.swing.JButton btnBuscarCancha;
     private javax.swing.JButton btnBuscarCategoria;
+    private javax.swing.JButton btnCancelar;
+    private org.edisoncor.gui.button.ButtonRound btnGuardar;
     private org.edisoncor.gui.button.ButtonRound btnNuevoHorario;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
@@ -364,14 +435,45 @@ public class jifHorario extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblHorarios;
     private javax.swing.JTabbedPane tphHorarios;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCancha;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCategoria;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtIdProfesor;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCancha;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCategoria;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreProfesor;
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCancha;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCategoria;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdProfesor;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCancha;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCategoria;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreProfesor;
     // End of variables declaration//GEN-END:variables
 
+    private void limpiarCampos(){
+        jcbDiasDeLaSemana.setSelectedIndex(0);
+        jsHoraInicio.setValue(new java.sql.Time(System.currentTimeMillis()));
+        jsHoraFin.setValue(new java.sql.Time(System.currentTimeMillis()));
+        txtIdProfesor.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombreProfesor.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtIdCategoria.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombreCategoria.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtIdCancha.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombreCancha.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+    }
+
+    private void habilitarCampos(boolean band){
+        if(indicador == 0){
+            jcbDiasDeLaSemana.setSelectedIndex(0);
+            jcbDiasDeLaSemana.setEnabled(band);
+        } else{
+            jcbDiasDeLaSemana.setEnabled(band);
+        }
+        jsHoraInicio.setEnabled(band);
+        jsHoraFin.setEnabled(band);
+        txtIdProfesor.setEditable(band);
+        txtNombreProfesor.setEditable(band);
+        txtIdCategoria.setEditable(band);
+        txtNombreCategoria.setEditable(band);
+        txtIdCancha.setEditable(band);
+        txtNombreCancha.setEditable(band);
+    }
+
+    private void accionBotones(boolean d, boolean e) {
+        btnCancelar.setEnabled(d);
+        btnGuardar.setEnabled(e);
+    }
 }
