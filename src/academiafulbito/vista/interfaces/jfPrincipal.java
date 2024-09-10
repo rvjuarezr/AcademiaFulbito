@@ -30,7 +30,9 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -56,16 +58,62 @@ public class jfPrincipal extends javax.swing.JFrame {
     private boolean isSubMenuVisible = false;
     JPopupMenu subMenu;
 
+    private JPanel jpCabecera, jpMenuVertical, jpPrincipal;
+    private JLabel lblLogo;
+    public static JLabel lblSesionUsuario;
+    private JDesktopPane jdpVentanas;
+
     public jfPrincipal() {
         setUndecorated(false);// Configura la ventana sin bordes
         initComponents();
 
-        // Maximizar la ventana para ocupar toda la pantalla
+        // Maximizar la ventana del JFrame para ocupar toda la pantalla
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         utils = new Utils(12);
 
-        jpCabecera.setSize(jpPrincipal.getWidth(), jpCabecera.getHeight());//ajustar el ancho del panel de la cabecera con el mismo del JFrame
+        // Cabecera
+        jpCabecera = new JPanel();
+        jpCabecera.setLayout(new BorderLayout());
+        jpCabecera.setBackground(new java.awt.Color(218, 218, 218));
+        jpCabecera.setPreferredSize(new Dimension(0, 50)); // Fijar altura de la cabecera
+
+        lblLogo = new JLabel("Logo", JLabel.LEFT); // Placeholder para el logo
+        lblSesionUsuario = new JLabel("Usuario: Administrador", JLabel.RIGHT); // Placeholder para el usuario
+        lblSesionUsuario.setFont(new java.awt.Font("Bookman Old Style", 3, 24));
+        lblSesionUsuario.setForeground(new java.awt.Color(128, 128, 128));
+
+        jpCabecera.add(lblLogo, BorderLayout.WEST); // Logo en la izquierda
+        jpCabecera.add(lblSesionUsuario, BorderLayout.EAST); // Usuario en la derecha
+        add(jpCabecera, BorderLayout.NORTH); // Añadir cabecera en la parte superior
+
+        // Panel principal
+        jpPrincipal = new JPanel();
+        jpPrincipal.setLayout(new BorderLayout());
+
+        // Panel vertical de menú
+        jpMenuVertical = new JPanel();
+        jpMenuVertical.setLayout(new BoxLayout(jpMenuVertical, BoxLayout.Y_AXIS)); // Disposición vertical
+        jpMenuVertical.setBackground(new java.awt.Color(218, 218, 218));
+        jpMenuVertical.setPreferredSize(new Dimension(150, 0)); // Fijar ancho del menú
+
+        // Añadir botones de menú
+        JButton btnEmpresa = createMenuButton("   EMPRESA      ", "/academiafulbito/vista/imagenes/inicio.png");
+        final JButton btnMaestras = createMenuButton("   MAESTRAS      ", "/academiafulbito/vista/imagenes/maestras.png");
+        jpMenuVertical.add(btnEmpresa);
+        jpMenuVertical.add(btnMaestras);
+
+        jpPrincipal.add(jpMenuVertical, BorderLayout.WEST); // Menú a la izquierda
+
+        // JDesktopPane para mostrar los InternalFrames
+        jdpVentanas = new JDesktopPane();
+        jdpVentanas.setBackground(Color.WHITE); // Fondo blanco para las ventanas
+        jpPrincipal.add(jdpVentanas, BorderLayout.CENTER); // Ventanas en el centro
+
+        add(jpPrincipal, BorderLayout.CENTER); // Agregar todo el contenido principal al JFrame
+
+
+        /*jpCabecera.setSize(jpPrincipal.getWidth(), jpCabecera.getHeight());//ajustar el ancho del panel de la cabecera con el mismo del JFrame
         // Repintar para que se apliquen los cambios
         jpCabecera.revalidate();
         jpCabecera.repaint();
@@ -73,10 +121,13 @@ public class jfPrincipal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         jpMenuVertical.setLayout(new BoxLayout(jpMenuVertical, BoxLayout.Y_AXIS));// Disposición vertical
         jpMenuVertical.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));//margen
-
+        //
+        jpMenuVertical.setPreferredSize(new Dimension(200, getHeight())); // Ancho fijo para el menú
+        jpVentanas.setPreferredSize(new Dimension(getWidth() - 200, getHeight()));
+        jpVentanas.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Para verificar los bordes y tamaño
+        */
         // Crear botones para el menú
-        JButton btnEmpresa = createMenuButton("   EMPRESA      ", "/academiafulbito/vista/imagenes/inicio.png");
-        final JButton btnMaestras = createMenuButton("   MAESTRAS      ", "/academiafulbito/vista/imagenes/maestras.png");
+        
 
         // Crear submenú desplegable
         subMenu = new JPopupMenu();
@@ -113,10 +164,10 @@ public class jfPrincipal extends javax.swing.JFrame {
         });
 
         // Agregar el botón al JPanel
-        jpMenuVertical.add(btnEmpresa);
+        /*jpMenuVertical.add(btnEmpresa);
         jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4))); // Espacio entre botones
         jpMenuVertical.add(btnMaestras);
-        jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));
+        jpMenuVertical.add(Box.createRigidArea(new Dimension(0, 4)));*/
         /*JButton btnCategoria = createMenuButton("   CATEGORIA   ", "/academiafulbito/vista/imagenes/maestras.png");
         JButton btnCancha = createMenuButton("   CANCHA   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
         JButton btnCampeonato = createMenuButton("   CAMPEONATO   ", "/academiafulbito/vista/imagenes/maestras/categorias.png");
@@ -215,69 +266,12 @@ public class jfPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jpPrincipal = new javax.swing.JPanel();
-        jpCabecera = new javax.swing.JPanel();
-        lblSesionUsuario = new javax.swing.JLabel();
-        lblLogo = new javax.swing.JLabel();
-        jpVentanas = new javax.swing.JPanel();
-        jdpAcademias = new javax.swing.JDesktopPane();
-        jpMenuVertical = new javax.swing.JPanel();
-        jpMostrarOcultar = new javax.swing.JPanel();
-        lblMostrarMenu = new javax.swing.JLabel();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jpPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jpCabecera.setBackground(new java.awt.Color(50, 121, 193));
-        jpCabecera.setLayout(new java.awt.BorderLayout());
-
-        lblSesionUsuario.setFont(new java.awt.Font("Bookman Old Style", 3, 24));
-        lblSesionUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        lblSesionUsuario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblSesionUsuario.setText("HOLA : ");
-        jpCabecera.add(lblSesionUsuario, java.awt.BorderLayout.EAST);
-
-        lblLogo.setText(" ");
-        jpCabecera.add(lblLogo, java.awt.BorderLayout.WEST);
-
-        jpPrincipal.add(jpCabecera, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 0, 1150, 40));
-
-        jpVentanas.setLayout(null);
-
-        jpMenuVertical.setBackground(new java.awt.Color(255, 255, 255));
-        jpMenuVertical.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jpMenuVertical.setBounds(0, 0, 170, 440);
-        jdpAcademias.add(jpMenuVertical, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jpVentanas.add(jdpAcademias);
-        jdpAcademias.setBounds(0, 0, 1290, 440);
-
-        jpPrincipal.add(jpVentanas, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1290, 440));
-
-        jpMostrarOcultar.setBackground(new java.awt.Color(50, 121, 193));
-        jpMostrarOcultar.setLayout(new java.awt.BorderLayout());
-
-        lblMostrarMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/menu-mostrar.png"))); // NOI18N
-        lblMostrarMenu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblMostrarMenuMouseClicked(evt);
-            }
-        });
-        jpMostrarOcultar.add(lblMostrarMenu, java.awt.BorderLayout.CENTER);
-
-        jpPrincipal.add(jpMostrarOcultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 40));
-
-        getContentPane().add(jpPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 480));
+        setTitle("ACADEMIA DE FULBITO");
+        setBackground(new java.awt.Color(255, 255, 255));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void lblMostrarMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMostrarMenuMouseClicked
-        // TODO add your handling code here:
-        toggleMenu();
-    }//GEN-LAST:event_lblMostrarMenuMouseClicked
 
     /**
      * @param args the command line arguments
@@ -291,15 +285,6 @@ public class jfPrincipal extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane jdpAcademias;
-    private javax.swing.JPanel jpCabecera;
-    private javax.swing.JPanel jpMenuVertical;
-    private javax.swing.JPanel jpMostrarOcultar;
-    private javax.swing.JPanel jpPrincipal;
-    private javax.swing.JPanel jpVentanas;
-    private javax.swing.JLabel lblLogo;
-    private javax.swing.JLabel lblMostrarMenu;
-    public static javax.swing.JLabel lblSesionUsuario;
     // End of variables declaration//GEN-END:variables
 
     private JButton createMenuButton(String text, String iconPath) {
@@ -351,12 +336,12 @@ public class jfPrincipal extends javax.swing.JFrame {
 
     // Método para mostrar/ocultar el menú
     private void toggleMenu() {
-        if (jpMenuVertical.isVisible()) {
+        /*if (jpMenuVertical.isVisible()) {
             jpMenuVertical.setVisible(false);
         } else {
             jpMenuVertical.setVisible(true);
         }
         jpPrincipal.revalidate();
-        jpPrincipal.repaint();
+        jpPrincipal.repaint();*/
     }
 }
