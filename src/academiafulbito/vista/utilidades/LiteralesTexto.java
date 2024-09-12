@@ -48,5 +48,11 @@ public class LiteralesTexto {
     public static final String LITERAL_ERROR = "ERROR.";
     public static final String LITERAL_APELLIDO = "Apellido";
     public static final String LITERAL_TELEFONO = "Telefono";
+    public static final String LITERAL_BOOKMAN_OLD_STYLE = "Bookman Old Style";
+    public static final String LITERAL_MAESTRAS_CATEGORIAS = "CATEGORIAS";
+    public static final String LITERAL_MAESTRAS_CANCHAS = "CANCHA";
+    public static final String LITERAL_MAESTRAS_CAMPEONATO = "CAMPEONATO";
+    public static final String LITERAL_MAESTRAS_PADRES = "PADRES";
+    public static final String LITERAL_MAESTRAS_PROFESORES = "PROFESORES";
 
 }
