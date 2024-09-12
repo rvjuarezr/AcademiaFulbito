@@ -17,6 +17,7 @@ import academiafulbito.modelo.enums.Estado;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +90,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         setTitle("MANTENIMIENTO CATEGORIAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -156,16 +157,31 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         txtNombre.setEditable(false);
         txtNombre.setDescripcion("Nombre*");
         txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
 
         txtEdadMin.setEditable(false);
         txtEdadMin.setDescripcion("Edad Mínima*");
         txtEdadMin.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtEdadMin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdadMinKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtEdadMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
 
         txtEdadMax.setEditable(false);
         txtEdadMax.setDescripcion("Edad Máxima*");
         txtEdadMax.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtEdadMax.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdadMaxKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtEdadMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
 
         btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
@@ -199,7 +215,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
 
         jcbEstado.setEnabled(false);
-        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
 
         tphCategorias.addTab("REGISTRO", jPanel2);
@@ -220,29 +236,35 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
-        if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
-            Categoria categoria;
-            switch(indicador){
-                case 0://registrar categoria
-                    categoria = new Categoria();
-                    categoriaFacade.guardarCategoria(getDatosCategoria(categoria));
-                    Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
-                    break;
-                case 1://actualizar categoria
-                    categoria = categoriaFacade.findCategoriaById(idSeleccionada);
-                    categoriaFacade.actualizarCategoria(getDatosCategoria(categoria));
-                    Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
-                    break;
-            }
+        try {
+            if (validarDatosCategoria()) {
+                String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+                if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+                    Categoria categoria;
+                    switch (indicador) {
+                        case 0://registrar categoria
+                            categoria = new Categoria();
+                            categoriaFacade.guardarCategoria(getDatosCategoria(categoria));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                            break;
+                        case 1://actualizar categoria
+                            categoria = categoriaFacade.findCategoriaById(idSeleccionada);
+                            categoriaFacade.actualizarCategoria(getDatosCategoria(categoria));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                            break;
+                    }
 
-            listarCategorias(paginaActual, tamanioPagina);
-            limpiarCampos();
-            habilitarCampos(false);
-            accionBotones(false, false);
-            btnGuardar.setText("Añadir");
-            indicador = 0;
-            tphCategorias.setSelectedIndex(0);
+                    listarCategorias(paginaActual, tamanioPagina);
+                    limpiarCampos();
+                    habilitarCampos(false);
+                    accionBotones(false, false);
+                    btnGuardar.setText("Añadir");
+                    indicador = 0;
+                    tphCategorias.setSelectedIndex(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -270,6 +292,32 @@ public class jifCategorias extends javax.swing.JInternalFrame {
             listarCategorias(paginaActual, tamanioPagina);
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void txtEdadMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMinKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+
+        // Permitir solo dígitos y hasta 2 caracteres
+        if (!Character.isDigit(c) || txtEdadMin.getText().length() >= 2) {
+            evt.consume(); // Ignorar el evento de tecla
+        }
+    }//GEN-LAST:event_txtEdadMinKeyTyped
+
+    private void txtEdadMaxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMaxKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+
+        // Permitir solo dígitos y hasta 2 caracteres
+        if (!Character.isDigit(c) || txtEdadMax.getText().length() >= 2) {
+            evt.consume(); // Ignorar el evento de tecla
+        }
+    }//GEN-LAST:event_txtEdadMaxKeyTyped
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
+    }//GEN-LAST:event_txtNombreKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -472,4 +520,26 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE LA CATEGORÍA", datos, 18, 20);
     }
 
+    private boolean validarDatosCategoria(){
+        if(!validarCampo(txtNombre.getText(), LiteralesTexto.ERROR_NOMBRE_CAMPO_VACIO)){
+            return false;
+        }
+
+        if (!validarCampo(txtEdadMin.getText(), LiteralesTexto.ERROR_VALOR_EDAD_VACIA)) {
+            return false;
+        }
+
+        if (!validarCampo(txtEdadMax.getText(), LiteralesTexto.ERROR_VALOR_EDAD_VACIA)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarCampo(String valor, String mensajeError) {
+        if (!Utils.validarCadena(valor)) {
+            Utils.mensajeError(mensajeError);
+            return false;
+        }
+        return true;
+    }
 }

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,6 +32,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
 
     JDesktopPane jdp;
     public static ProfesorFacade profesorFacade;
+    public static int permiteSelFila = -1;//este valor no permite seleccionar la fila en la tabla
     DefaultTableModel modelo;
     String[] nombreColumnas = {
         LiteralesTexto.LITERAL_ID,
@@ -107,6 +109,11 @@ public class jifProfesores extends javax.swing.JInternalFrame {
             }
         ));
         tblProfesores.setOpaque(false);
+        tblProfesores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProfesoresMouseClicked(evt);
+            }
+        });
         jspProfesores.setViewportView(tblProfesores);
 
         jPanel1.add(jspProfesores, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 270));
@@ -267,6 +274,26 @@ public class jifProfesores extends javax.swing.JInternalFrame {
             listarProfesores(paginaActual, tamanioPagina);
         }
 }//GEN-LAST:event_btnSiguienteActionPerformed
+
+    private void tblProfesoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProfesoresMouseClicked
+        // TODO add your handling code here:
+        switch(permiteSelFila){
+            case 0://permite llamarlo desde una ventana externa
+                int nroFila = tblProfesores.getSelectedRow();
+                if(nroFila != -1){
+                    jfPrincipal.menuHorario.txtIdProfesor.setText(tblProfesores.getValueAt(nroFila, 0).toString());
+                    jfPrincipal.menuHorario.txtNombreProfesor.setText(tblProfesores.getValueAt(nroFila, 1).toString()+" "+tblProfesores.getValueAt(nroFila, 2).toString());
+                
+                }
+                try{
+                    setClosed(true);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+                break;
+        }
+    }//GEN-LAST:event_tblProfesoresMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
@@ -323,6 +350,9 @@ public class jifProfesores extends javax.swing.JInternalFrame {
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
             tblProfesores.setDefaultRenderer(Object.class, new Utils(18));
+
+            // Establece el modo de selección de filas para permitir solo una selección a la vez.
+            tblProfesores.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
             Utils.configurarEstiloTabla(tblProfesores, jspProfesores);
             Utils.configurarBotonesAccion(tblProfesores);

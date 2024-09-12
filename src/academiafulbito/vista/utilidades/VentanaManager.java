@@ -55,6 +55,13 @@ public class VentanaManager {
 
         }
 
+        // Verificación si ventana sigue siendo null
+        if (ventana == null) {
+            // Manejar el caso en el que ninguna opción coincide
+            Utils.mensajeError("Opción no válida o ventana no encontrada");
+            return;
+        }
+
         // Verificar si la ventana ya está en el JDesktopPane antes de agregarla
         if (!ventana.isVisible()) {
             jdpVentanas.add(ventana);

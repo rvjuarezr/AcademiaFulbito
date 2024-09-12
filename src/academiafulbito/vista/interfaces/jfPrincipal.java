@@ -39,8 +39,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 /**
  *
@@ -56,8 +56,10 @@ public class jfPrincipal extends javax.swing.JFrame {
     public static jifCampeonatos menuCampeonatos;
     public static jifPadres menuPadres;
     public static jifProfesores menuProfesores;
+    public static jifHorario menuHorario;
 
-    JPopupMenu pmMaestras;
+    private JPopupMenu pmMaestras, pmControl;
+    private JPopupMenu subMenuActual = null; // Para mantener el submenú visible
 
     private JPanel jpCabecera, jpMenuVertical;
     public static JLabel lblSesionUsuario;
@@ -84,10 +86,7 @@ public class jfPrincipal extends javax.swing.JFrame {
         setupDesktopPane();
 
         //panel Layered
-        setupMainLayout();
-
-        // Crear submenú desplegable
-        setupSubMenu(); 
+        setupMainLayout(); 
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -98,6 +97,7 @@ public class jfPrincipal extends javax.swing.JFrame {
                 } else {
                     jdpVentanas.setBounds(0, 0, getWidth(), getHeight()); // Ocupar todo el espacio cuando el menú esté oculto
                 }
+
             }
         });
     }
@@ -156,6 +156,7 @@ public class jfPrincipal extends javax.swing.JFrame {
 
         // Cambiar color al pasar el ratón
         item.addMouseListener(new MouseAdapter() {
+
             @Override
             public void mouseEntered(MouseEvent e) {
                 item.setBackground(Color.LIGHT_GRAY);
@@ -169,15 +170,20 @@ public class jfPrincipal extends javax.swing.JFrame {
         return item;
     }
 
-    private void showSubMenu(JButton btn) {
+    private void showMenu(JButton btn, JPopupMenu jpm) {
         if (btn != null) {
+            // Ocultar el submenú actual si está visible
+            if (subMenuActual != null && subMenuActual.isVisible()) {
+                subMenuActual.setVisible(false);
+            }
             Point location = btn.getLocationOnScreen();
-            Dimension size = pmMaestras.getPreferredSize();
-            pmMaestras.setLocation(location.x + btn.getWidth(), location.y); // Muestra el submenú a la derecha del botón
-            pmMaestras.setSize(size);
+            jpm.setLocation(location.x + btn.getWidth(), location.y); // Muestra el Menú a la derecha del botón
+            jpm.setVisible(true);// Mostrar el nuevo submenú
+            subMenuActual = jpm;// Guardar referencia al submenú visible
+
             resetButtonBorders(jpMenuVertical);  // Resetea los colores de todos los botones
             btn.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));  // Cambia el borde del botón activo;  // Cambia el color del botón activo
-            pmMaestras.setVisible(true);
+            
         }
     }
 
@@ -239,11 +245,26 @@ public class jfPrincipal extends javax.swing.JFrame {
         final JButton btnReportes = createMenuButton("   REPORTES      ", "/academiafulbito/vista/imagenes/reportes.png");
         final JButton btnSalir = createMenuButton("   SALIR      ", "/academiafulbito/vista/imagenes/logout.jpg");
 
+        // Inicializar los submenús solo una vez
+        pmMaestras = new JPopupMenu();
+        setupSubMenus(new String[]{"CATEGORIAS", "CANCHA", "CAMPEONATO", "PADRES", "PROFESORES"}, pmMaestras);
+        pmControl = new JPopupMenu();
+        setupSubMenus(new String[]{"HORARIOS"}, pmControl);
+
         // Añadir funcionalidad a los botones
         btnMaestras.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showSubMenu(btnMaestras);
+                // Mostrar submenú y ocultar el actual si está visible
+                showMenu(btnMaestras, pmMaestras);                
+            }
+        });
+
+        btnControl.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {                
+                // Mostrar submenú y ocultar el actual si está visible
+                showMenu(btnControl, pmControl);
             }
         });
 
@@ -266,32 +287,30 @@ public class jfPrincipal extends javax.swing.JFrame {
 
     }
 
-    private void setupSubMenu(){
-        pmMaestras = new JPopupMenu();
-        pmMaestras.setLayout(new BoxLayout(pmMaestras, BoxLayout.Y_AXIS));
-        // Crear las opciones del submenú
-        String[] opcionesMaestras = {"CATEGORIAS", "CANCHA", "CAMPEONATO", "PADRES", "PROFESORES"};
-        for (final String opcion : opcionesMaestras) {
+    private void setupSubMenus(String[] opciones, final JPopupMenu jpm){
+        jpm.setLayout(new BoxLayout(jpm, BoxLayout.Y_AXIS));
+        // Crear las opciones del submenú        
+        for (final String opcion : opciones) {
             final JMenuItem item = createSubMenuItem(opcion);
             item.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Ocultar el submenú
-                    pmMaestras.setVisible(false);
+                    jpm.setVisible(false);
                     VentanaManager.openVentana(opcion, jdpVentanas, utils); // Usa una clase que maneje la apertura de ventanas
 
                     // Cambiar el color del item seleccionado
-                    resetMenuColors();  // Reseteamos colores de otros menús
+                    resetMenuColors(jpm);  // Reseteamos colores de otros menús
                     item.setBackground(Color.LIGHT_GRAY);  // Color del menú seleccionado
                 }
 
             });
-            pmMaestras.add(item);
+            jpm.add(item);
         }
     }
 
-    private void resetMenuColors() {
-        for (Component comp : pmMaestras.getComponents()) {
+    private void resetMenuColors(JPopupMenu jpm) {
+        for (Component comp : jpm.getComponents()) {
             if (comp instanceof JMenuItem) {
                 JMenuItem menuItem = (JMenuItem) comp;
                 menuItem.setBackground(Color.WHITE);
@@ -340,4 +359,5 @@ public class jfPrincipal extends javax.swing.JFrame {
         jdpVentanas = new JDesktopPane();
         jdpVentanas.setBackground(Color.WHITE); // Fondo blanco para las ventanas
     }
+
 }

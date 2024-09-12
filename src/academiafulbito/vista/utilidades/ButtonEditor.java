@@ -5,6 +5,7 @@
 package academiafulbito.vista.utilidades;
 
 import academiafulbito.vista.interfaces.jfPrincipal;
+import academiafulbito.vista.interfaces.jifCampeonatos;
 import academiafulbito.vista.interfaces.jifCategorias;
 import academiafulbito.vista.interfaces.jifPadres;
 import academiafulbito.vista.interfaces.jifProfesores;
@@ -77,6 +78,10 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if (jfPrincipal.menuPadres instanceof jifPadres) {
             jfPrincipal.menuPadres.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
         }
+        if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
+            jfPrincipal.menuCampeonatos.cargarDatosEnFormulario(selectedRow);
+        }
+
     }
 
     private void eliminarFilaSeleccionada() {
@@ -89,6 +94,10 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
          if (jfPrincipal.menuProfesores instanceof jifProfesores) {
             jfPrincipal.menuProfesores.eliminarProfesorSeleccionada(selectedRow); // Llama al método en el JInternalFrame
         }
+        if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
+            jfPrincipal.menuCampeonatos.eliminarCampeonatoSeleccionada(selectedRow);
+        }
+
     }
 
     private void mostrarFilaSeleccionada(){
@@ -101,5 +110,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
           if (jfPrincipal.menuProfesores instanceof jifProfesores) {
             jfPrincipal.menuProfesores.mostrarInformacionProfesor(selectedRow); // Llama al método en el JInternalFrame
         }
+        if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
+            jfPrincipal.menuCampeonatos.mostrarInformacionCampeonato(selectedRow);
+        }
+
     }
 }
