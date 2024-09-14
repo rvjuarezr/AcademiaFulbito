@@ -11,9 +11,17 @@
 
 package academiafulbito.vista.interfaces;
 
+import academiafulbito.controlador.beans.CategoriaFacade;
+import academiafulbito.controlador.beans.HorarioFacade;
+import academiafulbito.controlador.beans.ProfesorFacade;
+import academiafulbito.modelo.entidades.Horario;
+import academiafulbito.modelo.enums.Dia;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.sql.Time;
+import java.util.Date;
 import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 /**
@@ -32,11 +40,17 @@ public class jifHorario extends javax.swing.JInternalFrame {
     private int totalPaginas;
     jifProfesores menuProfesores;
     jifCanchas menuCanchas;
+    HorarioFacade horarioFacade;
+    CategoriaFacade categoriaFacade;
+    ProfesorFacade profesorFacade;
+
     public jifHorario(JDesktopPane jdpModAF) {
         initComponents();
         jDesktopPane = jdpModAF;
         Utils.cargarComboDiasDeLaSemana(jcbDiasDeLaSemana);
-
+        horarioFacade = new HorarioFacade();
+        categoriaFacade = new CategoriaFacade();
+        profesorFacade = new ProfesorFacade();
     }
 
     /** This method is called from within the constructor to
@@ -383,36 +397,36 @@ public class jifHorario extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        /*try {
-            if (validarDatosCategoria()) {
+        try {
+            //if (validarDatosCategoria()) {
                 String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
                 if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
-                    Categoria categoria;
+                    Horario horario;
                     switch (indicador) {
                         case 0://registrar categoria
-                            categoria = new Categoria();
-                            categoriaFacade.guardarCategoria(getDatosCategoria(categoria));
+                            horario = new Horario();
+                            horarioFacade.guardarHorario(getDatosHorario(horario));
                             Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
                             break;
                         case 1://actualizar categoria
-                            categoria = categoriaFacade.findCategoriaById(idSeleccionada);
-                            categoriaFacade.actualizarCategoria(getDatosCategoria(categoria));
-                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                            //categoria = categoriaFacade.findCategoriaById(idSeleccionada);
+                            //categoriaFacade.actualizarCategoria(getDatosCategoria(categoria));
+                            //Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
                             break;
                     }
 
-                    listarCategorias(paginaActual, tamanioPagina);
+                    //listarCategorias(paginaActual, tamanioPagina);
                     limpiarCampos();
                     habilitarCampos(false);
                     accionBotones(false, false);
                     btnGuardar.setText("Añadir");
                     indicador = 0;
-                    tphCategorias.setSelectedIndex(0);
+                    //tphCategorias.setSelectedIndex(0);
                 }
-            }
+            //}
         } catch (Exception ex) {
             ex.printStackTrace();
-        }*/
+        }
 }//GEN-LAST:event_btnGuardarActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -475,5 +489,18 @@ public class jifHorario extends javax.swing.JInternalFrame {
     private void accionBotones(boolean d, boolean e) {
         btnCancelar.setEnabled(d);
         btnGuardar.setEnabled(e);
+    }
+
+    private Horario getDatosHorario(Horario horario){
+
+        horario.setCancha(null);//falta el bean de checa
+        horario.setCategoria(categoriaFacade.findCategoriaById(Integer.parseInt(txtIdCategoria.getText())));
+        horario.setDia((Dia)jcbDiasDeLaSemana.getSelectedItem());
+        Date fechaInicio = (Date) jsHoraInicio.getValue();
+        horario.setHoraInicio(new Time(fechaInicio.getTime()));
+        Date fechaFin = (Date) jsHoraFin.getValue();
+        horario.setHoraInicio(new Time(fechaFin.getTime()));
+        horario.setProfesor(profesorFacade.findProfesorById(Integer.parseInt(txtIdProfesor.getText())));
+        return horario;
     }
 }

@@ -56,6 +56,7 @@ public class LiteralesTexto {
     public static final String LITERAL_MAESTRAS_CAMPEONATO = "CAMPEONATO";
     public static final String LITERAL_MAESTRAS_PADRES = "PADRES";
     public static final String LITERAL_MAESTRAS_PROFESORES = "PROFESORES";
+    public static final String LITERAL_CONTROL_HORARIOS = "HORARIOS";
     public static final String LITERAL_DIRECCION = "Direccion";
     public static final String LITERAL_UBIGEO = "Ubigeo";
 

@@ -9,6 +9,7 @@ import academiafulbito.vista.interfaces.jfPrincipal;
 import academiafulbito.vista.interfaces.jifCampeonatos;
 import academiafulbito.vista.interfaces.jifCanchas;
 import academiafulbito.vista.interfaces.jifCategorias;
+import academiafulbito.vista.interfaces.jifHorario;
 import academiafulbito.vista.interfaces.jifPadres;
 import academiafulbito.vista.interfaces.jifProfesores;
 import javax.swing.JDesktopPane;
@@ -52,6 +53,12 @@ public class VentanaManager {
                 jfPrincipal.menuProfesores = new jifProfesores(jdpVentanas);
             }
             ventana = jfPrincipal.menuProfesores;
+
+        } else if(opcion.equals(LiteralesTexto.LITERAL_CONTROL_HORARIOS)){
+            if (jfPrincipal.menuHorario == null || jfPrincipal.menuHorario.isClosed()) {
+                jfPrincipal.menuHorario = new jifHorario(jdpVentanas);
+            }
+            ventana = jfPrincipal.menuHorario;
 
         }
 
