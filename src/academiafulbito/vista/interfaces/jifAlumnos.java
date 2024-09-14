@@ -32,7 +32,7 @@ import javax.swing.table.DefaultTableModel;
 public class jifAlumnos extends javax.swing.JInternalFrame {
 
     JDesktopPane jdp;
-    public static AlumnoFacade alumnoFacade;
+    /*public static AlumnoFacade alumnoFacade;
     DefaultTableModel modelo;
     String[] nombreColumnas = {
         LiteralesTexto.LITERAL_ID,
@@ -46,7 +46,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_VER,
         LiteralesTexto.LITERAL_EDITAR,
         LiteralesTexto.LITERAL_ELIMINAR
-    };
+    };*/
     int indicador;//para saber si estamos en modo de edicion
 
     private int idSeleccionada; // Variable para almacenar la ID del alumno seleccionado
@@ -235,7 +235,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
         txtNombre.setEditable(false);
         txtNombre.setDescripcion("Nombre*");
-        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 720, 40));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14));
@@ -271,15 +271,15 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
     private void btnNuevoAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoAlumnoActionPerformed
         // TODO add your handling code here:
         indicador = 0;//para poder guardar
-        /*tphAlumnos.setSelectedIndex(1);
+        tphAlumnos.setSelectedIndex(1);
         limpiarCampos();
         habilitarCampos(true);
-        accionBotones(true, true);*/
+        accionBotones(true, true);
     }//GEN-LAST:event_btnNuevoAlumnoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+        /*String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
         if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
             Alumno alumno;
             switch (indicador) {
@@ -303,14 +303,15 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             btnGuardar.setText("Añadir");
             indicador = 0;
             tphAlumnos.setSelectedIndex(0);
-        }
+        }*/
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        /*limpiarCampos();
+        limpiarCampos();
         habilitarCampos(false);
-        tphAlumnos.setSelectedIndex(0);*/
+        tphAlumnos.setSelectedIndex(0);
+        accionBotones(false,false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
@@ -336,6 +337,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             // Llamamos al método para gestionar la visualización
             Utils.visualizarInternalFrame(jfPrincipal.menuCategorias, jdp);
         }
+        jfPrincipal.menuCategorias.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de categorias
         jfPrincipal.menuCategorias.toFront(); // Traer al frente
     }//GEN-LAST:event_btnBuscarCategoriaActionPerformed
 
@@ -345,6 +347,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             jfPrincipal.menuPadres = new jifPadres(jdp);
             Utils.visualizarInternalFrame(jfPrincipal.menuPadres, jdp);
         }
+        jfPrincipal.menuPadres.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de padres
         jfPrincipal.menuPadres.toFront();
     }//GEN-LAST:event_btnBuscarPadreActionPerformed
 
@@ -368,14 +371,14 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
     private javax.swing.JTable tblAlumnos;
     private javax.swing.JTabbedPane tphAlumnos;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtApellido;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCategoria;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtIdPadre;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCategoria;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdPadre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCategoria;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombrePadre;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCategoria;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombrePadre;
     // End of variables declaration//GEN-END:variables
 
-   private void listarAlumnos(List<Alumno> listaAlumnos) {
+   /*private void listarAlumnos(List<Alumno> listaAlumnos) {
          // Selecciona el primer tab en un JTabbedPane
         tphAlumnos.setSelectedIndex(0);
 
@@ -420,9 +423,9 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             Utils.configurarBotonesAccion(tblAlumnos);
 
         }
-    }
+    }*/
 
-    private Alumno getDatosAlumno(Alumno alumno) {
+   /* private Alumno getDatosAlumno(Alumno alumno) {
 
         alumno.setNombreAlumno(txtNombre.getText());
         alumno.setApellidoAlumno(txtApellido.getText());
@@ -431,7 +434,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
         return alumno;
 
-    }
+    }*/
 
     private void limpiarCampos() {
         txtNombre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
@@ -460,7 +463,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         btnGuardar.setEnabled(e);
     }
 
-    public void cargarDatosEnFormulario(int row) {
+    /*public void cargarDatosEnFormulario(int row) {
         if (row != -1) {
             // Capturar la ID de la fila seleccionada
             idSeleccionada = Integer.parseInt(tblAlumnos.getValueAt(row, 0).toString()); // Supone que la ID está en la primera columna
@@ -556,9 +559,9 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
 
         //fechaNacimiento(new java.sql.Date(jdcFechaNacimiento.getDate().getTime()));
-         /*if(jdcFechaNacimiento.getDate()!=null){
+         /if(jdcFechaNacimiento.getDate()!=null){
             postu.setFecNac(new java.sql.Date(jdchFecNac.getDate().getTime()));
-        }*/
+        }
 
 
         // Crear un mapa con los datos a mostrar
@@ -571,5 +574,5 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         // Llamar al método genérico para mostrar la información
         //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
         DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL ALUMNO", datos, 18, 20);
-    }
+    }*/
 }

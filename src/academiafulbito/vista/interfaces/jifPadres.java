@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,6 +32,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
 
     JDesktopPane jdp;
     public static PadreFacade padreFacade;
+    public static int permiteSelFila = -1;//este valor no permite seleccionar la fila en la tabla
     DefaultTableModel modelo;
     String[] nombreColumnas = {
         LiteralesTexto.LITERAL_ID,
@@ -91,7 +93,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         setTitle("MANTENIMIENTO PADRES");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphPadres.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphPadres.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -109,11 +111,14 @@ public class jifPadres extends javax.swing.JInternalFrame {
             }
         ));
         tblPadres.setOpaque(false);
+        tblPadres.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPadresMouseClicked(evt);
+            }
+        });
         jspPadres.setViewportView(tblPadres);
 
-
-        jPanel1.add(jspPadres, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
-
+        jPanel1.add(jspPadres, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 220));
 
         btnNuevoPadre.setBackground(new java.awt.Color(156, 156, 247));
         btnNuevoPadre.setText("+ PADRES");
@@ -134,16 +139,12 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-
         jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 320, -1, 50));
-
 
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
-
         jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 320, 220, 50));
-
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
@@ -154,9 +155,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 320, -1, 50));
-
 
         tphPadres.addTab("LISTADO", jPanel1);
 
@@ -279,6 +278,25 @@ public class jifPadres extends javax.swing.JInternalFrame {
         }
 }//GEN-LAST:event_btnSiguienteActionPerformed
 
+    private void tblPadresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPadresMouseClicked
+        // TODO add your handling code here:
+        switch(permiteSelFila){
+            case 0://permite llamarlo desde una ventana externa
+                int nroFila = tblPadres.getSelectedRow();
+                if(nroFila != -1){
+                    jfPrincipal.menuAlumnos.txtIdPadre.setText(tblPadres.getValueAt(nroFila, 0).toString());
+                    jfPrincipal.menuAlumnos.txtNombrePadre.setText(tblPadres.getValueAt(nroFila, 1).toString()+" "+tblPadres.getValueAt(nroFila, 2).toString());
+
+                }
+                try{
+                    setClosed(true);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+                break;
+        }
+    }//GEN-LAST:event_tblPadresMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
@@ -288,10 +306,8 @@ public class jifPadres extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-
     private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
     private javax.swing.JScrollPane jspPadres;
-
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblPadres;
     private javax.swing.JTabbedPane tphPadres;

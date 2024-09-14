@@ -33,6 +33,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
     JDesktopPane jdp;
     public static CategoriaFacade categoriaFacade;
+    public static int permiteSelFila = -1;//este valor no permite seleccionar la fila en la tabla
     DefaultTableModel modelo;
     String[] nombreColumnas = {
         LiteralesTexto.LITERAL_ID,
@@ -90,7 +91,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         setTitle("MANTENIMIENTO CATEGORIAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -108,6 +109,11 @@ public class jifCategorias extends javax.swing.JInternalFrame {
             }
         ));
         tblCategorias.setOpaque(false);
+        tblCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCategoriasMouseClicked(evt);
+            }
+        });
         jspCategorias.setViewportView(tblCategorias);
 
         jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
@@ -197,7 +203,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 270, 170, 70));
 
-        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVA CATEGORIA");
@@ -215,7 +221,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
 
         jcbEstado.setEnabled(false);
-        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
 
         tphCategorias.addTab("REGISTRO", jPanel2);
@@ -318,6 +324,26 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         char c = evt.getKeyChar();
         evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
     }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void tblCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoriasMouseClicked
+        // TODO add your handling code here:
+         switch(permiteSelFila){
+            case 0://permite llamarlo desde una ventana externa
+                int nroFila = tblCategorias.getSelectedRow();
+                if(nroFila != -1){
+                    jfPrincipal.menuAlumnos.txtIdCategoria.setText(tblCategorias.getValueAt(nroFila, 0).toString());
+                    jfPrincipal.menuAlumnos.txtNombreCategoria.setText(tblCategorias.getValueAt(nroFila, 1).toString()+" DE "+tblCategorias.getValueAt(nroFila, 2).toString()+" A "+tblCategorias.getValueAt(nroFila, 3).toString());
+
+                }
+                try{
+                    setClosed(true);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+                break;
+        }
+
+    }//GEN-LAST:event_tblCategoriasMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
