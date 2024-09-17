@@ -16,9 +16,7 @@ import academiafulbito.modelo.entidades.Cancha;
 import academiafulbito.vista.utilidades.ButtonEditor;
 import academiafulbito.vista.utilidades.ButtonRenderer;
 import academiafulbito.vista.utilidades.Utils;
-import java.sql.SQLException;
 import java.util.List;
-import javax.swing.JCheckBox;
 import javax.swing.JDesktopPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -29,7 +27,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class jifCanchas extends javax.swing.JInternalFrame {
 
-    JDesktopPane jdp;
+    JDesktopPane jDesktopPane;
+
+    int indicador;//para saber si estamos en modo de edicion
+    private int idSeleccionada; // Variable para almacenar la ID de la categoría seleccionada
+    private int paginaActual = 1;
+    private int tamanioPagina = 5;//para el paginado de tabla
+    private int totalPaginas;
+    jifL menuProfesores;
     public static CanchaFacade canchaFacade;
     DefaultTableModel modelo;
     /** Creates new form jifCategorias */
@@ -52,54 +57,271 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tphCancha = new org.edisoncor.gui.tabbedPane.TabbedPaneHeader();
-        panel1 = new org.edisoncor.gui.panel.Panel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        tphCancha = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jspCategorias = new javax.swing.JScrollPane();
         tblCancha = new javax.swing.JTable();
-        panel2 = new org.edisoncor.gui.panel.Panel();
+        btnNuevoHorario = new org.edisoncor.gui.button.ButtonRound();
+        lblPaginaActual = new javax.swing.JLabel();
+        btnAnterior = new org.edisoncor.gui.button.ButtonRound();
+        btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtNombreLugarE = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtIdLugarE = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        btnBucarLugarE = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        btnGuardar = new org.edisoncor.gui.button.ButtonRound();
+        txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
 
+        setBackground(new java.awt.Color(204, 204, 255));
         setClosable(true);
         setTitle("MANTENIMIENTO CANCHAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panel1.setColorPrimario(new java.awt.Color(255, 255, 255));
-        panel1.setColorSecundario(new java.awt.Color(51, 51, 255));
-        panel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        tphCancha.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jspCategorias.setBackground(new java.awt.Color(255, 255, 255));
+        jspCategorias.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jspCategorias.setOpaque(false);
 
         tblCancha.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "ID", "CANCHA", "ID_LUGAR", "Acciones"
+
             }
         ));
-        jScrollPane1.setViewportView(tblCancha);
+        tblCancha.setOpaque(false);
+        jspCategorias.setViewportView(tblCancha);
 
-        panel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 620, 250));
+        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
 
-        tphCancha.addTab("LISTADO", panel1);
+        btnNuevoHorario.setBackground(new java.awt.Color(156, 156, 247));
+        btnNuevoHorario.setText("+ CANCHA");
+        btnNuevoHorario.setActionCommand("+ CANCHA");
+        btnNuevoHorario.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnNuevoHorario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoHorarioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevoHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 140, 50));
 
-        panel2.setColorPrimario(new java.awt.Color(255, 255, 255));
-        panel2.setColorSecundario(new java.awt.Color(51, 51, 255));
-        panel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        tphCancha.addTab("CANCHAS", panel2);
+        lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPaginaActual.setText("10");
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, 220, 50));
 
-        getContentPane().add(tphCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 300));
+        btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
+        btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
+        btnAnterior.setText("<<");
+        btnAnterior.setFont(new java.awt.Font("Arial", 1, 24));
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 330, -1, 50));
+
+        btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
+        btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
+        btnSiguiente.setText(">>");
+        btnSiguiente.setFont(new java.awt.Font("Arial", 1, 24));
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, -1, 50));
+
+        tphCancha.addTab("LISTADO", jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        jLabel1.setForeground(new java.awt.Color(103, 98, 98));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("NUEVO HORARIO");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 360, 20));
+
+        txtNombreLugarE.setEditable(false);
+        txtNombreLugarE.setDescripcion("Nombre Lugar Entrenamiento*");
+        txtNombreLugarE.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtNombreLugarE.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreLugarEKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtNombreLugarE, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 130, 450, 50));
+
+        txtIdLugarE.setEditable(false);
+        txtIdLugarE.setDescripcion("Id*");
+        txtIdLugarE.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtIdLugarE.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdLugarEKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtIdLugarE, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 110, 50));
+
+        btnBucarLugarE.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/lupa.png"))); // NOI18N
+        btnBucarLugarE.setBorderPainted(false);
+        btnBucarLugarE.setContentAreaFilled(false);
+        btnBucarLugarE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBucarLugarEActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnBucarLugarE, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 120, 80, 60));
+
+        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
+        btnCancelar.setText("VOLVER");
+        btnCancelar.setContentAreaFilled(false);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 380, 220, 70));
+
+        btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
+        btnGuardar.setBorder(null);
+        btnGuardar.setText("AÑADIR");
+        btnGuardar.setBorderPainted(true);
+        btnGuardar.setContentAreaFilled(true);
+        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 380, 170, 70));
+
+        txtNombre.setEditable(false);
+        txtNombre.setDescripcion("Nombre*");
+        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 570, 50));
+
+        tphCancha.addTab("REGISTRO", jPanel2);
+
+        getContentPane().add(tphCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 520));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnNuevoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoHorarioActionPerformed
+        // TODO add your handling code here:
+        indicador = 0;//para poder guardar
+        tphHorarios.setSelectedIndex(1);
+        limpiarCampos();
+        habilitarCampos(true);
+        accionBotones(true, true);
+}//GEN-LAST:event_btnNuevoHorarioActionPerformed
+
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        // TODO add your handling code here:
+        if (paginaActual > 1) {
+            paginaActual--;
+            //listarCategorias(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual, jfPrincipal.menuCategorias));
+            //listarCategorias(paginaActual, tamanioPagina);
+        }
+}//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        // TODO add your handling code here:
+        if (paginaActual < totalPaginas) {
+            paginaActual++;
+            //listarCategorias(paginaActual, tamanioPagina);
+        }
+}//GEN-LAST:event_btnSiguienteActionPerformed
+
+    private void txtNombreLugarEKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreLugarEKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
+}//GEN-LAST:event_txtNombreLugarEKeyTyped
+
+    private void txtIdLugarEKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdLugarEKeyTyped
+        // TODO add your handling code here:
+}//GEN-LAST:event_txtIdLugarEKeyTyped
+
+    private void btnBucarLugarEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBucarLugarEActionPerformed
+        // TODO add your handling code here:
+        if(jfPrincipal.menuProfesores == null || jfPrincipal.menuProfesores.isClosed()){
+            jfPrincipal.menuProfesores = new jifProfesores(jDesktopPane);
+            Utils.visualizarInternalFrame(jfPrincipal.menuProfesores, jDesktopPane);
+        }
+        jfPrincipal.menuProfesores.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de profesores
+        jfPrincipal.menuProfesores.toFront();
+}//GEN-LAST:event_btnBucarLugarEActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        limpiarCampos();
+        habilitarCampos(false);
+        tphHorarios.setSelectedIndex(0);
+        accionBotones(false, false);
+}//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        try {
+            //if (validarDatosCategoria()) {
+            String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+            if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+                Horario horario;
+                switch (indicador) {
+                    case 0://registrar categoria
+                        horario = new Horario();
+                        horarioFacade.guardarHorario(getDatosHorario(horario));
+                        Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                        break;
+                    case 1://actualizar categoria
+                        //categoria = categoriaFacade.findCategoriaById(idSeleccionada);
+                        //categoriaFacade.actualizarCategoria(getDatosCategoria(categoria));
+                        //Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                        break;
+                }
+
+                //listarCategorias(paginaActual, tamanioPagina);
+                limpiarCampos();
+                habilitarCampos(false);
+                accionBotones(false, false);
+                btnGuardar.setText("Añadir");
+                indicador = 0;
+                //tphCategorias.setSelectedIndex(0);
+            }
+            //}
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+}//GEN-LAST:event_btnGuardarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private org.edisoncor.gui.panel.Panel panel1;
-    private org.edisoncor.gui.panel.Panel panel2;
+    private org.edisoncor.gui.button.ButtonRound btnAnterior;
+    private javax.swing.JButton btnBucarLugarE;
+    private javax.swing.JButton btnCancelar;
+    private org.edisoncor.gui.button.ButtonRound btnGuardar;
+    private org.edisoncor.gui.button.ButtonRound btnNuevoHorario;
+    private org.edisoncor.gui.button.ButtonRound btnSiguiente;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jspCategorias;
+    private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblCancha;
-    private org.edisoncor.gui.tabbedPane.TabbedPaneHeader tphCancha;
+    private javax.swing.JTabbedPane tphCancha;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdLugarE;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreLugarE;
     // End of variables declaration//GEN-END:variables
 
     private void listarCanchas(List<Cancha> listaCanchas){
