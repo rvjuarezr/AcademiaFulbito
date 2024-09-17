@@ -5,19 +5,19 @@
 
 package academiafulbito.controlador.beans;
 
-import academiafulbito.modelo.entidades.Categoria;
 import academiafulbito.modelo.entidades.LugarEntrenamiento;
+import academiafulbito.modelo.enums.Estado;
+import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
  *
  * @author Ronald J
  */
-public class LugarEntrenamientoFacade {
+public class LugarEntrenamientoFacade implements EntityFacade<LugarEntrenamiento>{
 
     EntityManagerFactory emf;
     
@@ -98,6 +98,7 @@ public class LugarEntrenamientoFacade {
         }
     }
 
+    @Override
     public int obtenerTotalPaginas(int tamanioPagina) {
         EntityManager em = getEntityManager();
         try {
@@ -108,5 +109,41 @@ public class LugarEntrenamientoFacade {
         }
     }
 
+    @Override
+    public List<LugarEntrenamiento> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT c FROM LugarEntrenamiento c", LugarEntrenamiento.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
+        } finally {
+            em.close();
+        }
+    }
 
+    public void eliminarCategoria(LugarEntrenamiento lugarE) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            // Asegúrate de que la entidad esté gestionada
+            lugarE.setEstado(Estado.INACTIVO);
+            em.merge(lugarE);
+
+
+             //otra forma de eliminar de manera fisica
+             /*lugarE = em.merge(lugarE);
+
+            // Eliminar la entidad
+            em.remove(lugarE);*/
+
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback(); // Hacer rollback en caso de error
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
 }

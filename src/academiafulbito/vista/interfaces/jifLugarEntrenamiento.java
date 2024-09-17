@@ -11,15 +11,15 @@
 
 package academiafulbito.vista.interfaces;
 
-import academiafulbito.controlador.beans.CategoriaFacade;
 import academiafulbito.controlador.beans.LugarEntrenamientoFacade;
-import academiafulbito.modelo.entidades.Categoria;
 import academiafulbito.modelo.entidades.LugarEntrenamiento;
 import academiafulbito.modelo.enums.Estado;
-import academiafulbito.vista.logueo.JFLogin;
+import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -47,6 +47,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
     private int idSeleccionada; // Variable para almacenar la ID del lugarEntrenamiento seleccionada
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
+    private int totalPaginas;
     /** Creates new form jifCategorias */
     public jifLugarEntrenamiento(JDesktopPane jdpModAF){
         initComponents();
@@ -54,8 +55,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         Utils.cargarComboEstado(jcbEstado);
         accionBotones(false, false);
         lugarEntrenamientoFacade = new LugarEntrenamientoFacade();
-        listarLugarEntrenamientos(lugarEntrenamientoFacade.getListadoLugarEntrenamientos());
-        //listarLugarEntrenamientos(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual));
+        listarLugarEntrenamientos(paginaActual, tamanioPagina);
     }
 
     /** This method is called from within the constructor to
@@ -86,7 +86,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
-        setTitle("MANTENIMIENTO CATEGORIAS");
+        setTitle("MANTENIMIENTO LUGAR ENTRENAMIENTO");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tphLugarEntrenamientos.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
@@ -112,19 +112,19 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         jPanel1.add(jspLugarEntrenamientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
 
         btnNuevaLugarEntrenamiento.setBackground(new java.awt.Color(156, 156, 247));
-        btnNuevaLugarEntrenamiento.setText("+ CATEGORIA");
+        btnNuevaLugarEntrenamiento.setText("+ LUGAR ENTRENAMIENTO");
         btnNuevaLugarEntrenamiento.setFont(new java.awt.Font("Arial", 1, 18));
         btnNuevaLugarEntrenamiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevaLugarEntrenamientoActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevaLugarEntrenamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 140, 50));
+        jPanel1.add(btnNuevaLugarEntrenamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, 260, 50));
 
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
-        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 330, 50, 50));
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, 220, 50));
 
         btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
         btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
@@ -135,7 +135,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 330, -1, 50));
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 330, -1, 50));
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
@@ -155,12 +155,12 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
 
         txtNombre.setEditable(false);
         txtNombre.setDescripcion("Nombre*");
-        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
 
         txtDireccion.setEditable(false);
         txtDireccion.setDescripcion("Dirección*");
-        txtDireccion.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtDireccion.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtDireccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDireccionActionPerformed(evt);
@@ -186,11 +186,11 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 270, 170, 70));
 
-        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVO LUGAR DE ENTRENAMIENTO");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 290, 20));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 520, 20));
 
         btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
@@ -264,7 +264,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         int totalDePaginas = lugarEntrenamientoFacade.obtenerTotalPaginas(tamanioPagina);
         if (paginaActual < totalDePaginas) {
             paginaActual++;
-            /*listarLugarEntrenamientos(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual)); */
+            listarLugarEntrenamientos(paginaActual, tamanioPagina);
         }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -272,7 +272,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (paginaActual > 1) {
             paginaActual--;
-            /*listarLugarEntrenamientos(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual));*/
+            listarLugarEntrenamientos(paginaActual, tamanioPagina);
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
@@ -299,6 +299,19 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtUbigeo;
     // End of variables declaration//GEN-END:variables
+
+    private void listarLugarEntrenamientos(int paginaActual, int tamanioPagina) {
+        totalPaginas = lugarEntrenamientoFacade.obtenerTotalPaginas(tamanioPagina);
+
+        List<LugarEntrenamiento> listaLugarEntrenamiento = lugarEntrenamientoFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+
+        // Actualizar el JLabel con la página actual
+        lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
+
+        // Mostrar las categorías en la tabla
+        listarLugarEntrenamientos(listaLugarEntrenamiento);
+        actualizarEstadoBotones();// Actualizar el estado de los botones
+    }
 
     private void listarLugarEntrenamientos(List<LugarEntrenamiento> listaLugarEntrenamientos){
         // Selecciona el primer tab en un JTabbedPane
@@ -406,5 +419,67 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         }
     }
 
- 
+    private void actualizarEstadoBotones() {
+        btnAnterior.setEnabled(paginaActual > 1);
+        btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
+    public void eliminarLugarEntrenamSeleccionado(int filaSeleccionada) {
+        if (filaSeleccionada != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 0).toString()); // Supone que la ID está en la primera columna
+            if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO) == JOptionPane.YES_OPTION) {
+                LugarEntrenamiento lugarEAEliminar = lugarEntrenamientoFacade.findLugarEntrenamientoById(idSeleccionada);
+                if(lugarEAEliminar != null){
+                    try {
+                        // Llamar al método para eliminar
+                        lugarEntrenamientoFacade.eliminarCategoria(lugarEAEliminar);
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_ELIMINADO_CORRECTAMENTE);
+
+                        // Actualizar la tabla después de eliminar
+                        totalPaginas = lugarEntrenamientoFacade.obtenerTotalPaginas(tamanioPagina);
+
+                        // Verificar si la página actual es mayor que el total de páginas después de la eliminación
+                        if (paginaActual > totalPaginas) {
+                            paginaActual = totalPaginas; // Ajustar la página actual a la última disponible
+                        }
+
+                        // Actualizar la tabla después de eliminar
+                        listarLugarEntrenamientos(paginaActual, tamanioPagina); // Volver a listar las categorías después de la eliminación
+
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.ERROR_AL_ELIMINAR_EL_REGISTRO+ " : " + e.getMessage(), LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_NO_ENCONTRADO_EN_LA_BBDD, LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, LiteralesTexto.POR_FAVOR_SELECCIONE_UNA_REGISTRO_PARA_ELIMINAR);
+        }
+    }
+
+
+
+    public void mostrarInformacionLugarE(int filaSeleccionada) {
+
+        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        String nombreLugar = (String) tblLugarEntrenamientos.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
+        String direccion = (String)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 2).toString();
+        String ubigeo = (String)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 3).toString();
+        Estado estado = (Estado)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 4);
+
+        // Crear un mapa con los datos a mostrar
+        Map<String, String> datos = new HashMap<String, String>(5);
+        datos.put("Nombre:", nombreLugar);
+        datos.put("Direccion:", direccion);
+        datos.put("Ubigeo", ubigeo);
+        datos.put("Estado:", estado.toString());
+
+        // Llamar al método genérico para mostrar la información
+        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
+        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE LUGAR ENTRENAM.", datos, 18, 20);
+    }
 }
