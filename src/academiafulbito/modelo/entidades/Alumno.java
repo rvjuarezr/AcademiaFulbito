@@ -8,6 +8,8 @@ import academiafulbito.modelo.enums.Estado;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,10 +39,11 @@ public class Alumno {
     private Date fechaNacimiento;
     @ManyToOne
     @JoinColumn(name = "ID_categoria")
-    private Categoria categoria;
+    private Categoria Categoria;
     @ManyToOne
     @JoinColumn(name = "ID_padre")
     private Padre padre;
+    @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
     @Column(name = "estado")
     private Estado estado;
 
@@ -51,7 +54,7 @@ public class Alumno {
         this.nombreAlumno = nombre;
         this.apellidoAlumno = apellido;
         this.fechaNacimiento = fechaNacimiento;
-        this.categoria = categoria;
+        this.Categoria = categoria;
         this.padre = padre;
         this.estado = estado;
     }
@@ -65,11 +68,11 @@ public class Alumno {
     }
 
     public Categoria getCategoria() {
-        return categoria;
+        return Categoria;
     }
 
     public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+        this.Categoria = categoria;
     }
 
     public Estado getEstado() {

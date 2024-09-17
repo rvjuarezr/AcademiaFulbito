@@ -115,6 +115,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
             jfPrincipal.menuCampeonatos.mostrarInformacionCampeonato(selectedRow);
         }
+         if(jfPrincipal.menuAlumnos instanceof jifAlumnos){
+            jfPrincipal.menuAlumnos.mostrarInformacionAlumno(selectedRow);
+        }
         
 
     }

@@ -63,6 +63,9 @@ public class CategoriaFacade implements EntityFacade<Categoria>{
 
     public Categoria findCategoriaById(int idCategoria) {
         EntityManager em = getEntityManager();
+        if (em == null) {
+            throw new IllegalStateException("EntityManager no está disponible.");
+        }
         try {
             return em.find(Categoria.class, idCategoria);
         } finally {

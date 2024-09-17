@@ -52,7 +52,7 @@ public class LiteralesTexto {
     public static final String LITERAL_TELEFONO = "Telefono";
     public static final String LITERAL_DIRECCION = "Direccion";
     public static final String LITERAL_UBIGEO = "Ubigeo";
-    public static final String LITERAL_FECHA_NACIMIENTO = "Fecha_nacimiento";
+    public static final String LITERAL_FECHA_NACIMIENTO = "Fec. Nac.";
 
 
 
