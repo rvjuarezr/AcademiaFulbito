@@ -5,7 +5,7 @@
 
 package academiafulbito.controlador.beans;
 
-import academiafulbito.modelo.entidades.Categoria;
+import academiafulbito.modelo.entidades.Padre;
 import academiafulbito.modelo.enums.Estado;
 import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
@@ -15,41 +15,42 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author Ronald J
+ * @author Walter Jair
  */
-public class CategoriaFacade implements EntityFacade<Categoria>{
+public class PadreFacade implements EntityFacade<Padre> {
 
     EntityManagerFactory emf;
     
 
-    public CategoriaFacade(){
+    public PadreFacade(){
         emf = Persistence.createEntityManagerFactory("AcademiaFulbitoPU");
     }
 
     private EntityManager getEntityManager() {
+
         return emf.createEntityManager();
     }
 
-    // Método para listar las categorías
-    public List<Categoria> getListadoCategorias() {
+    // Método para listar las padres
+    public List<Padre> getListadoPadres() {
         EntityManager em = getEntityManager();
-        List<Categoria> categorias = null;
+        List<Padre> padres = null;
         try {
-            categorias = em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
+            padres = em.createQuery("SELECT p FROM Padre p", Padre.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             em.close(); // Siempre cerrar el EntityManager al final
         }
-        return categorias;
+        return padres;
     }
 
-    // Método para guardar una categoría
-    public void guardarCategoria(Categoria categoria) {
+    // Método para guardar un padre
+    public void guardarPadre(Padre padre) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(categoria); // Guardar la entidad
+            em.persist(padre); // Guardar la entidad
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
@@ -61,22 +62,24 @@ public class CategoriaFacade implements EntityFacade<Categoria>{
         }
     }
 
-    public Categoria findCategoriaById(int idCategoria) {
+
+    public Padre findPadreById(int idPadre) {
+
         EntityManager em = getEntityManager();
         try {
-            return em.find(Categoria.class, idCategoria);
+            return em.find(Padre.class, idPadre);
         } finally {
             em.close();
         }
     }
 
-    public void actualizarCategoria(Categoria categoria) {
+    public void actualizarPadre(Padre padre) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
 
             // Simplemente se realiza el merge para actualizar la entidad
-            em.merge(categoria);
+            em.merge(padre);
 
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -89,43 +92,45 @@ public class CategoriaFacade implements EntityFacade<Categoria>{
         }
     }
 
+
     @Override
     public int obtenerTotalPaginas(int tamanioPagina) {
         EntityManager em = getEntityManager();
         try {
-            long totalCategorias = em.createQuery("SELECT COUNT(c) FROM Categoria c", Long.class).getSingleResult();
-            return (int) Math.ceil((double) totalCategorias / tamanioPagina);
+            long totalPadres = em.createQuery("SELECT COUNT(p) FROM Padre p", Long.class).getSingleResult();
+            return (int) Math.ceil((double) totalPadres / tamanioPagina);
         } finally {
             em.close();
         }
     }
 
     @Override
-    public List<Categoria> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
+    public List<Padre> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
+
         EntityManager em = getEntityManager();
         try {
-            return em.createQuery("SELECT c FROM Categoria c", Categoria.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
+            return em.createQuery("SELECT p FROM Padre p", Padre.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
         } finally {
             em.close();
         }
     }
 
-    public void eliminarCategoria(Categoria categoria) {
+        public void eliminarPadre(Padre padre) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            categoria.setEstado(Estado.INACTIVO);
-            em.merge(categoria);
+            padre.setEstado(Estado.INACTIVO);
+            em.merge(padre);
 
-            
+
              //otra forma de eliminar de manera fisica
-             /*categoria = em.merge(categoria);
+             /*padre = em.merge(padre);
 
             // Eliminar la entidad
-            em.remove(categoria);*/
-             
+            em.remove(padre);*/
+
 
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -137,5 +142,4 @@ public class CategoriaFacade implements EntityFacade<Categoria>{
             em.close();
         }
     }
-
 }

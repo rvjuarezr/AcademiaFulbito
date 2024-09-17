@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package academiafulbito.controlador.beans;
 
-import academiafulbito.modelo.entidades.Categoria;
+import academiafulbito.modelo.entidades.Profesor;
 import academiafulbito.modelo.enums.Estado;
 import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
@@ -15,14 +14,13 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author Ronald J
+ * @author Walter Jair
  */
-public class CategoriaFacade implements EntityFacade<Categoria>{
+public class ProfesorFacade implements EntityFacade<Profesor> {
 
     EntityManagerFactory emf;
-    
 
-    public CategoriaFacade(){
+    public ProfesorFacade() {
         emf = Persistence.createEntityManagerFactory("AcademiaFulbitoPU");
     }
 
@@ -30,26 +28,26 @@ public class CategoriaFacade implements EntityFacade<Categoria>{
         return emf.createEntityManager();
     }
 
-    // Método para listar las categorías
-    public List<Categoria> getListadoCategorias() {
+    // Método para listar las profesores
+    public List<Profesor> getListadoProfesores() {
         EntityManager em = getEntityManager();
-        List<Categoria> categorias = null;
+        List<Profesor> profesores = null;
         try {
-            categorias = em.createQuery("SELECT c FROM Categoria c", Categoria.class).getResultList();
+            profesores = em.createQuery("SELECT p FROM Profesor p", Profesor.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             em.close(); // Siempre cerrar el EntityManager al final
         }
-        return categorias;
+        return profesores;
     }
 
-    // Método para guardar una categoría
-    public void guardarCategoria(Categoria categoria) {
+    // Método para guardar un profesor
+    public void guardarProfesor(Profesor profesor) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(categoria); // Guardar la entidad
+            em.persist(profesor); // Guardar la entidad
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
@@ -61,22 +59,22 @@ public class CategoriaFacade implements EntityFacade<Categoria>{
         }
     }
 
-    public Categoria findCategoriaById(int idCategoria) {
+    public Profesor findProfesorById(int idProfesor) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Categoria.class, idCategoria);
+            return em.find(Profesor.class, idProfesor);
         } finally {
             em.close();
         }
     }
 
-    public void actualizarCategoria(Categoria categoria) {
+    public void actualizarProfesor(Profesor profesor) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
 
             // Simplemente se realiza el merge para actualizar la entidad
-            em.merge(categoria);
+            em.merge(profesor);
 
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -93,39 +91,39 @@ public class CategoriaFacade implements EntityFacade<Categoria>{
     public int obtenerTotalPaginas(int tamanioPagina) {
         EntityManager em = getEntityManager();
         try {
-            long totalCategorias = em.createQuery("SELECT COUNT(c) FROM Categoria c", Long.class).getSingleResult();
-            return (int) Math.ceil((double) totalCategorias / tamanioPagina);
+            long totalProfesores = em.createQuery("SELECT COUNT(p) FROM Profesor p", Long.class).getSingleResult();
+            return (int) Math.ceil((double) totalProfesores / tamanioPagina);
         } finally {
             em.close();
         }
     }
 
     @Override
-    public List<Categoria> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
+    public List<Profesor> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
         EntityManager em = getEntityManager();
         try {
-            return em.createQuery("SELECT c FROM Categoria c", Categoria.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
+            return em.createQuery("SELECT p FROM Profesor p", Profesor.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
         } finally {
             em.close();
         }
     }
 
-    public void eliminarCategoria(Categoria categoria) {
+    public void eliminarProfesor (Profesor profesor) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            categoria.setEstado(Estado.INACTIVO);
-            em.merge(categoria);
+            profesor.setEstado(Estado.INACTIVO);
+            em.merge(profesor);
 
-            
+
              //otra forma de eliminar de manera fisica
-             /*categoria = em.merge(categoria);
+             /*profesor = em.merge(profesor);
 
             // Eliminar la entidad
-            em.remove(categoria);*/
-             
+            em.remove(profesor);*/
+
 
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -137,5 +135,4 @@ public class CategoriaFacade implements EntityFacade<Categoria>{
             em.close();
         }
     }
-
 }
