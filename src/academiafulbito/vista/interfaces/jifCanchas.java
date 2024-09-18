@@ -4,7 +4,7 @@
  */
 
 /*
- * jifCategorias.java
+ * jifCanchas.java
  *
  * Created on 02/08/2024, 02:42:40 PM
  */
@@ -12,12 +12,16 @@
 package academiafulbito.vista.interfaces;
 
 import academiafulbito.controlador.beans.CanchaFacade;
+import academiafulbito.controlador.beans.LugarEntrenamientoFacade;
 import academiafulbito.modelo.entidades.Cancha;
+import academiafulbito.modelo.enums.Estado;
 import academiafulbito.vista.utilidades.ButtonEditor;
 import academiafulbito.vista.utilidades.ButtonRenderer;
+import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
 import java.util.List;
 import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -34,18 +38,18 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
     private int totalPaginas;
-    jifL menuProfesores;
+    jifLugarEntrenamiento menuLugarE;
     public static CanchaFacade canchaFacade;
+    public static LugarEntrenamientoFacade lugarEFacade;
     DefaultTableModel modelo;
-    /** Creates new form jifCategorias */
+    /** Creates new form jifCanchas */
     public jifCanchas(JDesktopPane jdpModAF){
         initComponents();
-        jdp=jdpModAF;
-        int[] anchoColumnas = {15, 55, 20, 80}; // Anchos específicos para cada columna
-        jfPrincipal.utils.setAnchoColumnas(tblCancha, anchoColumnas);
-        jfPrincipal.utils.ocultarColumnas(tblCancha, 0);
+        jDesktopPane = jdpModAF;
+        Utils.cargarComboEstado(jcbEstado);
+        accionBotones(false, false);
         canchaFacade = new CanchaFacade();
-        listarCanchas(canchaFacade.getListadoCanchas());
+        
     }
 
     /** This method is called from within the constructor to
@@ -59,7 +63,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
 
         tphCancha = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jspCategorias = new javax.swing.JScrollPane();
+        jspCanchas = new javax.swing.JScrollPane();
         tblCancha = new javax.swing.JTable();
         btnNuevoHorario = new org.edisoncor.gui.button.ButtonRound();
         lblPaginaActual = new javax.swing.JLabel();
@@ -73,6 +77,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new org.edisoncor.gui.button.ButtonRound();
         txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
 
         setBackground(new java.awt.Color(204, 204, 255));
         setClosable(true);
@@ -84,9 +89,9 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jspCategorias.setBackground(new java.awt.Color(255, 255, 255));
-        jspCategorias.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jspCategorias.setOpaque(false);
+        jspCanchas.setBackground(new java.awt.Color(255, 255, 255));
+        jspCanchas.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jspCanchas.setOpaque(false);
 
         tblCancha.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -97,9 +102,9 @@ public class jifCanchas extends javax.swing.JInternalFrame {
             }
         ));
         tblCancha.setOpaque(false);
-        jspCategorias.setViewportView(tblCancha);
+        jspCanchas.setViewportView(tblCancha);
 
-        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
+        jPanel1.add(jspCanchas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
 
         btnNuevoHorario.setBackground(new java.awt.Color(156, 156, 247));
         btnNuevoHorario.setText("+ CANCHA");
@@ -209,6 +214,10 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 570, 50));
 
+        jcbEstado.setEnabled(false);
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 220, 40));
+
         tphCancha.addTab("REGISTRO", jPanel2);
 
         getContentPane().add(tphCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 520));
@@ -219,7 +228,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     private void btnNuevoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoHorarioActionPerformed
         // TODO add your handling code here:
         indicador = 0;//para poder guardar
-        tphHorarios.setSelectedIndex(1);
+        tphCancha.setSelectedIndex(1);
         limpiarCampos();
         habilitarCampos(true);
         accionBotones(true, true);
@@ -229,8 +238,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (paginaActual > 1) {
             paginaActual--;
-            //listarCategorias(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual, jfPrincipal.menuCategorias));
-            //listarCategorias(paginaActual, tamanioPagina);
+            listarCanchas(paginaActual, tamanioPagina);
         }
 }//GEN-LAST:event_btnAnteriorActionPerformed
 
@@ -238,7 +246,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (paginaActual < totalPaginas) {
             paginaActual++;
-            //listarCategorias(paginaActual, tamanioPagina);
+            listarCanchas(paginaActual, tamanioPagina);
         }
 }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -254,49 +262,49 @@ public class jifCanchas extends javax.swing.JInternalFrame {
 
     private void btnBucarLugarEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBucarLugarEActionPerformed
         // TODO add your handling code here:
-        if(jfPrincipal.menuProfesores == null || jfPrincipal.menuProfesores.isClosed()){
-            jfPrincipal.menuProfesores = new jifProfesores(jDesktopPane);
-            Utils.visualizarInternalFrame(jfPrincipal.menuProfesores, jDesktopPane);
+        if(jfPrincipal.menuLugarEntrenamiento == null || jfPrincipal.menuLugarEntrenamiento.isClosed()){
+            jfPrincipal.menuLugarEntrenamiento = new jifLugarEntrenamiento(jDesktopPane);
+            Utils.visualizarInternalFrame(jfPrincipal.menuLugarEntrenamiento, jDesktopPane);
         }
-        jfPrincipal.menuProfesores.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de profesores
-        jfPrincipal.menuProfesores.toFront();
+        jfPrincipal.menuLugarEntrenamiento.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de profesores
+        jfPrincipal.menuLugarEntrenamiento.toFront();
 }//GEN-LAST:event_btnBucarLugarEActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
         limpiarCampos();
         habilitarCampos(false);
-        tphHorarios.setSelectedIndex(0);
+        tphCancha.setSelectedIndex(0);
         accionBotones(false, false);
 }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         try {
-            //if (validarDatosCategoria()) {
+            //if (validarDatosCancha()) {
             String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
             if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
-                Horario horario;
+                Cancha cancha;
                 switch (indicador) {
-                    case 0://registrar categoria
-                        horario = new Horario();
-                        horarioFacade.guardarHorario(getDatosHorario(horario));
+                    case 0://registrar Cancha
+                        cancha = new Cancha();
+                        canchaFacade.guardarCancha(getDatosCancha(cancha));
                         Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
                         break;
-                    case 1://actualizar categoria
-                        //categoria = categoriaFacade.findCategoriaById(idSeleccionada);
-                        //categoriaFacade.actualizarCategoria(getDatosCategoria(categoria));
-                        //Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                    case 1://actualizar Cancha
+                        cancha = canchaFacade.findCanchaById(idSeleccionada);
+                        canchaFacade.actualizarCancha(getDatosCancha(cancha));
+                        Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
                         break;
                 }
 
-                //listarCategorias(paginaActual, tamanioPagina);
+                listarCanchas(paginaActual, tamanioPagina);
                 limpiarCampos();
                 habilitarCampos(false);
                 accionBotones(false, false);
                 btnGuardar.setText("Añadir");
                 indicador = 0;
-                //tphCategorias.setSelectedIndex(0);
+                tphCancha.setSelectedIndex(0);
             }
             //}
         } catch (Exception ex) {
@@ -315,7 +323,8 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jspCategorias;
+    private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
+    private javax.swing.JScrollPane jspCanchas;
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblCancha;
     private javax.swing.JTabbedPane tphCancha;
@@ -337,12 +346,12 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         // Verificar si la lista de socios tiene elementos
         if (listaCanchas.size() > 0) {
             System.out.println("LISTADO DE CANCHAS DESDE LA BBDD");
-            // Iterar sobre la lista de categorias y agregar cada categoria a la tabla
+            // Iterar sobre la lista de canchas y agregar cada cancha a la tabla
             for (Cancha cancha : listaCanchas) {
 
                 System.out.println("cancha.getIdCancha():"+cancha.getIdCancha()+" ,cancha.getNombre():"+cancha.getNombre()+" ,cancha.getIdLugar():"+cancha.getIdLugar());
 
-                // Crea un array de objetos con los datos de la categoria para agregar a la tabla.
+                // Crea un array de objetos con los datos de la cancha para agregar a la tabla.
                 Object[] fila = new Object[]{
                     cancha.getIdCancha(),
                     cancha.getNombre(),
@@ -361,5 +370,55 @@ public class jifCanchas extends javax.swing.JInternalFrame {
             tblCancha.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         }
+    }
+
+    private void accionBotones(boolean d, boolean e) {
+        btnCancelar.setEnabled(d);
+        btnGuardar.setEnabled(e);
+    }
+
+    private void listarCanchas(int paginaActual, int tamanioPagina) {
+        totalPaginas = canchaFacade.obtenerTotalPaginas(tamanioPagina);
+
+        List<Cancha> listaCanchas = canchaFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+
+        // Actualizar el JLabel con la página actual
+        lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
+
+        // Mostrar las categorías en la tabla
+        listarCanchas(listaCanchas);
+        actualizarEstadoBotones();// Actualizar el estado de los botones
+
+    }
+
+    private void actualizarEstadoBotones() {
+        btnAnterior.setEnabled(paginaActual > 1);
+        btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
+    private void limpiarCampos() {
+        txtNombre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtIdLugarE.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombreLugarE.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+    }
+
+    private void habilitarCampos(boolean band) {
+        txtNombre.setEditable(band);
+        txtIdLugarE.setEditable(band);
+        txtNombreLugarE.setEditable(band);
+        if (indicador == 0) {
+            jcbEstado.setSelectedIndex(0);
+            jcbEstado.setEnabled(!band);
+        } else {
+            jcbEstado.setEnabled(band);
+        }
+    }
+
+    private Cancha getDatosCancha(Cancha cancha){
+        cancha.setEstado((Estado) jcbEstado.getSelectedItem());
+        cancha.setIdLugar(Integer.parseInt(txtIdLugarE.getText()));
+        cancha.setNombre(txtNombre.getText());
+
+        return cancha;
     }
 }

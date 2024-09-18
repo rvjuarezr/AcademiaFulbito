@@ -48,6 +48,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
     private int totalPaginas;
+    public static int permiteSelFila = -1;//este valor no permite seleccionar la fila en la tabla
     /** Creates new form jifCategorias */
     public jifLugarEntrenamiento(JDesktopPane jdpModAF){
         initComponents();
@@ -107,6 +108,11 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
             }
         ));
         tblLugarEntrenamientos.setOpaque(false);
+        tblLugarEntrenamientos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblLugarEntrenamientosMouseClicked(evt);
+            }
+        });
         jspLugarEntrenamientos.setViewportView(tblLugarEntrenamientos);
 
         jPanel1.add(jspLugarEntrenamientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
@@ -280,6 +286,25 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDireccionActionPerformed
 
+    private void tblLugarEntrenamientosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLugarEntrenamientosMouseClicked
+        // TODO add your handling code here:
+        switch(permiteSelFila){
+            case 0://permite llamarlo desde una ventana externa
+                int nroFila = tblLugarEntrenamientos.getSelectedRow();
+                if(nroFila != -1){
+                    jfPrincipal.menuCanchas.txtIdLugarE.setText(tblLugarEntrenamientos.getValueAt(nroFila, 0).toString());
+                    jfPrincipal.menuCanchas.txtNombreLugarE.setText(tblLugarEntrenamientos.getValueAt(nroFila, 1).toString()+" "+tblLugarEntrenamientos.getValueAt(nroFila, 2).toString());
+
+                }
+                try{
+                    setClosed(true);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+                break;
+        }
+    }//GEN-LAST:event_tblLugarEntrenamientosMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
@@ -322,7 +347,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         // Asignar el modelo a la tabla
         tblLugarEntrenamientos.setModel(modelo);
 
-        int[] anchoColumnas = {15, 60, 20, 20, 20, 15, 25, 25}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {15, 55, 75, 25, 10, 12, 21, 25}; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblLugarEntrenamientos, anchoColumnas);
         Utils.ocultarColumnas(tblLugarEntrenamientos, 0);//ocultar la primera columna
         Utils.ocultarColumnas(tblLugarEntrenamientos, 4);//ocultar columna estado
