@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -349,6 +350,9 @@ public class jifProfesores extends javax.swing.JInternalFrame {
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
             tblProfesores.setDefaultRenderer(Object.class, new Utils(18));
+
+            // Establece el modo de selección de filas para permitir solo una selección a la vez.
+            tblProfesores.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
             Utils.configurarEstiloTabla(tblProfesores, jspProfesores);
             Utils.configurarBotonesAccion(tblProfesores);
