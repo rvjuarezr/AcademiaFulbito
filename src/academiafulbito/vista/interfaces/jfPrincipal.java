@@ -57,6 +57,7 @@ public class jfPrincipal extends javax.swing.JFrame {
     public static jifPadres menuPadres;
     public static jifProfesores menuProfesores;
     public static jifHorario menuHorario;
+    public static jifLugarEntrenamiento menuLugarEntrenamiento;
 
     private JPopupMenu pmMaestras, pmControl;
     private JPopupMenu subMenuActual = null; // Para mantener el submenú visible
@@ -247,9 +248,9 @@ public class jfPrincipal extends javax.swing.JFrame {
 
         // Inicializar los submenús solo una vez
         pmMaestras = new JPopupMenu();
-        setupSubMenus(new String[]{"CATEGORIAS", "CANCHA", "CAMPEONATO", "PADRES", "PROFESORES"}, pmMaestras);
+        setupSubMenus(new String[]{"CATEGORIAS", "LUGAR E.", "CAMPEONATO", "PADRES", "PROFESORES"}, pmMaestras);
         pmControl = new JPopupMenu();
-        setupSubMenus(new String[]{"HORARIOS"}, pmControl);
+        setupSubMenus(new String[]{"HORARIOS", "CANCHA"}, pmControl);
 
         // Añadir funcionalidad a los botones
         btnMaestras.addActionListener(new ActionListener() {

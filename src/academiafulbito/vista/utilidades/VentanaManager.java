@@ -10,6 +10,7 @@ import academiafulbito.vista.interfaces.jifCampeonatos;
 import academiafulbito.vista.interfaces.jifCanchas;
 import academiafulbito.vista.interfaces.jifCategorias;
 import academiafulbito.vista.interfaces.jifHorario;
+import academiafulbito.vista.interfaces.jifLugarEntrenamiento;
 import academiafulbito.vista.interfaces.jifPadres;
 import academiafulbito.vista.interfaces.jifProfesores;
 import javax.swing.JDesktopPane;
@@ -30,7 +31,7 @@ public class VentanaManager {
             }
             ventana = jfPrincipal.menuCategorias;
 
-        } else if(opcion.equals(LiteralesTexto.LITERAL_MAESTRAS_CANCHAS)){
+        } else if(opcion.equals(LiteralesTexto.LITERAL_CONTROL_CANCHAS)){
             if (jfPrincipal.menuCanchas == null || jfPrincipal.menuCanchas.isClosed()) {
                 jfPrincipal.menuCanchas = new jifCanchas(jdpVentanas);
             }
@@ -59,6 +60,12 @@ public class VentanaManager {
                 jfPrincipal.menuHorario = new jifHorario(jdpVentanas);
             }
             ventana = jfPrincipal.menuHorario;
+
+        } else if(opcion.equals(LiteralesTexto.LITERAL_MAESTRAS_LUGAR_E)){
+            if (jfPrincipal.menuLugarEntrenamiento == null || jfPrincipal.menuLugarEntrenamiento.isClosed()) {
+                jfPrincipal.menuLugarEntrenamiento = new jifLugarEntrenamiento(jdpVentanas);
+            }
+            ventana = jfPrincipal.menuLugarEntrenamiento;
 
         }
 

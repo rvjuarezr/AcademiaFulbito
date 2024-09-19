@@ -5,8 +5,11 @@
 
 package academiafulbito.modelo.entidades;
 
+import academiafulbito.modelo.enums.Estado;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,6 +30,9 @@ public class Cancha {
     private String nombre;
     @Column(name = "ID_lugar", nullable = true, length = 11)
     private int idLugar;
+    @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
+    @Column(name = "estado")
+    private Estado estado;
     
     //Getter y setter
     public int getIdCancha() {
@@ -53,6 +59,11 @@ public class Cancha {
         this.nombre = nombre;
     }
 
+    public Estado getEstado() {
+        return estado;
+    }
 
-
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
 }

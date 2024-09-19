@@ -5,7 +5,7 @@
 
 package academiafulbito.controlador.beans;
 
-import academiafulbito.modelo.entidades.Cancha;
+import academiafulbito.modelo.entidades.LugarEntrenamiento;
 import academiafulbito.modelo.enums.Estado;
 import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
@@ -17,38 +17,39 @@ import javax.persistence.Persistence;
  *
  * @author Ronald J
  */
-public class CanchaFacade implements EntityFacade<Cancha>{
+public class LugarEntrenamientoFacade implements EntityFacade<LugarEntrenamiento>{
 
     EntityManagerFactory emf;
+    
 
-    public CanchaFacade(){
+    public LugarEntrenamientoFacade(){
         emf = Persistence.createEntityManagerFactory("AcademiaFulbitoPU");
     }
 
-    public List<Cancha> getListadoCanchas() {
+    private EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
+
+    // Método para listar lugarEntrenamientos
+    public List<LugarEntrenamiento> getListadoLugarEntrenamientos() {
         EntityManager em = getEntityManager();
-        List<Cancha> listaCancha = null;
-        try{
-            listaCancha = em.createQuery("SELECT c FROM Cancha c", Cancha.class).getResultList();
+        List<LugarEntrenamiento> lugarEntrenamientos = null;
+        try {
+            lugarEntrenamientos = em.createQuery("SELECT c FROM LugarEntrenamiento c", LugarEntrenamiento.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             em.close(); // Siempre cerrar el EntityManager al final
         }
-        return listaCancha;
+        return lugarEntrenamientos;
     }
 
-    private EntityManager getEntityManager() {
-
-        return emf.createEntityManager();
-    }
-
-    // Método para guardar una cancha
-    public void guardarCancha(Cancha cancha) {
+    // Método para guardar una categoría
+    public void guardarLugarEntrenamiento(LugarEntrenamiento lugarEntrenamiento) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(cancha); // Guardar la entidad
+            em.persist(lugarEntrenamiento); // Guardar la entidad
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
@@ -60,23 +61,22 @@ public class CanchaFacade implements EntityFacade<Cancha>{
         }
     }
 
-    public Cancha findCanchaById(int idCancha) {
-
+    public LugarEntrenamiento findLugarEntrenamientoById(int idLugarEntrenamiento) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Cancha.class, idCancha);
+            return em.find(LugarEntrenamiento.class, idLugarEntrenamiento);
         } finally {
             em.close();
         }
     }
 
-    public void actualizarCancha(Cancha cancha) {
+    public void actualizarLugarEntrenamiento(LugarEntrenamiento lugarEntrenamiento) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
 
             // Simplemente se realiza el merge para actualizar la entidad
-            em.merge(cancha);
+            em.merge(lugarEntrenamiento);
 
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -89,42 +89,51 @@ public class CanchaFacade implements EntityFacade<Cancha>{
         }
     }
 
+    public List<LugarEntrenamiento> listarLugarEntrenamientosPaginadas(int paginaActual, int tamanioPagina) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT c FROM LugarEntrenamiento c", LugarEntrenamiento.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
     @Override
     public int obtenerTotalPaginas(int tamanioPagina) {
         EntityManager em = getEntityManager();
         try {
-            long totalCanchas = em.createQuery("SELECT COUNT(p) FROM Cancha p", Long.class).getSingleResult();
-            return (int) Math.ceil((double) totalCanchas / tamanioPagina);
+            long totalLugarEntrenamientos = em.createQuery("SELECT COUNT(c) FROM LugarEntrenamiento c", Long.class).getSingleResult();
+            return (int) Math.ceil((double) totalLugarEntrenamientos / tamanioPagina);
         } finally {
             em.close();
         }
     }
 
     @Override
-    public List<Cancha> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
+    public List<LugarEntrenamiento> listarEntidadesPaginadas(int paginaActual, int tamanioPagina) {
         EntityManager em = getEntityManager();
         try {
-            return em.createQuery("SELECT p FROM Cancha p", Cancha.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
+            return em.createQuery("SELECT c FROM LugarEntrenamiento c", LugarEntrenamiento.class).setFirstResult((paginaActual - 1) * tamanioPagina).setMaxResults(tamanioPagina).getResultList();
         } finally {
             em.close();
         }
     }
 
-    public void eliminarCancha(Cancha cancha) {
+    public void eliminarCategoria(LugarEntrenamiento lugarE) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            cancha.setEstado(Estado.INACTIVO);
-            em.merge(cancha);
+            lugarE.setEstado(Estado.INACTIVO);
+            em.merge(lugarE);
 
 
              //otra forma de eliminar de manera fisica
-             /*cancha = em.merge(cancha);
+             /*lugarE = em.merge(lugarE);
 
             // Eliminar la entidad
-            em.remove(cancha);*/
+            em.remove(lugarE);*/
 
 
             em.getTransaction().commit();
