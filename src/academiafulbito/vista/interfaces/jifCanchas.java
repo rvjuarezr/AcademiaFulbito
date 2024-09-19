@@ -34,7 +34,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     JDesktopPane jDesktopPane;
 
     int indicador;//para saber si estamos en modo de edicion
-    private int idSeleccionada; // Variable para almacenar la ID de la categoría seleccionada
+    private int idSeleccionada; // Variable para almacenar la ID de la cancha seleccionada
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
     private int totalPaginas;
@@ -42,6 +42,15 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     public static CanchaFacade canchaFacade;
     public static LugarEntrenamientoFacade lugarEFacade;
     DefaultTableModel modelo;
+    String[] nombreColumnas = {
+        LiteralesTexto.LITERAL_ID,
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_ID,
+        LiteralesTexto.LITERAL_ESTADO,
+        LiteralesTexto.LITERAL_VER,
+        LiteralesTexto.LITERAL_EDITAR,
+        LiteralesTexto.LITERAL_ELIMINAR
+    };
     /** Creates new form jifCanchas */
     public jifCanchas(JDesktopPane jdpModAF){
         initComponents();
@@ -49,7 +58,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         Utils.cargarComboEstado(jcbEstado);
         accionBotones(false, false);
         canchaFacade = new CanchaFacade();
-        
+        listarCanchas(paginaActual, tamanioPagina);
     }
 
     /** This method is called from within the constructor to
@@ -266,7 +275,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
             jfPrincipal.menuLugarEntrenamiento = new jifLugarEntrenamiento(jDesktopPane);
             Utils.visualizarInternalFrame(jfPrincipal.menuLugarEntrenamiento, jDesktopPane);
         }
-        jfPrincipal.menuLugarEntrenamiento.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de profesores
+        jfPrincipal.menuLugarEntrenamiento.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de lugar E
         jfPrincipal.menuLugarEntrenamiento.toFront();
 }//GEN-LAST:event_btnBucarLugarEActionPerformed
 
@@ -337,38 +346,45 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         // Selecciona el primer tab en un JTabbedPane
         tphCancha.setSelectedIndex(0);
 
-        // Obtiene el modelo de la tabla
-        modelo=(DefaultTableModel)tblCancha.getModel();
+        modelo = Utils.generarModeloTabla(nombreColumnas);
+
+        // Asignar el modelo a la tabla
+        tblCancha.setModel(modelo);
+
+        int[] anchoColumnas = {15, 50, 30, 20, 15, 25, 25}; // Anchos específicos para cada columna
+        Utils.setAnchoColumnas(tblCancha, anchoColumnas);
+        Utils.ocultarColumnas(tblCancha, 0);//ocultar la primera columna
+        Utils.ocultarColumnas(tblCancha, 3);//ocultar columna estado
 
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblCancha);
 
         // Verificar si la lista de socios tiene elementos
         if (listaCanchas.size() > 0) {
-            System.out.println("LISTADO DE CANCHAS DESDE LA BBDD");
+
             // Iterar sobre la lista de canchas y agregar cada cancha a la tabla
             for (Cancha cancha : listaCanchas) {
-
-                System.out.println("cancha.getIdCancha():"+cancha.getIdCancha()+" ,cancha.getNombre():"+cancha.getNombre()+" ,cancha.getIdLugar():"+cancha.getIdLugar());
 
                 // Crea un array de objetos con los datos de la cancha para agregar a la tabla.
                 Object[] fila = new Object[]{
                     cancha.getIdCancha(),
                     cancha.getNombre(),
-                    cancha.getIdLugar()
+                    cancha.getIdLugar(),
+                    cancha.getEstado(),
+                    LiteralesTexto.LITERAL_VER,
+                    LiteralesTexto.LITERAL_EDITAR,
+                    LiteralesTexto.LITERAL_ELIMINAR
                 };
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
             tblCancha.setDefaultRenderer(Object.class, new Utils(18));
 
-            // Agregar botones en la última columna
-            tblCancha.getColumn("Acciones").setCellRenderer(new ButtonRenderer("Acciones"));
-            tblCancha.getColumn("Acciones").setCellEditor(new ButtonEditor("Acciones"));
-
             // Establece el modo de selección de filas para permitir solo una selección a la vez.
             tblCancha.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+            Utils.configurarEstiloTabla(tblCancha, jspCanchas);
+            Utils.configurarBotonesAccion(tblCancha);
         }
     }
 
@@ -385,7 +401,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         // Actualizar el JLabel con la página actual
         lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
 
-        // Mostrar las categorías en la tabla
+        // Mostrar las canchas en la tabla
         listarCanchas(listaCanchas);
         actualizarEstadoBotones();// Actualizar el estado de los botones
 
