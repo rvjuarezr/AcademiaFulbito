@@ -19,8 +19,9 @@ import academiafulbito.modelo.enums.Estado;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
-import java.util.Date;
+import java.text.ParseException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JDesktopPane;
@@ -44,9 +45,12 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_NOMBRE,
         LiteralesTexto.LITERAL_APELLIDO,
         LiteralesTexto.LITERAL_FECHA_NACIMIENTO,
-        LiteralesTexto.LITERAL_ID,
-        LiteralesTexto.LITERAL_ID,
-        LiteralesTexto.LITERAL_ESTADO,
+        LiteralesTexto.LITERAL_ID,//4 categoria
+        LiteralesTexto.LITERAL_NOMBRE,//5 nombre categoria
+        LiteralesTexto.LITERAL_ID, //6 idpadre
+        LiteralesTexto.LITERAL_NOMBRE,//7 nombre padre
+        LiteralesTexto.LITERAL_APELLIDO, // 8 apellido padre
+        LiteralesTexto.LITERAL_ESTADO, //9 estado
         LiteralesTexto.LITERAL_VER,
         LiteralesTexto.LITERAL_EDITAR,
         LiteralesTexto.LITERAL_ELIMINAR
@@ -108,6 +112,8 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         btnBuscarPadre = new javax.swing.JButton();
         btnBuscarCategoria = new javax.swing.JButton();
         jdcFechaNacimiento = new com.toedter.calendar.JDateChooser();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -181,12 +187,17 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         txtApellido.setEditable(false);
         txtApellido.setDescripcion("Apellidos*");
         txtApellido.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 90, 720, 40));
+        txtApellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidoKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 720, 40));
 
         txtIdPadre.setEditable(false);
         txtIdPadre.setDescripcion("ID*");
         txtIdPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(txtIdPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, 60, 40));
+        jPanel2.add(txtIdPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 270, 60, 40));
 
         btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
         btnGuardar.setBorder(null);
@@ -204,7 +215,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVO ALUMNO");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, 250, 20));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 250, 20));
 
         btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
@@ -219,16 +230,16 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 320, 220, 40));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 220, 40));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel2.setText("ESTADO");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 170, 40));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 330, 170, 40));
 
         txtNombrePadre.setEditable(false);
         txtNombrePadre.setDescripcion("Nombre Padre*");
         txtNombrePadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(txtNombrePadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 260, 340, 40));
+        jPanel2.add(txtNombrePadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 270, 340, 40));
 
         txtIdCategoria.setEditable(false);
         txtIdCategoria.setDescripcion("ID*");
@@ -242,12 +253,17 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
         txtNombre.setEditable(false);
         txtNombre.setDescripcion("Nombre*");
-        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
-        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 720, 40));
+        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 720, 40));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel3.setText("FECHA DE NACIMIENTO");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 180, 40));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, 180, 40));
 
         btnBuscarPadre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/buscar.png"))); // NOI18N
         btnBuscarPadre.setContentAreaFilled(false);
@@ -256,7 +272,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
                 btnBuscarPadreActionPerformed(evt);
             }
         });
-        jPanel2.add(btnBuscarPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 260, 60, 50));
+        jPanel2.add(btnBuscarPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 270, 60, 50));
 
         btnBuscarCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/buscar.png"))); // NOI18N
         btnBuscarCategoria.setContentAreaFilled(false);
@@ -266,7 +282,15 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(btnBuscarCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, 50, 50));
-        jPanel2.add(jdcFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 140, 230, 40));
+        jPanel2.add(jdcFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, 230, 40));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14));
+        jLabel4.setText("DATOS DEL PADRE DEL ALUMNO:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 240, 30));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14));
+        jLabel5.setText("DATOS DE LA CATEGORIA QUE PERTENECE:");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 320, 30));
 
         tphAlumnos.addTab("REGISTRO", jPanel2);
 
@@ -286,37 +310,43 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
-        if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
-            Alumno alumno;
-            switch (indicador) {
-                case 0: // Registrar alumno
-                    alumno = new Alumno();
-                    alumno = getDatosAlumno(alumno); // Obtener los datos del alumno
-                    if (alumno != null) {
-                        alumnoFacade.guardarAlumno(alumno);
+        try {
+            if (validarDatosCategoria()) {
+                String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+                if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+                    Alumno alumno;
+                    switch (indicador) {
+                        case 0: // Registrar alumno
+                            alumno = new Alumno();
+                            alumno = getDatosAlumno(alumno); // Obtener los datos del alumno
+                            if (alumno != null) {
+                                alumnoFacade.guardarAlumno(alumno);
+                                Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                            }
+                            break;
+                        /*case 0://registrar alumno
+                        alumno = new Alumno();
+                        alumnoFacade.guardarAlumno(getDatosAlumno(alumno));
                         Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                        break;*/
+                        case 1://actualizar alumno
+                            alumno = alumnoFacade.findAlumnoById(idSeleccionada);
+                            alumnoFacade.actualizarAlumno(getDatosAlumno(alumno));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                            break;
                     }
-                    break;
-                /*case 0://registrar alumno
-                    alumno = new Alumno();
-                    alumnoFacade.guardarAlumno(getDatosAlumno(alumno));
-                    Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
-                    break;*/
-                case 1://actualizar alumno
-                    //alumno = alumnoFacade.findAlumnoById(idSeleccionada);
-                    //alumnoFacade.actualizarAlumno(getDatosAlumno(alumno));
-                    //Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
-                    break;
-            }
 
-            listarAlumnos(paginaActual, tamanioPagina);
-            limpiarCampos();
-            habilitarCampos(false);
-            accionBotones(false, false);
-            btnGuardar.setText("Añadir");
-            indicador = 0;
-            tphAlumnos.setSelectedIndex(0);
+                    listarAlumnos(paginaActual, tamanioPagina);
+                    limpiarCampos();
+                    habilitarCampos(false);
+                    accionBotones(false, false);
+                    btnGuardar.setText("Añadir");
+                    indicador = 0;
+                    tphAlumnos.setSelectedIndex(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -365,6 +395,24 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         jfPrincipal.menuPadres.toFront();
     }//GEN-LAST:event_btnBuscarPadreActionPerformed
 
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != evt.VK_BACK_SPACE) {
+            evt.consume(); // Consume el evento si no es letra ni espacio
+        }
+        evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != evt.VK_BACK_SPACE) {
+            evt.consume(); // Consume el evento si no es letra ni espacio
+        }
+        evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
+    }//GEN-LAST:event_txtApellidoKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBuscarCategoria;
@@ -376,6 +424,8 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
@@ -401,12 +451,15 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         // Asignar el modelo a la tabla
         tblAlumnos.setModel(modelo);
 
-        int[] anchoColumnas = {35, 60, 45, 20, 20, 20, 20,15, 15, 15}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {35, 60, 45, 20, 20, 20,20,20,20, 20,15, 15, 15}; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblAlumnos, anchoColumnas);
         Utils.ocultarColumnas(tblAlumnos, 0);//ocultar la primera columna
         Utils.ocultarColumnas(tblAlumnos, 4);//ocultar columna idCategoria
-        Utils.ocultarColumnas(tblAlumnos, 5);//ocultar columna idPadre
-        Utils.ocultarColumnas(tblAlumnos, 6);//ocultar columna estado
+        Utils.ocultarColumnas(tblAlumnos, 5);//ocultar columna NombreCategoria
+        Utils.ocultarColumnas(tblAlumnos, 6);//ocultar columna idPadre
+        Utils.ocultarColumnas(tblAlumnos, 7);//ocultar columna NombrePadre
+        Utils.ocultarColumnas(tblAlumnos, 8);//ocultar columna ApellidoPadre
+        Utils.ocultarColumnas(tblAlumnos, 9);//ocultar columna estado
 
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblAlumnos);
@@ -418,14 +471,19 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
                 // Crea un array de objetos con los datos del objeto para agregar a la tabla.
                 Object[] fila = new Object[]{
-                    alumno.getIdAlumno(),
-                    alumno.getNombreAlumno(),
-                    alumno.getApellidoAlumno(),
-                    Utils.getFechaFormateada(alumno.getFechaNacimiento()),
-                    alumno.getEstado(),
-                    LiteralesTexto.LITERAL_VER,
-                    LiteralesTexto.LITERAL_EDITAR,
-                    LiteralesTexto.LITERAL_ELIMINAR
+                    alumno.getIdAlumno(),//0
+                    alumno.getNombreAlumno(),//1
+                    alumno.getApellidoAlumno(),//2
+                    Utils.getFechaFormateada(alumno.getFechaNacimiento()),//3
+                    alumno.getCategoria().getIdCategoria(),//4
+                    alumno.getCategoria().getNombre(),//5
+                    alumno.getPadre().getIdPadre(),//6
+                    alumno.getPadre().getNombrePadre(),//7
+                    alumno.getPadre().getApellidoPadre(),//8
+                    alumno.getEstado(),//9
+                    LiteralesTexto.LITERAL_VER,//10
+                    LiteralesTexto.LITERAL_EDITAR,//11
+                    LiteralesTexto.LITERAL_ELIMINAR//12
                 };
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
@@ -448,8 +506,6 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         alumno.setCategoria(categoriaFacade.findCategoriaById(categoria));
         int padre = Integer.parseInt(txtIdPadre.getText());
         alumno.setPadre(padreFacade.findPadreById(padre));
-        //alumno.setCategoria(categoriaFacade.findCategoriaById(Integer.parseInt(txtIdCategoria.getText())));
-        //alumno.setPadre(padreFacade.findPadreById(Integer.parseInt(txtIdPadre.getText())));
         alumno.setEstado((Estado) jcbEstado.getSelectedItem());
 
         return alumno;
@@ -483,7 +539,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         btnGuardar.setEnabled(e);
     }
 
-    public void cargarDatosEnFormulario(int row) {
+    public void cargarDatosEnFormulario(int row) throws ParseException {
         if (row != -1) {
             // Capturar la ID de la fila seleccionada
             idSeleccionada = Integer.parseInt(tblAlumnos.getValueAt(row, 0).toString()); // Supone que la ID está en la primera columna
@@ -491,14 +547,23 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             // Obtener los datos de la fila seleccionada
             String nombre = (String) tblAlumnos.getValueAt(row, 1);
             String apellido = (String) tblAlumnos.getValueAt(row, 2);
-            Date fechaNacimiento = (Date) tblAlumnos.getValueAt(row, 3);
-            //String telefono = (String) tblAlumnos.getValueAt(row, 3);
-            Estado estado = (Estado) tblAlumnos.getValueAt(row, 4);
+            String fechaNacimiento= (String) tblAlumnos.getValueAt(row, 3);
+            int idCategoria= Integer.parseInt(tblAlumnos.getValueAt(row, 4).toString());
+            String nombreCategoria=(String) tblAlumnos.getValueAt(row, 5);
+            int idPadre= Integer.parseInt(tblAlumnos.getValueAt(row, 6).toString());
+            String nombrePadre=(String) tblAlumnos.getValueAt(row, 7);
+            String apellidoPadre=(String) tblAlumnos.getValueAt(row, 8);
+            Estado estado = (Estado) tblAlumnos.getValueAt(row, 9);
 
             // Asignar los datos a los JTextField en el segundo panel
             txtNombre.setText(nombre);
             txtApellido.setText(apellido);
-            jdcFechaNacimiento.setDate(fechaNacimiento);
+            jdcFechaNacimiento.setDate(Utils.getDate(fechaNacimiento));
+            txtIdCategoria.setText(""+idCategoria);
+            txtNombreCategoria.setText(nombreCategoria);
+            txtIdPadre.setText(""+idPadre);
+            txtNombrePadre.setText(nombrePadre+" "+apellidoPadre);
+
 
             // Seleccionar el estado en el JComboBox
             jcbEstado.setSelectedItem(estado);
@@ -572,21 +637,59 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
     public void mostrarInformacionAlumno(int filaSeleccionada) {
 
         // Supongamos que tienes un modelo de tabla que almacena los datos.
-        String nombrePadre = (String) tblAlumnos.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
-        String apellidoPadre = (String) tblAlumnos.getValueAt(filaSeleccionada, 2);
+        String nombreAlumno = (String) tblAlumnos.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
+        String apellidoAlumno = (String) tblAlumnos.getValueAt(filaSeleccionada, 2);
         String fechaNacimiento= (String) tblAlumnos.getValueAt(filaSeleccionada, 3);
-        Estado estado = (Estado)tblAlumnos.getValueAt(filaSeleccionada, 4);
+        String nombreCategoria = (String) tblAlumnos.getValueAt(filaSeleccionada, 5);
+        String nombrePadre = (String) tblAlumnos.getValueAt(filaSeleccionada, 7);
+        String apellidoPadre = (String) tblAlumnos.getValueAt(filaSeleccionada, 8);
+        Estado estado = (Estado)tblAlumnos.getValueAt(filaSeleccionada, 9);
 
 
         // Crear un mapa con los datos a mostrar
-        Map<String, String> datos = new HashMap<String, String>(5);
-        datos.put("Nombre:", nombrePadre);
-        datos.put("Apellido:",apellidoPadre );
-        datos.put("FechaNacimiento:",fechaNacimiento);
+        //Map<String, String> datos = new HashMap<String, String>(5);
+        Map<String, String> datos = new LinkedHashMap<String, String>(5);
+        datos.put("Nombre Alumno :", nombreAlumno);
+        datos.put("Apellido Alumno :",apellidoAlumno);
+        datos.put("Fec. Nac. Alumno :",fechaNacimiento);
+        datos.put("Categoria que pertenece :", nombreCategoria);
+        datos.put("Datos del Padre :", nombrePadre+" "+apellidoPadre);
         datos.put("Estado:", estado.toString());
 
         // Llamar al método genérico para mostrar la información
         //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
         DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL ALUMNO", datos, 18, 20);
+    }
+
+     private boolean validarDatosCategoria() {
+        if (!validarCampo(txtNombre.getText(), LiteralesTexto.ERROR_NOMBRE_CAMPO_VACIO)) {
+            return false;
+        }
+
+        if (!validarCampo(txtApellido.getText(), LiteralesTexto.ERROR_APELLIDO_CAMPO_VACIO)) {
+            return false;
+        }
+
+        if (jdcFechaNacimiento.getDate() == null) {
+            Utils.mensajeError(LiteralesTexto.ERROR_FECHA_CAMPO_VACIO);
+            return false;
+        }
+
+        if (!validarCampo(txtIdCategoria.getText(), LiteralesTexto.ERROR_ID_CAMPO_VACIO)) {
+            return false;
+        }
+
+        if (!validarCampo(txtIdPadre.getText(), LiteralesTexto.ERROR_ID_CAMPO_VACIO)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarCampo(String valor, String mensajeError) {
+        if (!Utils.validarCadena(valor)) {
+            Utils.mensajeError(mensajeError);
+            return false;
+        }
+        return true;
     }
 }

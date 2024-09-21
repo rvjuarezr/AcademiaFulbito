@@ -261,7 +261,7 @@ public class Utils extends DefaultTableCellRenderer{
         return ff;
     }
 
-    public Date getDate(String fec){
+    public static Date getDate(String fec){
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha = null;
         try {

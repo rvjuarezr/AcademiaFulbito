@@ -17,6 +17,7 @@ import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JDesktopPane;
@@ -93,7 +94,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         setTitle("MANTENIMIENTO PADRES");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphPadres.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+        tphPadres.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -165,16 +166,31 @@ public class jifPadres extends javax.swing.JInternalFrame {
         txtNombre.setEditable(false);
         txtNombre.setDescripcion("Nombre*");
         txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
 
         txtApellido.setEditable(false);
         txtApellido.setDescripcion("Apellidos*");
         txtApellido.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtApellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidoKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
 
         txtTelefono.setEditable(false);
         txtTelefono.setDescripcion("Telefono*");
         txtTelefono.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
 
         btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
@@ -228,30 +244,35 @@ public class jifPadres extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
-        if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
-            Padre padre;
-            switch (indicador) {
-                case 0://registrar padre
+        try {
+            if (validarDatosCategoria()) {
+                String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+                if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+                    Padre padre;
+                    switch (indicador) {
+                        case 0://registrar padre
+                            padre = new Padre();
+                            padreFacade.guardarPadre(getDatosPadre(padre));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                            break;
+                        case 1://actualizar padre
+                            padre = padreFacade.findPadreById(idSeleccionada);
+                            padreFacade.actualizarPadre(getDatosPadre(padre));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                            break;
+                    }
 
-                    padre = new Padre();
-                    padreFacade.guardarPadre(getDatosPadre(padre));
-                    Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
-                    break;
-                case 1://actualizar padre
-                    padre = padreFacade.findPadreById(idSeleccionada);
-                    padreFacade.actualizarPadre(getDatosPadre(padre));
-                    Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
-                    break;
+                    listarPadres(paginaActual, tamanioPagina);
+                    limpiarCampos();
+                    habilitarCampos(false);
+                    accionBotones(false, false);
+                    btnGuardar.setText("Añadir");
+                    indicador = 0;
+                    tphPadres.setSelectedIndex(0);
+                }
             }
-
-            listarPadres(paginaActual, tamanioPagina);
-            limpiarCampos();
-            habilitarCampos(false);
-            accionBotones(false, false);
-            btnGuardar.setText("Añadir");
-            indicador = 0;
-            tphPadres.setSelectedIndex(0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -296,6 +317,33 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 break;
         }
     }//GEN-LAST:event_tblPadresMouseClicked
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != evt.VK_BACK_SPACE) {
+            evt.consume(); // Consume el evento si no es letra ni espacio
+        }
+        evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c) && c != ' ' && c != evt.VK_BACK_SPACE) {
+            evt.consume(); // Consume el evento si no es una letra
+        }
+        evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
+    }//GEN-LAST:event_txtApellidoKeyTyped
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        // Permitir solo dígitos y hasta 2 caracteres
+        if (!Character.isDigit(c) || txtTelefono.getText().length() >= 9) {
+            evt.consume(); // Ignorar el evento de tecla
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
@@ -489,14 +537,37 @@ public class jifPadres extends javax.swing.JInternalFrame {
         Estado estado = (Estado)tblPadres.getValueAt(filaSeleccionada, 4);
 
         // Crear un mapa con los datos a mostrar
-        Map<String, String> datos = new HashMap<String, String>(5);
-        datos.put("Nombre:", nombrePadre);
-        datos.put("Apellido:",apellidoPadre );
-        datos.put("Telefono:", telefono);
+        //Map<String, String> datos = new HashMap<String, String>(5);
+        Map<String, String> datos = new LinkedHashMap<String, String>(5);
+        datos.put("Nombre del Padre :", nombrePadre);
+        datos.put("Apellido del Padre :",apellidoPadre );
+        datos.put("Telefono del Padre :", telefono);
         datos.put("Estado:", estado.toString());
 
         // Llamar al método genérico para mostrar la información
         //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
         DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL PADRE", datos, 18, 20);
+    }
+     private boolean validarDatosCategoria(){
+        if(!validarCampo(txtNombre.getText(), LiteralesTexto.ERROR_NOMBRE_CAMPO_VACIO)){
+            return false;
+        }
+
+        if (!validarCampo(txtApellido.getText(), LiteralesTexto.ERROR_APELLIDO_CAMPO_VACIO)) {
+            return false;
+        }
+
+        if (!validarCampo(txtTelefono.getText(), LiteralesTexto.ERROR_TELEFONO_CAMPO_VACIO)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarCampo(String valor, String mensajeError) {
+        if (!Utils.validarCadena(valor)) {
+            Utils.mensajeError(mensajeError);
+            return false;
+        }
+        return true;
     }
 }
