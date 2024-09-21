@@ -51,6 +51,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_EDITAR,
         LiteralesTexto.LITERAL_ELIMINAR
     };
+    public static int permiteSelFila = -1;//este valor no permite seleccionar la fila en la tabla
     /** Creates new form jifCanchas */
     public jifCanchas(JDesktopPane jdpModAF){
         initComponents();
@@ -111,14 +112,18 @@ public class jifCanchas extends javax.swing.JInternalFrame {
             }
         ));
         tblCancha.setOpaque(false);
+        tblCancha.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCanchaMouseClicked(evt);
+            }
+        });
         jspCanchas.setViewportView(tblCancha);
 
         jPanel1.add(jspCanchas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
 
         btnNuevoHorario.setBackground(new java.awt.Color(156, 156, 247));
         btnNuevoHorario.setText("+ CANCHA");
-        btnNuevoHorario.setActionCommand("+ CANCHA");
-        btnNuevoHorario.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnNuevoHorario.setFont(new java.awt.Font("Arial", 1, 18));
         btnNuevoHorario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoHorarioActionPerformed(evt);
@@ -166,7 +171,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
 
         txtNombreLugarE.setEditable(false);
         txtNombreLugarE.setDescripcion("Nombre Lugar Entrenamiento*");
-        txtNombreLugarE.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtNombreLugarE.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtNombreLugarE.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNombreLugarEKeyTyped(evt);
@@ -320,6 +325,25 @@ public class jifCanchas extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
 }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void tblCanchaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCanchaMouseClicked
+        // TODO add your handling code here:
+        switch(permiteSelFila){
+            case 0://permite llamarlo desde una ventana externa
+                int nroFila = tblCancha.getSelectedRow();
+                if(nroFila != -1){
+                    jfPrincipal.menuHorario.txtIdCancha.setText(tblCancha.getValueAt(nroFila, 0).toString());
+                    jfPrincipal.menuHorario.txtNombreCancha.setText(tblCancha.getValueAt(nroFila, 1).toString());
+
+                }
+                try{
+                    setClosed(true);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+                break;
+        }
+    }//GEN-LAST:event_tblCanchaMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

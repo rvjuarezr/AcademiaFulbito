@@ -213,7 +213,7 @@ public class Utils extends DefaultTableCellRenderer{
     public static void cargarComboDiasDeLaSemana(JComboBox cmbDiasDeLaSemana) {
         cmbDiasDeLaSemana.addItem("SELECCIONA EL DIA DE LA SEMANA");
         for (Dia dia : Dia.values()) {
-            cmbDiasDeLaSemana.addItem(dia.toString().toUpperCase());
+            cmbDiasDeLaSemana.addItem(dia);
         }
     }
 

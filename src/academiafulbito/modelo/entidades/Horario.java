@@ -6,6 +6,7 @@
 package academiafulbito.modelo.entidades;
 
 import academiafulbito.modelo.enums.Dia;
+import academiafulbito.modelo.enums.Estado;
 import java.sql.Time;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +25,7 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name = "horario")
+@Table(name = "horario", catalog = "bdacademiafulbito", schema = "")
 public class Horario {
 
     @Id
@@ -53,6 +54,10 @@ public class Horario {
     @ManyToOne
     @JoinColumn(name = "ID_cancha")
     private Cancha cancha;
+    
+    @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
+    @Column(name = "estado")
+    private Estado estado;
 
     public Cancha getCancha() {
         return cancha;
@@ -108,6 +113,14 @@ public class Horario {
 
     public void setProfesor(Profesor profesor) {
         this.profesor = profesor;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
     
 }

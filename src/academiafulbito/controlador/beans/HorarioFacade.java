@@ -64,7 +64,7 @@ public class HorarioFacade implements EntityFacade<Horario>{
         }
     }
 
-    public void actualizarEntidad(Horario horario) {
+    public void actualizarHorario(Horario horario) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();

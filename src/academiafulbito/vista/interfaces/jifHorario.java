@@ -11,19 +11,24 @@
 
 package academiafulbito.vista.interfaces;
 
+import academiafulbito.controlador.beans.CanchaFacade;
 import academiafulbito.controlador.beans.CategoriaFacade;
 import academiafulbito.controlador.beans.HorarioFacade;
 import academiafulbito.controlador.beans.ProfesorFacade;
 import academiafulbito.modelo.entidades.Horario;
 import academiafulbito.modelo.enums.Dia;
+import academiafulbito.modelo.enums.Estado;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
 import java.sql.Time;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerDateModel;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Ronald J
@@ -34,23 +39,45 @@ public class jifHorario extends javax.swing.JInternalFrame {
     JDesktopPane jDesktopPane;
 
     int indicador;//para saber si estamos en modo de edicion
-    private int idSeleccionada; // Variable para almacenar la ID de la categoría seleccionada
+    private int idSeleccionada; // Variable para almacenar la ID seleccionada
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
     private int totalPaginas;
     jifProfesores menuProfesores;
     jifCanchas menuCanchas;
-    HorarioFacade horarioFacade;
-    CategoriaFacade categoriaFacade;
-    ProfesorFacade profesorFacade;
+    public static HorarioFacade horarioFacade;
+    public static CategoriaFacade categoriaFacade;
+    public static ProfesorFacade profesorFacade;
+    public static CanchaFacade canchaFacade;
+    DefaultTableModel modelo;
+    String[] nombreColumnas = {
+        LiteralesTexto.LITERAL_ID,
+        LiteralesTexto.LITERAL_DIA,
+        LiteralesTexto.LITERAL_HORA_INI,
+        LiteralesTexto.LITERAL_HORA_FIN,
+        LiteralesTexto.LITERAL_ID,//profesor
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_ID,//categoria
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_ID,//cancha
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_ESTADO,
+        LiteralesTexto.LITERAL_VER,
+        LiteralesTexto.LITERAL_EDITAR,
+        LiteralesTexto.LITERAL_ELIMINAR
+    };
 
     public jifHorario(JDesktopPane jdpModAF) {
         initComponents();
         jDesktopPane = jdpModAF;
         Utils.cargarComboDiasDeLaSemana(jcbDiasDeLaSemana);
+        Utils.cargarComboEstado(jcbEstado);
+        accionBotones(false, false);
         horarioFacade = new HorarioFacade();
         categoriaFacade = new CategoriaFacade();
         profesorFacade = new ProfesorFacade();
+        canchaFacade = new CanchaFacade();
+        listarHorarios(paginaActual, tamanioPagina);
     }
 
     /** This method is called from within the constructor to
@@ -64,7 +91,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
 
         tphHorarios = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jspCategorias = new javax.swing.JScrollPane();
+        jspHorarios = new javax.swing.JScrollPane();
         tblHorarios = new javax.swing.JTable();
         btnNuevoHorario = new org.edisoncor.gui.button.ButtonRound();
         lblPaginaActual = new javax.swing.JLabel();
@@ -72,7 +99,6 @@ public class jifHorario extends javax.swing.JInternalFrame {
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jcbDiasDeLaSemana = new org.edisoncor.gui.comboBox.ComboBoxRound();
         jPanel3 = new javax.swing.JPanel();
         jsHoraFin = new javax.swing.JSpinner(new SpinnerDateModel());
         jsHoraInicio = new javax.swing.JSpinner(new SpinnerDateModel());
@@ -87,6 +113,9 @@ public class jifHorario extends javax.swing.JInternalFrame {
         txtNombreCancha = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new org.edisoncor.gui.button.ButtonRound();
+        jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
+        jPanel4 = new javax.swing.JPanel();
+        jcbDiasDeLaSemana = new org.edisoncor.gui.comboBox.ComboBoxRound();
 
         setBackground(new java.awt.Color(204, 204, 255));
         setTitle("MANTENIMIENTO HORARIOS");
@@ -97,9 +126,9 @@ public class jifHorario extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jspCategorias.setBackground(new java.awt.Color(255, 255, 255));
-        jspCategorias.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jspCategorias.setOpaque(false);
+        jspHorarios.setBackground(new java.awt.Color(255, 255, 255));
+        jspHorarios.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jspHorarios.setOpaque(false);
 
         tblHorarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -110,9 +139,9 @@ public class jifHorario extends javax.swing.JInternalFrame {
             }
         ));
         tblHorarios.setOpaque(false);
-        jspCategorias.setViewportView(tblHorarios);
+        jspHorarios.setViewportView(tblHorarios);
 
-        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
+        jPanel1.add(jspHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
 
         btnNuevoHorario.setBackground(new java.awt.Color(156, 156, 247));
         btnNuevoHorario.setText("+ HORARIO");
@@ -162,9 +191,6 @@ public class jifHorario extends javax.swing.JInternalFrame {
         jLabel1.setText("NUEVO HORARIO");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 360, 20));
 
-        jcbDiasDeLaSemana.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
-        jPanel2.add(jcbDiasDeLaSemana, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 550, 50));
-
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ELIGE TU HORARIO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Bookman Old Style", 1, 18), new java.awt.Color(102, 102, 102))); // NOI18N
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -173,7 +199,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
         jsHoraFin.setEditor(timeEditorHF);
         jsHoraFin.setValue(new java.util.Date()); // valor inicial
         jsHoraFin.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
-        jPanel3.add(jsHoraFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 160, 40));
+        jPanel3.add(jsHoraFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 30, 160, 40));
 
         JSpinner.DateEditor timeEditorHI = new JSpinner.DateEditor(jsHoraInicio, "HH:mm");
         jsHoraInicio.setEditor(timeEditorHI);
@@ -181,7 +207,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
         jsHoraInicio.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         jPanel3.add(jsHoraInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 170, 40));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 570, 90));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 620, 80));
 
         txtNombreProfesor.setEditable(false);
         txtNombreProfesor.setDescripcion("Nombre Profesor*");
@@ -191,8 +217,9 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 txtNombreProfesorKeyTyped(evt);
             }
         });
-        jPanel2.add(txtNombreProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 210, 450, 50));
+        jPanel2.add(txtNombreProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 230, 450, 50));
 
+        txtIdProfesor.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtIdProfesor.setEditable(false);
         txtIdProfesor.setDescripcion("Id*");
         txtIdProfesor.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
@@ -201,7 +228,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 txtIdProfesorKeyTyped(evt);
             }
         });
-        jPanel2.add(txtIdProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 110, 50));
+        jPanel2.add(txtIdProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 230, 110, 50));
 
         btnBucarProfesor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/lupa.png"))); // NOI18N
         btnBucarProfesor.setBorderPainted(false);
@@ -211,7 +238,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 btnBucarProfesorActionPerformed(evt);
             }
         });
-        jPanel2.add(btnBucarProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 200, 80, 60));
+        jPanel2.add(btnBucarProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 220, 80, 60));
 
         btnBuscarCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/lupa.png"))); // NOI18N
         btnBuscarCategoria.setBorderPainted(false);
@@ -221,7 +248,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 btnBuscarCategoriaActionPerformed(evt);
             }
         });
-        jPanel2.add(btnBuscarCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 260, 80, 60));
+        jPanel2.add(btnBuscarCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 280, 80, 60));
 
         txtNombreCategoria.setEditable(false);
         txtNombreCategoria.setDescripcion("Nombre Categoria*");
@@ -231,7 +258,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 txtNombreCategoriaKeyTyped(evt);
             }
         });
-        jPanel2.add(txtNombreCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, 450, 50));
+        jPanel2.add(txtNombreCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, 450, 50));
 
         txtIdCategoria.setEditable(false);
         txtIdCategoria.setDescripcion("Id*");
@@ -241,7 +268,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 txtIdCategoriaKeyTyped(evt);
             }
         });
-        jPanel2.add(txtIdCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, 110, 50));
+        jPanel2.add(txtIdCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 110, 50));
 
         txtIdCancha.setEditable(false);
         txtIdCancha.setDescripcion("Id*");
@@ -251,7 +278,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 txtIdCanchaKeyTyped(evt);
             }
         });
-        jPanel2.add(txtIdCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 110, 50));
+        jPanel2.add(txtIdCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 350, 110, 50));
 
         btnBuscarCancha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/lupa.png"))); // NOI18N
         btnBuscarCancha.setBorderPainted(false);
@@ -261,7 +288,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 btnBuscarCanchaActionPerformed(evt);
             }
         });
-        jPanel2.add(btnBuscarCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 320, 80, 60));
+        jPanel2.add(btnBuscarCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 340, 80, 60));
 
         txtNombreCancha.setEditable(false);
         txtNombreCancha.setDescripcion("Nombre Cancha*");
@@ -271,7 +298,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 txtNombreCanchaKeyTyped(evt);
             }
         });
-        jPanel2.add(txtNombreCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, 450, 50));
+        jPanel2.add(txtNombreCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 450, 50));
 
         btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
@@ -282,7 +309,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 400, 220, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 440, 220, 70));
 
         btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
         btnGuardar.setBorder(null);
@@ -295,11 +322,24 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 400, 170, 70));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 440, 170, 70));
+
+        jcbEstado.setEnabled(false);
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 410, 220, 40));
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Elige tu Dia", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Bookman Old Style", 0, 18))); // NOI18N
+        jPanel4.setOpaque(false);
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jcbDiasDeLaSemana.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        jPanel4.add(jcbDiasDeLaSemana, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 550, 50));
+
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 620, 80));
 
         tphHorarios.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 520));
+        getContentPane().add(tphHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 590));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -365,6 +405,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
             // Llamamos al método para gestionar la visualización
             Utils.visualizarInternalFrame(jfPrincipal.menuCategorias, jDesktopPane);
         }
+        jfPrincipal.menuCategorias.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de profesores
         jfPrincipal.menuCategorias.toFront(); // Traer al frente
     }//GEN-LAST:event_btnBuscarCategoriaActionPerformed
 
@@ -384,6 +425,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
             jfPrincipal.menuCanchas = new jifCanchas(jDesktopPane);
             Utils.visualizarInternalFrame(jfPrincipal.menuCanchas, jDesktopPane);
         }
+        jfPrincipal.menuCanchas.permiteSelFila = 0;
         jfPrincipal.menuCanchas.toFront();
     }//GEN-LAST:event_btnBuscarCanchaActionPerformed
 
@@ -397,33 +439,31 @@ public class jifHorario extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        //listarCategorias(paginaActual, tamanioPagina);
         try {
             //if (validarDatosCategoria()) {
             String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
             if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
                 Horario horario;
                 switch (indicador) {
-                    case 0://registrar categoria
+                    case 0://registrar horario
                         horario = new Horario();
                         horarioFacade.guardarHorario(getDatosHorario(horario));
                         Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
                         break;
-                    case 1://actualizar categoria
-                        //categoria = categoriaFacade.findCategoriaById(idSeleccionada);
-                        //categoriaFacade.actualizarCategoria(getDatosCategoria(categoria));
-                        //Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                    case 1://actualizar horario
+                        horario = horarioFacade.findHorarioById(idSeleccionada);
+                        horarioFacade.actualizarHorario(getDatosHorario(horario));
+                        Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
                         break;
                 }
 
-                //listarCategorias(paginaActual, tamanioPagina);
+                listarHorarios(paginaActual, tamanioPagina);
                 limpiarCampos();
                 habilitarCampos(false);
                 accionBotones(false, false);
                 btnGuardar.setText("Añadir");
                 indicador = 0;
-
-                //tphCategorias.setSelectedIndex(0);
+                tphHorarios.setSelectedIndex(0);
             }
             //}
         } catch (Exception ex) {
@@ -445,10 +485,12 @@ public class jifHorario extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private org.edisoncor.gui.comboBox.ComboBoxRound jcbDiasDeLaSemana;
+    private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
     private javax.swing.JSpinner jsHoraFin;
     private javax.swing.JSpinner jsHoraInicio;
-    private javax.swing.JScrollPane jspCategorias;
+    private javax.swing.JScrollPane jspHorarios;
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblHorarios;
     private javax.swing.JTabbedPane tphHorarios;
@@ -496,14 +538,92 @@ public class jifHorario extends javax.swing.JInternalFrame {
 
     private Horario getDatosHorario(Horario horario){
 
-        horario.setCancha(null);//falta el bean de checa
+        horario.setCancha(canchaFacade.findCanchaById(Integer.parseInt(txtIdCancha.getText())));
         horario.setCategoria(categoriaFacade.findCategoriaById(Integer.parseInt(txtIdCategoria.getText())));
         horario.setDia((Dia)jcbDiasDeLaSemana.getSelectedItem());
         Date fechaInicio = (Date) jsHoraInicio.getValue();
         horario.setHoraInicio(new Time(fechaInicio.getTime()));
         Date fechaFin = (Date) jsHoraFin.getValue();
-        horario.setHoraInicio(new Time(fechaFin.getTime()));
+        horario.setHoraFin(new Time(fechaFin.getTime()));
         horario.setProfesor(profesorFacade.findProfesorById(Integer.parseInt(txtIdProfesor.getText())));
+        horario.setEstado((Estado)jcbEstado.getSelectedItem());
         return horario;
+    }
+
+    private void listarHorarios(int paginaActual, int tamanioPagina) {
+        totalPaginas = horarioFacade.obtenerTotalPaginas(tamanioPagina);
+
+        List<Horario> listaHorarios = horarioFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+
+        // Actualizar el JLabel con la página actual
+        lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
+
+        // Mostrar las canchas en la tabla
+        listarHorarios(listaHorarios);
+        actualizarEstadoBotones();// Actualizar el estado de los botones
+
+    }
+
+    private void actualizarEstadoBotones() {
+        btnAnterior.setEnabled(paginaActual > 1);
+        btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
+    private void listarHorarios(List<Horario> listaHorario){
+        // Selecciona el primer tab en un JTabbedPane
+        tphHorarios.setSelectedIndex(0);
+
+        modelo = Utils.generarModeloTabla(nombreColumnas);
+
+        // Asignar el modelo a la tabla
+        tblHorarios.setModel(modelo);
+
+        int[] anchoColumnas = {15, 20, 20, 20,10,20,10,20,10,20,15, 15, 25, 25}; // Anchos específicos para cada columna
+        Utils.setAnchoColumnas(tblHorarios, anchoColumnas);
+        Utils.ocultarColumnas(tblHorarios, 0);//ocultar la primera columna
+        Utils.ocultarColumnas(tblHorarios, 4);
+        Utils.ocultarColumnas(tblHorarios, 5);
+        Utils.ocultarColumnas(tblHorarios, 6);
+        Utils.ocultarColumnas(tblHorarios, 7);
+        Utils.ocultarColumnas(tblHorarios, 8);
+        Utils.ocultarColumnas(tblHorarios, 9);
+        Utils.ocultarColumnas(tblHorarios, 10);
+
+        // limpia los datos existentes en la tabla.
+        Utils.limpiarModeloTabla(modelo, tblHorarios);
+
+        // Verificar si la lista de socios tiene elementos
+        if (listaHorario.size() > 0) {
+
+            // Iterar sobre la lista de canchas y agregar cada cancha a la tabla
+            for (Horario horario : listaHorario) {
+
+                // Crea un array de objetos con los datos de la cancha para agregar a la tabla.
+                Object[] fila = new Object[]{
+                    horario.getIdHorario(),
+                    horario.getDia(),
+                    horario.getHoraInicio(),
+                    horario.getHoraFin(),
+                    horario.getProfesor().getIdProfesor(),
+                    horario.getProfesor().getNombreProfesor()+horario.getProfesor().getApellidoProfesor(),
+                    horario.getCategoria().getIdCategoria()+horario.getCategoria().getNombre(),
+                    horario.getCancha().getIdCancha(),
+                    horario.getCancha().getNombre(),
+                    horario.getEstado(),
+                    LiteralesTexto.LITERAL_VER,
+                    LiteralesTexto.LITERAL_EDITAR,
+                    LiteralesTexto.LITERAL_ELIMINAR
+                };
+                modelo.addRow(fila); // Agregar la fila al modelo de la tabla
+            }
+            // Establece un renderizador personalizado para las celdas de la tabla.
+            tblHorarios.setDefaultRenderer(Object.class, new Utils(18));
+
+            // Establece el modo de selección de filas para permitir solo una selección a la vez.
+            tblHorarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+            Utils.configurarEstiloTabla(tblHorarios, jspHorarios);
+            Utils.configurarBotonesAccion(tblHorarios);
+        }
     }
 }
