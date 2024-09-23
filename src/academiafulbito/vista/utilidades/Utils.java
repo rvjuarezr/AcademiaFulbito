@@ -12,6 +12,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.BorderFactory;
@@ -253,4 +254,21 @@ public class Utils extends DefaultTableCellRenderer{
         internalFrame.setLocation(Utils.posicionX(internalFrame, desktopPane), Utils.posicionY(internalFrame, desktopPane));
         internalFrame.show();
     }
+
+    public String getFechaNumLetraNum(Date fe){
+         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMMM-yyyy");//09-09-2024
+         String ff=formatoFecha.format(fe);
+        return ff;
+    }
+
+    public static Date getDate(String fec){
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha = null;
+        try {
+           fecha = formatoDelTexto.parse(fec);
+         } catch (ParseException ex) {
+            ex.printStackTrace();
+         }
+        return fecha;
+     }
 }

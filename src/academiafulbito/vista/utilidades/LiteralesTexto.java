@@ -23,6 +23,10 @@ public class LiteralesTexto {
     public static final String ERROR_FECHA_RANGO = "La fecha seleccionada no está en el rango permitido.";
     public static final String ERROR_FECHA_NO_VALIDA = "Debe seleccionar una fecha válida.";
     public static final String ERROR_NOMBRE_CAMPO_VACIO = "Debe de escribir un nombre!";
+    public static final String ERROR_APELLIDO_CAMPO_VACIO = "Debe de escribir un apellido!";
+    public static final String ERROR_TELEFONO_CAMPO_VACIO = "Debe de escribir un telefono!";
+    public static final String ERROR_FECHA_CAMPO_VACIO = "Debe de escribir una fecha de nacimiento!";
+    public static final String ERROR_ID_CAMPO_VACIO = "Debe seleccionar un ID valido!";
     public static final String ERROR_VALOR_EDAD_VACIA = "Debe de escribir una edad valida!";
     public static final String ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO = "¿ESTA SEGURO DE GUARDAR\nEL NUEVO REGISTRO?";
     public static final String ESTA_SEGURO_MODIFICAR_REGISTRO = "¿ESTA SEGURO DE MODIFICAR\nEL REGISTRO?";
@@ -58,7 +62,9 @@ public class LiteralesTexto {
     public static final String LITERAL_MAESTRAS_PROFESORES = "PROFESORES";
     public static final String LITERAL_MAESTRAS_LUGAR_E = "LUGAR E.";
     public static final String LITERAL_CONTROL_HORARIOS = "HORARIOS";
+    public static final String LITERAL_CONTROL_ALUMNOS = "ALUMNOS";
     public static final String LITERAL_DIRECCION = "Direccion";
     public static final String LITERAL_UBIGEO = "Ubigeo";
+    public static final String LITERAL_FECHA_NACIMIENTO = "Fec. Nac.";
 
 }

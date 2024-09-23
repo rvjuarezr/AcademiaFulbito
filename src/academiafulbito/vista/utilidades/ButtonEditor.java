@@ -5,6 +5,7 @@
 package academiafulbito.vista.utilidades;
 
 import academiafulbito.vista.interfaces.jfPrincipal;
+import academiafulbito.vista.interfaces.jifAlumnos;
 import academiafulbito.vista.interfaces.jifCampeonatos;
 import academiafulbito.vista.interfaces.jifCategorias;
 import academiafulbito.vista.interfaces.jifLugarEntrenamiento;
@@ -13,6 +14,9 @@ import academiafulbito.vista.interfaces.jifProfesores;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -43,11 +47,19 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (label.equals(LiteralesTexto.LITERAL_EDITAR)) {
-                    enviarFilaSeleccionada(); // Método para enviar la fila seleccionada
+                    try {
+                        enviarFilaSeleccionada(); // Método para enviar la fila seleccionada
+                    } catch (ParseException ex) {
+                        Logger.getLogger(ButtonEditor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
                 if (label.equals(LiteralesTexto.LITERAL_ELIMINAR)) {
-                    eliminarFilaSeleccionada();
+                    try {
+                        eliminarFilaSeleccionada();
+                    } catch (ParseException ex) {
+                        Logger.getLogger(ButtonEditor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
                 if(label.equals(LiteralesTexto.LITERAL_VER)){
@@ -69,7 +81,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         return super.stopCellEditing();
     }
 
-    private void enviarFilaSeleccionada() {
+    private void enviarFilaSeleccionada() throws ParseException {
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
             jfPrincipal.menuCategorias.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
         }
@@ -82,13 +94,15 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
             jfPrincipal.menuCampeonatos.cargarDatosEnFormulario(selectedRow);
         }
-        if(jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento){
+        if (jfPrincipal.menuAlumnos instanceof jifAlumnos) {
+            jfPrincipal.menuAlumnos.cargarDatosEnFormulario(selectedRow);
+        }
+        if (jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento) {
             jfPrincipal.menuLugarEntrenamiento.cargarDatosEnFormulario(selectedRow);
         }
-
+        
     }
-
-    private void eliminarFilaSeleccionada() {
+    private void eliminarFilaSeleccionada() throws ParseException {
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
             jfPrincipal.menuCategorias.eliminarCategoriaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
         }
@@ -101,25 +115,32 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
             jfPrincipal.menuCampeonatos.eliminarCampeonatoSeleccionada(selectedRow);
         }
-        if(jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento){
+        if (jfPrincipal.menuAlumnos instanceof jifAlumnos) {
+            jfPrincipal.menuAlumnos.eliminarAlumnoSeleccionada(selectedRow);
+        }
+        if (jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento) {
             jfPrincipal.menuLugarEntrenamiento.eliminarLugarEntrenamSeleccionado(selectedRow);
         }
+
     }
 
     private void mostrarFilaSeleccionada(){
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
             jfPrincipal.menuCategorias.mostrarInformacionCategoria(selectedRow); // Llama al método en el JInternalFrame
         }
-         if (jfPrincipal.menuPadres instanceof jifPadres) {
+        if (jfPrincipal.menuPadres instanceof jifPadres) {
             jfPrincipal.menuPadres.mostrarInformacionPadre(selectedRow); // Llama al método en el JInternalFrame
         }
-          if (jfPrincipal.menuProfesores instanceof jifProfesores) {
+        if (jfPrincipal.menuProfesores instanceof jifProfesores) {
             jfPrincipal.menuProfesores.mostrarInformacionProfesor(selectedRow); // Llama al método en el JInternalFrame
         }
-        if(jfPrincipal.menuCampeonatos instanceof jifCampeonatos){
+        if (jfPrincipal.menuCampeonatos instanceof jifCampeonatos) {
             jfPrincipal.menuCampeonatos.mostrarInformacionCampeonato(selectedRow);
         }
-        if(jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento){
+        if (jfPrincipal.menuAlumnos instanceof jifAlumnos) {
+            jfPrincipal.menuAlumnos.mostrarInformacionAlumno(selectedRow);
+        }
+        if (jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento) {
             jfPrincipal.menuLugarEntrenamiento.mostrarInformacionLugarE(selectedRow);
         }
     }
