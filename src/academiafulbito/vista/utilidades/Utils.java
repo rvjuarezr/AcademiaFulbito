@@ -113,18 +113,18 @@ public class Utils extends DefaultTableCellRenderer{
     }
 
     public static int posicionX(JInternalFrame jif, JDesktopPane dpMostrar){
-        return (dpMostrar.getWidth()/2)-(jif.getWidth()/2);
+        return (dpMostrar.getWidth()-jif.getWidth())/2;
     }
 
     public static int posicionY(JInternalFrame jif, JDesktopPane dpMostrar){
-        return (dpMostrar.getHeight()/2)-(jif.getHeight()/2);
+        return (dpMostrar.getHeight()-jif.getHeight())/3;
     }
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {
 
         //variables para el metodo formato tabla
-        Font normal = new Font("Bookman Old Style", Font.BOLD + Font.ITALIC, tamanioLetra);
+        Font normal = new Font(LiteralesTexto.LITERAL_BOOKMAN_OLD_STYLE, Font.BOLD + Font.ITALIC, tamanioLetra);
         Font negrilla = new Font("Verdana", Font.BOLD, tamanioLetra);
         Font cursiva = new Font("Times new roman", Font.ITALIC, tamanioLetra);
         boolean fila_con_color = (row % 2 == 0);
@@ -244,7 +244,7 @@ public class Utils extends DefaultTableCellRenderer{
     public static void aplicarEstiloButtonJOptionPane(String nombreBtn, int tamLetra, int ancho, int altura){
         // Configurar el tamaño y estilo del botón "Aceptar"
         UIManager.put("OptionPane.okButtonText", nombreBtn);
-        UIManager.put("Button.font", new Font("Bookman Old Style", Font.BOLD, tamLetra)); // Cambiar la fuente y tamaño
+        UIManager.put("Button.font", new Font(LiteralesTexto.LITERAL_BOOKMAN_OLD_STYLE, Font.BOLD, tamLetra)); // Cambiar la fuente y tamaño
         UIManager.put("Button.minimumSize", new Dimension(100, 40)); // Cambiar el tamaño mínimo
         UIManager.put("Button.preferredSize", new Dimension(ancho, altura)); // Cambiar el tamaño preferido
     }

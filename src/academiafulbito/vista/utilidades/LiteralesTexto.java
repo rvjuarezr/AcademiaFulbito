@@ -54,10 +54,17 @@ public class LiteralesTexto {
     public static final String LITERAL_ERROR = "ERROR.";
     public static final String LITERAL_APELLIDO = "Apellido";
     public static final String LITERAL_TELEFONO = "Telefono";
+    public static final String LITERAL_BOOKMAN_OLD_STYLE = "Bookman Old Style";
+    public static final String LITERAL_MAESTRAS_CATEGORIAS = "CATEGORIAS";
+    public static final String LITERAL_CONTROL_CANCHAS = "CANCHA";
+    public static final String LITERAL_MAESTRAS_CAMPEONATO = "CAMPEONATO";
+    public static final String LITERAL_MAESTRAS_PADRES = "PADRES";
+    public static final String LITERAL_MAESTRAS_PROFESORES = "PROFESORES";
+    public static final String LITERAL_MAESTRAS_LUGAR_E = "LUGAR E.";
+    public static final String LITERAL_CONTROL_HORARIOS = "HORARIOS";
+    public static final String LITERAL_CONTROL_ALUMNOS = "ALUMNOS";
     public static final String LITERAL_DIRECCION = "Direccion";
     public static final String LITERAL_UBIGEO = "Ubigeo";
     public static final String LITERAL_FECHA_NACIMIENTO = "Fec. Nac.";
-
-
 
 }
