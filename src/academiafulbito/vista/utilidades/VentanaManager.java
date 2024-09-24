@@ -6,6 +6,7 @@
 package academiafulbito.vista.utilidades;
 
 import academiafulbito.vista.interfaces.jfPrincipal;
+import academiafulbito.vista.interfaces.jifAlumnos;
 import academiafulbito.vista.interfaces.jifCampeonatos;
 import academiafulbito.vista.interfaces.jifCanchas;
 import academiafulbito.vista.interfaces.jifCategorias;
@@ -66,6 +67,12 @@ public class VentanaManager {
                 jfPrincipal.menuLugarEntrenamiento = new jifLugarEntrenamiento(jdpVentanas);
             }
             ventana = jfPrincipal.menuLugarEntrenamiento;
+
+        } else if(opcion.equals(LiteralesTexto.LITERAL_CONTROL_ALUMNOS)){
+            if (jfPrincipal.menuAlumnos == null || jfPrincipal.menuAlumnos.isClosed()) {
+                jfPrincipal.menuAlumnos = new jifAlumnos(jdpVentanas);
+            }
+            ventana = jfPrincipal.menuAlumnos;
 
         }
 

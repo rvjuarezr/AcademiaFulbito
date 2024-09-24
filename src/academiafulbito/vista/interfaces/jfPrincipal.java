@@ -57,6 +57,7 @@ public class jfPrincipal extends javax.swing.JFrame {
     public static jifPadres menuPadres;
     public static jifProfesores menuProfesores;
     public static jifHorario menuHorario;
+    public static jifAlumnos menuAlumnos;
     public static jifLugarEntrenamiento menuLugarEntrenamiento;
 
     private JPopupMenu pmMaestras, pmControl;
@@ -76,7 +77,6 @@ public class jfPrincipal extends javax.swing.JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         utils = new Utils(12);
-
         // Cabecera
         setupCabecera();        
 
@@ -87,7 +87,7 @@ public class jfPrincipal extends javax.swing.JFrame {
         setupDesktopPane();
 
         //panel Layered
-        setupMainLayout(); 
+        setupMainLayout();
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -250,7 +250,7 @@ public class jfPrincipal extends javax.swing.JFrame {
         pmMaestras = new JPopupMenu();
         setupSubMenus(new String[]{"CATEGORIAS", "LUGAR E.", "CAMPEONATO", "PADRES", "PROFESORES"}, pmMaestras);
         pmControl = new JPopupMenu();
-        setupSubMenus(new String[]{"HORARIOS", "CANCHA"}, pmControl);
+        setupSubMenus(new String[]{"HORARIOS", "CANCHA", "ALUMNOS"}, pmControl);
 
         // Añadir funcionalidad a los botones
         btnMaestras.addActionListener(new ActionListener() {

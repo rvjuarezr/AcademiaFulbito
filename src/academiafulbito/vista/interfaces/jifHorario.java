@@ -405,7 +405,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
             // Llamamos al método para gestionar la visualización
             Utils.visualizarInternalFrame(jfPrincipal.menuCategorias, jDesktopPane);
         }
-        jfPrincipal.menuCategorias.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de profesores
+        jfPrincipal.menuCategorias.permiteSelFila=1;//este valor permite seleccionar con un clic en la fila de la tabla de categoria
         jfPrincipal.menuCategorias.toFront(); // Traer al frente
     }//GEN-LAST:event_btnBuscarCategoriaActionPerformed
 

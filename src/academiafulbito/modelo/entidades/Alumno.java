@@ -4,12 +4,17 @@
  */
 package academiafulbito.modelo.entidades;
 
+import academiafulbito.modelo.enums.Estado;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
@@ -32,67 +37,81 @@ public class Alumno {
     @Column(name = "Fecha_nacimiento", nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaNacimiento;
-    @Column(name = "ID_categoria", nullable = false, length = 11)
-    private int idCategoria;
-    @Column(name = "ID_padre", nullable = false, length = 11)
-    private int idPadre;
+    @ManyToOne
+    @JoinColumn(name = "ID_categoria")
+    private Categoria Categoria;
+    @ManyToOne
+    @JoinColumn(name = "ID_padre")
+    private Padre padre;
+    @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
+    @Column(name = "estado")
+    private Estado estado;
 
     public Alumno() {
     }
 
-    public Alumno(String nombre, String apellido, Date fechaNacimiento, int IdCategoria, int IdPadre) {
+    public Alumno(String nombre, String apellido, Date fechaNacimiento, Categoria categoria, Padre padre, Estado estado) {
         this.nombreAlumno = nombre;
         this.apellidoAlumno = apellido;
         this.fechaNacimiento = fechaNacimiento;
-        this.idCategoria = IdCategoria;
-        this.idPadre = IdPadre;
-    }
-
-    public int getIdAlumno() {
-        return idAlumno;
+        this.Categoria = categoria;
+        this.padre = padre;
+        this.estado = estado;
     }
 
     public String getApellidoAlumno() {
         return apellidoAlumno;
     }
 
-    public int getIdCategoria() {
-        return idCategoria;
-    }
-
-    public int getIdPadre() {
-        return idPadre;
-    }
-
-    public String getNombreAlumno() {
-        return nombreAlumno;
-    }
-
     public void setApellidoAlumno(String apellidoAlumno) {
         this.apellidoAlumno = apellidoAlumno;
+    }
+
+    public Categoria getCategoria() {
+        return Categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.Categoria = categoria;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
     }
 
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    public int getIdAlumno() {
+        return idAlumno;
+    }
+
     public void setIdAlumno(int idAlumno) {
         this.idAlumno = idAlumno;
     }
 
-    public void setIdCategoria(int idCategoria) {
-        this.idCategoria = idCategoria;
-    }
-
-    public void setIdPadre(int idPadre) {
-        this.idPadre = idPadre;
+    public String getNombreAlumno() {
+        return nombreAlumno;
     }
 
     public void setNombreAlumno(String nombreAlumno) {
         this.nombreAlumno = nombreAlumno;
     }
 
-    public Date getFechaNacimiento() {
-        return fechaNacimiento;
+    public Padre getPadre() {
+        return padre;
+    }
+
+    public void setPadre(Padre padre) {
+        this.padre = padre;
     }
 }

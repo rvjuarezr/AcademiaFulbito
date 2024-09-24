@@ -32,6 +32,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
     JDesktopPane jdp;
     public static CategoriaFacade categoriaFacade;
+    public static int permiteSelFila = -1;//este valor no permite seleccionar la fila en la tabla
     DefaultTableModel modelo;
     String[] nombreColumnas = {
         LiteralesTexto.LITERAL_ID,
@@ -48,7 +49,6 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
     private int totalPaginas;
-    public static int permiteSelFila = -1;//este valor no permite seleccionar la fila en la tabla
     /** Creates new form jifCategorias */
     public jifCategorias(JDesktopPane jdpModAF){
         initComponents();
@@ -326,21 +326,26 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
     private void tblCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoriasMouseClicked
         // TODO add your handling code here:
-        switch(permiteSelFila){
-            case 0://permite llamarlo desde una ventana externa
-                int nroFila = tblCategorias.getSelectedRow();
-                if(nroFila != -1){
+        int nroFila = tblCategorias.getSelectedRow();
+        if (nroFila != -1) {
+            switch (permiteSelFila) {
+                case 0://permite llamarlo desde una ventana externa
+                    jfPrincipal.menuAlumnos.txtIdCategoria.setText(tblCategorias.getValueAt(nroFila, 0).toString());
+                    jfPrincipal.menuAlumnos.txtNombreCategoria.setText(tblCategorias.getValueAt(nroFila, 1).toString() + " DE " + tblCategorias.getValueAt(nroFila, 2).toString() + " A " + tblCategorias.getValueAt(nroFila, 3).toString());
+                    break;
+                case 1://permite llamarlo desde una ventana externa
                     jfPrincipal.menuHorario.txtIdCategoria.setText(tblCategorias.getValueAt(nroFila, 0).toString());
                     jfPrincipal.menuHorario.txtNombreCategoria.setText(tblCategorias.getValueAt(nroFila, 1).toString());
-
-                }
-                try{
-                    setClosed(true);
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
-                break;
+                    break;
+            }
+            //cerrar ventana
+            try {
+                setClosed(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
+        
     }//GEN-LAST:event_tblCategoriasMouseClicked
 
 
