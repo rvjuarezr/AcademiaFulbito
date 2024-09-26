@@ -15,11 +15,12 @@ import academiafulbito.controlador.beans.CanchaFacade;
 import academiafulbito.controlador.beans.LugarEntrenamientoFacade;
 import academiafulbito.modelo.entidades.Cancha;
 import academiafulbito.modelo.enums.Estado;
-import academiafulbito.vista.utilidades.ButtonEditor;
-import academiafulbito.vista.utilidades.ButtonRenderer;
+import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -44,8 +45,9 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     DefaultTableModel modelo;
     String[] nombreColumnas = {
         LiteralesTexto.LITERAL_ID,
-        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_NOMBRE_CANCHA,
         LiteralesTexto.LITERAL_ID,
+        LiteralesTexto.LITERAL_NOMBRE_LUGAR,
         LiteralesTexto.LITERAL_ESTADO,
         LiteralesTexto.LITERAL_VER,
         LiteralesTexto.LITERAL_EDITAR,
@@ -59,6 +61,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         Utils.cargarComboEstado(jcbEstado);
         accionBotones(false, false);
         canchaFacade = new CanchaFacade();
+        lugarEFacade = new LugarEntrenamientoFacade();
         listarCanchas(paginaActual, tamanioPagina);
     }
 
@@ -86,7 +89,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         btnBucarLugarE = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new org.edisoncor.gui.button.ButtonRound();
-        txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtNombreCancha = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
 
         setBackground(new java.awt.Color(204, 204, 255));
@@ -166,7 +169,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("NUEVO HORARIO");
+        jLabel1.setText("NUEVA CANCHA");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 360, 20));
 
         txtNombreLugarE.setEditable(false);
@@ -223,10 +226,10 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 380, 170, 70));
 
-        txtNombre.setEditable(false);
-        txtNombre.setDescripcion("Nombre*");
-        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 570, 50));
+        txtNombreCancha.setEditable(false);
+        txtNombreCancha.setDescripcion("Nombre*");
+        txtNombreCancha.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(txtNombreCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 570, 50));
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
@@ -362,7 +365,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     private javax.swing.JTable tblCancha;
     private javax.swing.JTabbedPane tphCancha;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdLugarE;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCancha;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreLugarE;
     // End of variables declaration//GEN-END:variables
 
@@ -375,10 +378,11 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         // Asignar el modelo a la tabla
         tblCancha.setModel(modelo);
 
-        int[] anchoColumnas = {15, 50, 30, 20, 15, 25, 25}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {15, 50, 30, 50, 20, 15, 25, 25}; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblCancha, anchoColumnas);
         Utils.ocultarColumnas(tblCancha, 0);//ocultar la primera columna
-        Utils.ocultarColumnas(tblCancha, 3);//ocultar columna estado
+        Utils.ocultarColumnas(tblCancha, 2);//ocultar la primera columna
+        Utils.ocultarColumnas(tblCancha, 4);//ocultar columna estado
 
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblCancha);
@@ -393,7 +397,8 @@ public class jifCanchas extends javax.swing.JInternalFrame {
                 Object[] fila = new Object[]{
                     cancha.getIdCancha(),
                     cancha.getNombre(),
-                    cancha.getIdLugar(),
+                    cancha.getId_lugar().getIdLugar(),
+                    cancha.getId_lugar().getNombre(),
                     cancha.getEstado(),
                     LiteralesTexto.LITERAL_VER,
                     LiteralesTexto.LITERAL_EDITAR,
@@ -437,13 +442,13 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     }
 
     private void limpiarCampos() {
-        txtNombre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombreCancha.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtIdLugarE.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtNombreLugarE.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
     }
 
     private void habilitarCampos(boolean band) {
-        txtNombre.setEditable(band);
+        txtNombreCancha.setEditable(band);
         txtIdLugarE.setEditable(band);
         txtNombreLugarE.setEditable(band);
         if (indicador == 0) {
@@ -456,9 +461,93 @@ public class jifCanchas extends javax.swing.JInternalFrame {
 
     private Cancha getDatosCancha(Cancha cancha){
         cancha.setEstado((Estado) jcbEstado.getSelectedItem());
-        cancha.setIdLugar(Integer.parseInt(txtIdLugarE.getText()));
-        cancha.setNombre(txtNombre.getText());
+        cancha.setId_lugar(lugarEFacade.findLugarEntrenamientoById(Integer.parseInt(txtIdLugarE.getText())));
+        cancha.setNombre(txtNombreCancha.getText());
 
         return cancha;
     }
+    public void mostrarInformacionCancha(int filaSeleccionada) {
+
+        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        String nombreLugar = (String) tblCancha.getValueAt(filaSeleccionada, 3); // Ajusta el índice de columna según tu tabla
+        String nombreCancha = (String)tblCancha.getValueAt(filaSeleccionada, 1).toString();
+        Estado estado = (Estado)tblCancha.getValueAt(filaSeleccionada, 4);
+
+        // Crear un mapa con los datos a mostrar
+        Map<String, String> datos = new LinkedHashMap<String, String>(5);
+        datos.put("Nombre Cancha:", nombreCancha);
+        datos.put("Nombre Lugar:", nombreLugar);
+        datos.put("Estado:", estado.toString());
+
+        // Llamar al método genérico para mostrar la información
+        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
+        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE CANCHA", datos, 18, 20);
+    }
+    public void eliminarCanchaSeleccionada(int filaSeleccionada) {
+        if (filaSeleccionada != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblCancha.getValueAt(filaSeleccionada, 0).toString()); // Supone que la ID está en la primera columna
+            if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO) == JOptionPane.YES_OPTION) {
+                Cancha canchaAEliminar = canchaFacade.findCanchaById(idSeleccionada);
+                if(canchaAEliminar != null){
+                    try {
+                        // Llamar al método para eliminar
+                        canchaFacade.eliminarCancha(canchaAEliminar);
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_ELIMINADO_CORRECTAMENTE);
+
+                        // Actualizar la tabla después de eliminar
+                        totalPaginas = canchaFacade.obtenerTotalPaginas(tamanioPagina);
+
+                        // Verificar si la página actual es mayor que el total de páginas después de la eliminación
+                        if (paginaActual > totalPaginas) {
+                            paginaActual = totalPaginas; // Ajustar la página actual a la última disponible
+                        }
+
+                        // Actualizar la tabla después de eliminar
+                        listarCanchas(paginaActual, tamanioPagina); // Volver a listar las categorías después de la eliminación
+
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.ERROR_AL_ELIMINAR_EL_REGISTRO+ " : " + e.getMessage(), LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_NO_ENCONTRADO_EN_LA_BBDD, LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, LiteralesTexto.POR_FAVOR_SELECCIONE_UNA_REGISTRO_PARA_ELIMINAR);
+        }
+    }
+    public void cargarDatosEnFormulario(int row) {
+        if (row != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblCancha.getValueAt(row, 0).toString()); // Supone que la ID está en la primera columna
+
+            // Obtener los datos de la fila seleccionada
+            String nombreCancha = (String) tblCancha.getValueAt(row, 1);
+            String idLugar = (String) tblCancha.getValueAt(row, 2).toString();
+            String nombreLugar = (String) tblCancha.getValueAt(row, 3);
+            Estado estado = (Estado)tblCancha.getValueAt(row, 4);
+
+            // Asignar los datos a los JTextField en el segundo panel
+            txtNombreCancha.setText(nombreCancha);
+            txtIdLugarE.setText(idLugar);
+            txtNombreLugarE.setText(nombreLugar);
+
+            // Seleccionar el estado en el JComboBox
+            jcbEstado.setSelectedItem(estado);
+
+            // Cambiar al segundo panel donde están los JTextField
+            tphCancha.setSelectedIndex(1);
+            btnGuardar.setText("Modificar");
+            indicador = 1;
+            accionBotones(true, true);
+            habilitarCampos(true);
+        } else{
+            //colocar alguna alerta
+        }
+    }
+
+
 }

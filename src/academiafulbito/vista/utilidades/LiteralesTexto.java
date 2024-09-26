@@ -72,7 +72,10 @@ public class LiteralesTexto {
     public static final String LITERAL_FECHA_NACIMIENTO = "Fec. Nac.";
     public static final String LITERAL_COLUMNA_PROFESOR = "PROFESOR";
     public static final String LITERAL_COLUMNA_CATEGORIA = "CATEGORIA";
-    public static final String LITERAL_COLUMNA_CANCHA = "CANCHA" +
-            "";
+    public static final String LITERAL_COLUMNA_CANCHA = "CANCHA";
+    public static final String LITERAL_NOMBRE_CANCHA = "Nombre Cancha";
+    public static final String LITERAL_NOMBRE_LUGAR = "Nombre Lugar";
+    public static final String LITERAL_DNI = "DNI";
+    public static final String ERROR_DNI_CAMPO_VACIO = "Debe de escribir un dni valido!";
 
 }

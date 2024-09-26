@@ -11,11 +11,12 @@ import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
  *
- * @author Ronald J
+ * @author Jose Checa C
  */
 public class LugarEntrenamientoFacade implements EntityFacade<LugarEntrenamiento>{
 
@@ -119,7 +120,7 @@ public class LugarEntrenamientoFacade implements EntityFacade<LugarEntrenamiento
         }
     }
 
-    public void eliminarCategoria(LugarEntrenamiento lugarE) {
+    public void eliminarLugarEntrenamiento(LugarEntrenamiento lugarE) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();

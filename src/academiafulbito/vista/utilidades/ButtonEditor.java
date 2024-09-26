@@ -7,6 +7,7 @@ package academiafulbito.vista.utilidades;
 import academiafulbito.vista.interfaces.jfPrincipal;
 import academiafulbito.vista.interfaces.jifAlumnos;
 import academiafulbito.vista.interfaces.jifCampeonatos;
+import academiafulbito.vista.interfaces.jifCanchas;
 import academiafulbito.vista.interfaces.jifCategorias;
 import academiafulbito.vista.interfaces.jifHorario;
 import academiafulbito.vista.interfaces.jifLugarEntrenamiento;
@@ -110,7 +111,10 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if (jfPrincipal.menuHorario instanceof jifHorario) {
             jfPrincipal.menuHorario.editarHorarioSeleccionado(selectedRow);
         }
-        
+        if (jfPrincipal.menuCanchas instanceof jifCanchas) {
+            jfPrincipal.menuCanchas.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
+        }
+
     }
     private void eliminarFilaSeleccionada() throws ParseException {
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
@@ -134,6 +138,10 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if (jfPrincipal.menuHorario instanceof jifHorario) {
             jfPrincipal.menuHorario.eliminarHorarioSeleccionado(selectedRow);
         }
+        if (jfPrincipal.menuCanchas instanceof jifCanchas) {
+            jfPrincipal.menuCanchas.eliminarCanchaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
+        }
+
     }
 
     private void mostrarFilaSeleccionada(){
@@ -157,6 +165,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         }
         if (jfPrincipal.menuHorario instanceof jifHorario) {
             jfPrincipal.menuHorario.mostrarInformacionHorario(selectedRow);
+        }
+        if (jfPrincipal.menuCanchas instanceof jifCanchas) {
+            jfPrincipal.menuCanchas.mostrarInformacionCancha(selectedRow); // Llama al método en el JInternalFrame
         }
     }
 }
