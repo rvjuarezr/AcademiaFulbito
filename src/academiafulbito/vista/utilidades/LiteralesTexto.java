@@ -38,21 +38,22 @@ public class LiteralesTexto {
     public static final String ERROR_SOCIO_NO_ENCONTRADO = "SOCIO NO ENCONTRADO";
     public static final String ERROR_BUSQUEDA_DATOS_SOCIO = "ERROR AL TRATAR DE BUSCAR DATOS DEL ASOCIADO";
     public static final String ERROR_BUSQUEDA_UBIGEO = "ERROR AL TRATAR DE BUSCAR UBIGEO";
-    public static final String LITERAL_VER = "Ver";
-    public static final String LITERAL_EDITAR = "Editar";
-    public static final String LITERAL_ELIMINAR = "Eliminar";
+    public static final String LITERAL_VER = "VER";
+    public static final String LITERAL_EDITAR = "EDITAR";
+    public static final String LITERAL_ELIMINAR = "ELIMINAR";
     public static final String LITERAL_ID = "ID";
-    public static final String LITERAL_NOMBRE = "Nombre";
+    public static final String LITERAL_NOMBRE = "NOMBRE";
     public static final String LITERAL_EDAD_MIN = "Edad Min.";
     public static final String LITERAL_EDAD_MAX = "Edad Max.";
-    public static final String LITERAL_ESTADO = "Estado";
+    public static final String LITERAL_ESTADO = "ESTADO";
     public static final String LITERAL_CADENA_VACIA = "";
     public static final String LITERAL_TEMPORADA = "Temporada";
     public static final String POR_FAVOR_SELECCIONE_UNA_REGISTRO_PARA_ELIMINAR = "POR FAVOR, SELECCIONA UN REGISTRO PARA ELIMINAR.";
     public static final String REGISTRO_NO_ENCONTRADO_EN_LA_BBDD = "NO SE HA ENCONTRADO EL REGISTRO EN LA BASE DE DATOS.";
     public static final String ERROR_AL_ELIMINAR_EL_REGISTRO = "ERROR AL ELIMINAR EL REGISTRO.";
+    public static final String ERROR_AL_ACTUALIZAR_EL_REGISTRO = "ERROR AL ACTUALIZAR EL REGISTRO.";
     public static final String LITERAL_ERROR = "ERROR.";
-    public static final String LITERAL_APELLIDO = "Apellido";
+    public static final String LITERAL_APELLIDO = "APELLIDO";
     public static final String LITERAL_TELEFONO = "Telefono";
     public static final String LITERAL_BOOKMAN_OLD_STYLE = "Bookman Old Style";
     public static final String LITERAL_MAESTRAS_CATEGORIAS = "CATEGORIAS";
@@ -65,9 +66,13 @@ public class LiteralesTexto {
     public static final String LITERAL_CONTROL_ALUMNOS = "ALUMNOS";
     public static final String LITERAL_DIRECCION = "Direccion";
     public static final String LITERAL_UBIGEO = "Ubigeo";
-    public static final String LITERAL_DIA = "Dia";
-    public static final String LITERAL_HORA_INI = "Hora Inicio";
-    public static final String LITERAL_HORA_FIN = "Hora Fin";
+    public static final String LITERAL_DIA = "DIA";
+    public static final String LITERAL_HORA_INI = "H.INICIO";
+    public static final String LITERAL_HORA_FIN = "H.FIN";
     public static final String LITERAL_FECHA_NACIMIENTO = "Fec. Nac.";
+    public static final String LITERAL_COLUMNA_PROFESOR = "PROFESOR";
+    public static final String LITERAL_COLUMNA_CATEGORIA = "CATEGORIA";
+    public static final String LITERAL_COLUMNA_CANCHA = "CANCHA" +
+            "";
 
 }

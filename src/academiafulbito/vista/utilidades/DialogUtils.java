@@ -56,7 +56,7 @@ public class DialogUtils {
         // Crear un panel con el título personalizado
         JPanel dialogPanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel(titulo, SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Bookman Old Style", Font.BOLD, 20)); // Cambiar el tamaño y estilo del título
+        titleLabel.setFont(new Font(LiteralesTexto.LITERAL_BOOKMAN_OLD_STYLE, Font.BOLD, 20)); // Cambiar el tamaño y estilo del título
         titleLabel.setForeground(new Color(103, 98, 98));
         dialogPanel.add(titleLabel, BorderLayout.NORTH);
         dialogPanel.add(panel, BorderLayout.CENTER);
