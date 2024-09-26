@@ -23,7 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -40,7 +39,7 @@ public class Utils extends DefaultTableCellRenderer{
 
     DecimalFormat df;
 
-    int tamanioLetra=12;//valor por defecto
+    int tamanioLetra=18;//valor por defecto
     public Utils(int tamLetra){
         df=new DecimalFormat("##0.00");
         tamanioLetra = tamLetra;
@@ -190,19 +189,33 @@ public class Utils extends DefaultTableCellRenderer{
 
     // Método para agregar los botones a las columnas
     public static void configurarBotonesAccion(JTable tabla) {
-        // Agregar boton ver
-        tabla.getColumn(LiteralesTexto.LITERAL_VER).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_VER));
-        tabla.getColumn(LiteralesTexto.LITERAL_VER).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_VER));
 
+        try{
+            // Agregar boton ver
+            tabla.getColumn(LiteralesTexto.LITERAL_VER).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_VER));
+            tabla.getColumn(LiteralesTexto.LITERAL_VER).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_VER));
+        } catch (IllegalArgumentException e) {
+            Utils.mensajeError("Columna '" + LiteralesTexto.LITERAL_VER + "' no encontrada en la tabla.");
+            e.printStackTrace();
+        }
 
-        // Agregar boton Editar
-        tabla.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_EDITAR));
-        tabla.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_EDITAR));
+        try{
+            // Agregar boton Editar
+            tabla.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_EDITAR));
+            tabla.getColumn(LiteralesTexto.LITERAL_EDITAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_EDITAR));
+        } catch (IllegalArgumentException e) {
+            Utils.mensajeError("Columna '" + LiteralesTexto.LITERAL_EDITAR + "' no encontrada en la tabla.");
+            e.printStackTrace();
+        }
 
-
-        // Agregar boton Eliminar
-        tabla.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_ELIMINAR));
-        tabla.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_ELIMINAR));
+        try{
+            // Agregar boton Eliminar
+            tabla.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellRenderer(new ButtonRenderer(LiteralesTexto.LITERAL_ELIMINAR));
+            tabla.getColumn(LiteralesTexto.LITERAL_ELIMINAR).setCellEditor(new ButtonEditor(LiteralesTexto.LITERAL_ELIMINAR));
+        } catch (IllegalArgumentException e) {
+            Utils.mensajeError("Columna '" + LiteralesTexto.LITERAL_ELIMINAR + "' no encontrada en la tabla.");
+            e.printStackTrace();
+        }
     }
 
     public static void cargarComboEstado(JComboBox cmbEstado) {
@@ -214,7 +227,7 @@ public class Utils extends DefaultTableCellRenderer{
     public static void cargarComboDiasDeLaSemana(JComboBox cmbDiasDeLaSemana) {
         cmbDiasDeLaSemana.addItem("SELECCIONA EL DIA DE LA SEMANA");
         for (Dia dia : Dia.values()) {
-            cmbDiasDeLaSemana.addItem(dia.toString().toUpperCase());
+            cmbDiasDeLaSemana.addItem(dia);
         }
     }
 
@@ -255,20 +268,33 @@ public class Utils extends DefaultTableCellRenderer{
         internalFrame.show();
     }
 
-    public String getFechaNumLetraNum(Date fe){
-         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMMM-yyyy");//09-09-2024
-         String ff=formatoFecha.format(fe);
+    public String getFechaNumLetraNum(Date fe) {
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMMM-yyyy");//09-09-2024
+        String ff = formatoFecha.format(fe);
         return ff;
     }
 
-    public static Date getDate(String fec){
+    public static Date getDate(String fec) {
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha = null;
         try {
-           fecha = formatoDelTexto.parse(fec);
-         } catch (ParseException ex) {
+            fecha = formatoDelTexto.parse(fec);
+        } catch (ParseException ex) {
             ex.printStackTrace();
-         }
+        }
         return fecha;
-     }
+    }
+
+    public static Date getTime(String fec) {
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("HH:mm");
+        Date fecha = null;
+        try {
+            fecha = formatoDelTexto.parse(fec);
+        } catch (ParseException ex) {
+            System.err.println("Error al parsear la hora: " + fec);
+            ex.printStackTrace(); // Manejo de excepciones
+        }
+        return fecha; // Considera cómo manejar un retorno nulo
+    }
+
 }

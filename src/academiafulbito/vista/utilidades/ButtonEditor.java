@@ -9,6 +9,7 @@ import academiafulbito.vista.interfaces.jifAlumnos;
 import academiafulbito.vista.interfaces.jifCampeonatos;
 import academiafulbito.vista.interfaces.jifCanchas;
 import academiafulbito.vista.interfaces.jifCategorias;
+import academiafulbito.vista.interfaces.jifHorario;
 import academiafulbito.vista.interfaces.jifLugarEntrenamiento;
 import academiafulbito.vista.interfaces.jifPadres;
 import academiafulbito.vista.interfaces.jifProfesores;
@@ -43,6 +44,12 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
     public Component getTableCellEditorComponent(final JTable table, Object value, boolean isSelected, int row, int column) {
         button.setText(label);
         selectedRow = row; // Guarda la fila seleccionada
+
+        // Remover todos los ActionListeners previamente asignados para evitar duplicados
+        for (ActionListener al : button.getActionListeners()) {
+            button.removeActionListener(al);
+        }
+
         button.addActionListener(new ActionListener() {
 
             @Override
@@ -101,10 +108,13 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if (jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento) {
             jfPrincipal.menuLugarEntrenamiento.cargarDatosEnFormulario(selectedRow);
         }
-		if (jfPrincipal.menuCanchas instanceof jifCanchas) {
+        if (jfPrincipal.menuHorario instanceof jifHorario) {
+            jfPrincipal.menuHorario.editarHorarioSeleccionado(selectedRow);
+        }
+        if (jfPrincipal.menuCanchas instanceof jifCanchas) {
             jfPrincipal.menuCanchas.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
         }
-		
+
     }
     private void eliminarFilaSeleccionada() throws ParseException {
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
@@ -125,7 +135,10 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if (jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento) {
             jfPrincipal.menuLugarEntrenamiento.eliminarLugarEntrenamSeleccionado(selectedRow);
         }
-		if (jfPrincipal.menuCanchas instanceof jifCanchas) {
+        if (jfPrincipal.menuHorario instanceof jifHorario) {
+            jfPrincipal.menuHorario.eliminarHorarioSeleccionado(selectedRow);
+        }
+        if (jfPrincipal.menuCanchas instanceof jifCanchas) {
             jfPrincipal.menuCanchas.eliminarCanchaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
         }
 
@@ -149,6 +162,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         }
         if (jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento) {
             jfPrincipal.menuLugarEntrenamiento.mostrarInformacionLugarE(selectedRow);
+        }
+        if (jfPrincipal.menuHorario instanceof jifHorario) {
+            jfPrincipal.menuHorario.mostrarInformacionHorario(selectedRow);
         }
         if (jfPrincipal.menuCanchas instanceof jifCanchas) {
             jfPrincipal.menuCanchas.mostrarInformacionCancha(selectedRow); // Llama al método en el JInternalFrame
