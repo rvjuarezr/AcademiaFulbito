@@ -66,5 +66,7 @@ public class LiteralesTexto {
     public static final String LITERAL_DIRECCION = "Direccion";
     public static final String LITERAL_UBIGEO = "Ubigeo";
     public static final String LITERAL_FECHA_NACIMIENTO = "Fec. Nac.";
+    public static final String LITERAL_DNI = "DNI";
+    public static final String ERROR_DNI_CAMPO_VACIO = "Debe de escribir un dni valido!";
 
 }

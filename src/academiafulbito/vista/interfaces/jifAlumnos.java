@@ -51,6 +51,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_NOMBRE,//7 nombre padre
         LiteralesTexto.LITERAL_APELLIDO, // 8 apellido padre
         LiteralesTexto.LITERAL_ESTADO, //9 estado
+        LiteralesTexto.LITERAL_DNI, //10 dni alumno
         LiteralesTexto.LITERAL_VER,
         LiteralesTexto.LITERAL_EDITAR,
         LiteralesTexto.LITERAL_ELIMINAR
@@ -114,6 +115,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         jdcFechaNacimiento = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        txtDni = new org.edisoncor.gui.textField.TextFieldRoundBackground();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -263,7 +265,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel3.setText("FECHA DE NACIMIENTO");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, 180, 40));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 130, 180, 40));
 
         btnBuscarPadre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/buscar.png"))); // NOI18N
         btnBuscarPadre.setContentAreaFilled(false);
@@ -282,7 +284,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(btnBuscarCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, 50, 50));
-        jPanel2.add(jdcFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, 230, 40));
+        jPanel2.add(jdcFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 130, 230, 40));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel4.setText("DATOS DEL PADRE DEL ALUMNO:");
@@ -291,6 +293,16 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel5.setText("DATOS DE LA CATEGORIA QUE PERTENECE:");
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 320, 30));
+
+        txtDni.setEditable(false);
+        txtDni.setDescripcion("DNI Alumno*");
+        txtDni.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, 300, 40));
 
         tphAlumnos.addTab("REGISTRO", jPanel2);
 
@@ -413,6 +425,15 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
     }//GEN-LAST:event_txtApellidoKeyTyped
 
+    private void txtDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        // Permitir solo dígitos y hasta 2 caracteres
+        if (!Character.isDigit(c) || txtDni.getText().length() >= 12) {
+            evt.consume(); // Ignorar el evento de tecla
+        }
+    }//GEN-LAST:event_txtDniKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBuscarCategoria;
@@ -435,6 +456,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
     private javax.swing.JTable tblAlumnos;
     private javax.swing.JTabbedPane tphAlumnos;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtApellido;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtDni;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCategoria;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdPadre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
@@ -451,7 +473,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         // Asignar el modelo a la tabla
         tblAlumnos.setModel(modelo);
 
-        int[] anchoColumnas = {35, 60, 45, 20, 20, 20,20,20,20, 20,15, 15, 15}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {35, 60, 45, 20, 20, 20,20,20,20,20, 20,15, 15, 15}; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblAlumnos, anchoColumnas);
         Utils.ocultarColumnas(tblAlumnos, 0);//ocultar la primera columna
         Utils.ocultarColumnas(tblAlumnos, 4);//ocultar columna idCategoria
@@ -460,6 +482,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         Utils.ocultarColumnas(tblAlumnos, 7);//ocultar columna NombrePadre
         Utils.ocultarColumnas(tblAlumnos, 8);//ocultar columna ApellidoPadre
         Utils.ocultarColumnas(tblAlumnos, 9);//ocultar columna estado
+        
 
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblAlumnos);
@@ -481,9 +504,10 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
                     alumno.getPadre().getNombrePadre(),//7
                     alumno.getPadre().getApellidoPadre(),//8
                     alumno.getEstado(),//9
-                    LiteralesTexto.LITERAL_VER,//10
-                    LiteralesTexto.LITERAL_EDITAR,//11
-                    LiteralesTexto.LITERAL_ELIMINAR//12
+                    alumno.getDniAlumno(),//10
+                    LiteralesTexto.LITERAL_VER,//11
+                    LiteralesTexto.LITERAL_EDITAR,//12
+                    LiteralesTexto.LITERAL_ELIMINAR//13
                 };
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
@@ -507,6 +531,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         int padre = Integer.parseInt(txtIdPadre.getText());
         alumno.setPadre(padreFacade.findPadreById(padre));
         alumno.setEstado((Estado) jcbEstado.getSelectedItem());
+        alumno.setDniAlumno(txtDni.getText());
 
         return alumno;
 
@@ -520,6 +545,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         txtNombreCategoria.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtIdPadre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtNombrePadre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtDni.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
     }
 
     private void habilitarCampos(boolean band) {
@@ -532,6 +558,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         } else {
             jcbEstado.setEnabled(band);
         }
+        txtDni.setEditable(band);
     }
 
     private void accionBotones(boolean d, boolean e) {
@@ -554,6 +581,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             String nombrePadre=(String) tblAlumnos.getValueAt(row, 7);
             String apellidoPadre=(String) tblAlumnos.getValueAt(row, 8);
             Estado estado = (Estado) tblAlumnos.getValueAt(row, 9);
+            String dniAlumno=(String) tblAlumnos.getValueAt(row, 10);
 
             // Asignar los datos a los JTextField en el segundo panel
             txtNombre.setText(nombre);
@@ -563,6 +591,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             txtNombreCategoria.setText(nombreCategoria);
             txtIdPadre.setText(""+idPadre);
             txtNombrePadre.setText(nombrePadre+" "+apellidoPadre);
+            txtDni.setText(dniAlumno);
 
 
             // Seleccionar el estado en el JComboBox
@@ -644,6 +673,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         String nombrePadre = (String) tblAlumnos.getValueAt(filaSeleccionada, 7);
         String apellidoPadre = (String) tblAlumnos.getValueAt(filaSeleccionada, 8);
         Estado estado = (Estado)tblAlumnos.getValueAt(filaSeleccionada, 9);
+        String dniAlunno = (String) tblAlumnos.getValueAt(filaSeleccionada, 10);
 
 
         // Crear un mapa con los datos a mostrar
@@ -652,9 +682,11 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         datos.put("Nombre Alumno :", nombreAlumno);
         datos.put("Apellido Alumno :",apellidoAlumno);
         datos.put("Fec. Nac. Alumno :",fechaNacimiento);
+        datos.put("DNI Alumno :",dniAlunno);
         datos.put("Categoria que pertenece :", nombreCategoria);
         datos.put("Datos del Padre :", nombrePadre+" "+apellidoPadre);
         datos.put("Estado:", estado.toString());
+        
 
         // Llamar al método genérico para mostrar la información
         //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
@@ -670,6 +702,10 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             return false;
         }
 
+        if (!validarCampo(txtDni.getText(), LiteralesTexto.ERROR_DNI_CAMPO_VACIO)) {
+            return false;
+        }
+
         if (jdcFechaNacimiento.getDate() == null) {
             Utils.mensajeError(LiteralesTexto.ERROR_FECHA_CAMPO_VACIO);
             return false;
@@ -682,6 +718,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         if (!validarCampo(txtIdPadre.getText(), LiteralesTexto.ERROR_ID_CAMPO_VACIO)) {
             return false;
         }
+        
         return true;
     }
 
