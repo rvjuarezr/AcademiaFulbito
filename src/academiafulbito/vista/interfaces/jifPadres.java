@@ -41,6 +41,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_APELLIDO,
         LiteralesTexto.LITERAL_TELEFONO,
         LiteralesTexto.LITERAL_ESTADO,
+        LiteralesTexto.LITERAL_DNI,
         LiteralesTexto.LITERAL_VER,
         LiteralesTexto.LITERAL_EDITAR,
         LiteralesTexto.LITERAL_ELIMINAR
@@ -88,6 +89,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
+        txtDni = new org.edisoncor.gui.textField.TextFieldRoundBackground();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -181,7 +183,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 txtApellidoKeyTyped(evt);
             }
         });
-        jPanel2.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
+        jPanel2.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 720, 40));
 
         txtTelefono.setEditable(false);
         txtTelefono.setDescripcion("Telefono*");
@@ -191,7 +193,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 txtTelefonoKeyTyped(evt);
             }
         });
-        jPanel2.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
+        jPanel2.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 720, 40));
 
         btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
         btnGuardar.setBorder(null);
@@ -224,7 +226,17 @@ public class jifPadres extends javax.swing.JInternalFrame {
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 270, 220, 40));
+
+        txtDni.setEditable(false);
+        txtDni.setDescripcion("DNI*");
+        txtDni.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, 720, 40));
 
         tphPadres.addTab("REGISTRO", jPanel2);
 
@@ -345,6 +357,15 @@ public class jifPadres extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtTelefonoKeyTyped
 
+    private void txtDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        // Permitir solo dígitos y hasta 2 caracteres
+        if (!Character.isDigit(c) || txtDni.getText().length() >= 12) {
+            evt.consume(); // Ignorar el evento de tecla
+        }
+    }//GEN-LAST:event_txtDniKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
@@ -360,6 +381,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
     private javax.swing.JTable tblPadres;
     private javax.swing.JTabbedPane tphPadres;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtApellido;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtDni;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtTelefono;
     // End of variables declaration//GEN-END:variables
@@ -373,7 +395,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         // Asignar el modelo a la tabla
         tblPadres.setModel(modelo);
 
-        int[] anchoColumnas = {15, 60, 20, 20, 20, 15, 25, 25}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {15, 60, 20, 20,20, 20, 15, 25, 25}; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblPadres, anchoColumnas);
         Utils.ocultarColumnas(tblPadres, 0);//ocultar la primera columna
         Utils.ocultarColumnas(tblPadres, 4);//ocultar columna estado
@@ -393,6 +415,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                     padre.getApellidoPadre(),
                     padre.getTelefono(),
                     padre.getEstado(),
+                    padre.getDniPadre(),
                     LiteralesTexto.LITERAL_VER,
                     LiteralesTexto.LITERAL_EDITAR,
                     LiteralesTexto.LITERAL_ELIMINAR
@@ -415,6 +438,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         padre.setApellidoPadre(txtApellido.getText());
         padre.setTelefono(txtTelefono.getText());
         padre.setEstado((Estado) jcbEstado.getSelectedItem());
+        padre.setDniPadre(txtDni.getText());
 
         return padre;
 
@@ -424,6 +448,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         txtNombre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtApellido.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtTelefono.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtDni.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
     }
 
     private void habilitarCampos(boolean band) {
@@ -436,6 +461,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         } else {
             jcbEstado.setEnabled(band);
         }
+        txtDni.setEditable(band);
     }
 
     private void accionBotones(boolean d, boolean e) {
@@ -453,11 +479,13 @@ public class jifPadres extends javax.swing.JInternalFrame {
             String apellido = (String) tblPadres.getValueAt(row, 2);
             String telefono = (String) tblPadres.getValueAt(row, 3);
             Estado estado = (Estado) tblPadres.getValueAt(row, 4);
+            String dni = (String) tblPadres.getValueAt(row, 5);
 
             // Asignar los datos a los JTextField en el segundo panel
             txtNombre.setText(nombre);
             txtApellido.setText(apellido);
             txtTelefono.setText(telefono);
+            txtDni.setText(dni);
 
             // Seleccionar el estado en el JComboBox
             jcbEstado.setSelectedItem(estado);
@@ -535,6 +563,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         String apellidoPadre = (String) tblPadres.getValueAt(filaSeleccionada, 2).toString();
         String telefono = (String) tblPadres.getValueAt(filaSeleccionada, 3).toString();
         Estado estado = (Estado)tblPadres.getValueAt(filaSeleccionada, 4);
+        String dni = (String) tblPadres.getValueAt(filaSeleccionada, 5).toString();
 
         // Crear un mapa con los datos a mostrar
         //Map<String, String> datos = new HashMap<String, String>(5);
@@ -542,6 +571,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         datos.put("Nombre del Padre :", nombrePadre);
         datos.put("Apellido del Padre :",apellidoPadre );
         datos.put("Telefono del Padre :", telefono);
+        datos.put("DNI del Padre :", dni);
         datos.put("Estado:", estado.toString());
 
         // Llamar al método genérico para mostrar la información
@@ -558,6 +588,10 @@ public class jifPadres extends javax.swing.JInternalFrame {
         }
 
         if (!validarCampo(txtTelefono.getText(), LiteralesTexto.ERROR_TELEFONO_CAMPO_VACIO)) {
+            return false;
+        }
+
+        if (!validarCampo(txtDni.getText(), LiteralesTexto.ERROR_DNI_CAMPO_VACIO)) {
             return false;
         }
         return true;

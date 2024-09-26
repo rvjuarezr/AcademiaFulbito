@@ -34,15 +34,18 @@ public class Padre {
     @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
     @Column(name = "estado")
     private Estado estado;
+    @Column(name = "dni", nullable = false, length = 12)
+    private String dniPadre;
 
     public Padre() {
     }
 
-    public Padre(String nombre, String apellido, String telefono,Estado estado) {
+    public Padre(String nombre, String apellido, String telefono,Estado estado,String dniPadre) {
         this.nombrePadre = nombre;
         this.apellidoPadre = apellido;
         this.telefono = telefono;
         this.estado=estado;
+        this.dniPadre=dniPadre;
     }
 
     public String getApellidoPadre() {
@@ -84,4 +87,14 @@ public class Padre {
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
+
+    public String getDniPadre() {
+        return dniPadre;
+    }
+
+    public void setDniPadre(String dniPadre) {
+        this.dniPadre = dniPadre;
+    }
+
+    
 }
