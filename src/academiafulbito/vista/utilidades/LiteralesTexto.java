@@ -60,5 +60,7 @@ public class LiteralesTexto {
     public static final String LITERAL_CONTROL_HORARIOS = "HORARIOS";
     public static final String LITERAL_DIRECCION = "Direccion";
     public static final String LITERAL_UBIGEO = "Ubigeo";
+    public static final String LITERAL_NOMBRE_CANCHA = "Nombre Cancha";
+    public static final String LITERAL_NOMBRE_LUGAR = "Nombre Lugar";
 
 }

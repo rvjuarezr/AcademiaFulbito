@@ -13,6 +13,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -28,12 +30,22 @@ public class Cancha {
     private int idCancha;
     @Column(name = "Nombre", nullable = false, length = 50)
     private String nombre;
-    @Column(name = "ID_lugar", nullable = true, length = 11)
-    private int idLugar;
+    @ManyToOne
+    @JoinColumn(name = "ID_lugar")
+    private LugarEntrenamiento id_lugar;
     @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
     @Column(name = "estado")
     private Estado estado;
-    
+
+    public Cancha() {
+    }
+
+    public Cancha(String nombre, LugarEntrenamiento id_lugar, Estado estado) {
+        this.nombre = nombre;
+        this.id_lugar = id_lugar;
+        this.estado = estado;
+    }
+
     //Getter y setter
     public int getIdCancha() {
         return idCancha;
@@ -43,12 +55,12 @@ public class Cancha {
         this.idCancha = idCancha;
     }
 
-    public int getIdLugar() {
-        return idLugar;
+    public LugarEntrenamiento getId_lugar() {
+        return id_lugar;
     }
 
-    public void setIdLugar(int idLugar) {
-        this.idLugar = idLugar;
+    public void setId_lugar(LugarEntrenamiento id_lugar) {
+        this.id_lugar = id_lugar;
     }
 
     public String getNombre() {

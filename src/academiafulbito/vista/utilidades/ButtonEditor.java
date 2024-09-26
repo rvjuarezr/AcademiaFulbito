@@ -6,6 +6,7 @@ package academiafulbito.vista.utilidades;
 
 import academiafulbito.vista.interfaces.jfPrincipal;
 import academiafulbito.vista.interfaces.jifCampeonatos;
+import academiafulbito.vista.interfaces.jifCanchas;
 import academiafulbito.vista.interfaces.jifCategorias;
 import academiafulbito.vista.interfaces.jifLugarEntrenamiento;
 import academiafulbito.vista.interfaces.jifPadres;
@@ -85,6 +86,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if(jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento){
             jfPrincipal.menuLugarEntrenamiento.cargarDatosEnFormulario(selectedRow);
         }
+        if (jfPrincipal.menuCanchas instanceof jifCanchas) {
+            jfPrincipal.menuCanchas.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
+        }
 
     }
 
@@ -104,6 +108,10 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if(jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento){
             jfPrincipal.menuLugarEntrenamiento.eliminarLugarEntrenamSeleccionado(selectedRow);
         }
+        if (jfPrincipal.menuCanchas instanceof jifCanchas) {
+            jfPrincipal.menuCanchas.eliminarCanchaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
+        }
+
     }
 
     private void mostrarFilaSeleccionada(){
@@ -121,6 +129,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         }
         if(jfPrincipal.menuLugarEntrenamiento instanceof jifLugarEntrenamiento){
             jfPrincipal.menuLugarEntrenamiento.mostrarInformacionLugarE(selectedRow);
+        }
+        if (jfPrincipal.menuCanchas instanceof jifCanchas) {
+            jfPrincipal.menuCanchas.mostrarInformacionCancha(selectedRow); // Llama al método en el JInternalFrame
         }
     }
 }
