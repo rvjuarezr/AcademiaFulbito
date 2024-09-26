@@ -458,7 +458,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
                 if(lugarEAEliminar != null){
                     try {
                         // Llamar al método para eliminar
-                        lugarEntrenamientoFacade.eliminarCategoria(lugarEAEliminar);
+                        lugarEntrenamientoFacade.eliminarLugarEntrenamiento(lugarEAEliminar);
                         JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_ELIMINADO_CORRECTAMENTE);
 
                         // Actualizar la tabla después de eliminar

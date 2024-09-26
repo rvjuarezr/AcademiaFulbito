@@ -15,7 +15,7 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author Ronald J
+ * @author Jose Checa C
  */
 public class CanchaFacade implements EntityFacade<Cancha>{
 
