@@ -11,6 +11,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Map;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -34,6 +36,11 @@ public class DialogUtils {
 
         // Crear un panel personalizado para el JOptionPane
         JPanel panel = new JPanel(new GridBagLayout());
+
+        // Si estás reutilizando 'panel', asegúrate de limpiarlo antes de agregar nuevo contenido
+        panel.removeAll();  // Limpia todo el contenido anterior del panel
+        panel.repaint();    // Redibuja el panel vacío
+        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5); // Espaciado alrededor de cada componente
         gbc.anchor = GridBagConstraints.WEST; // Alinea a la izquierda
@@ -58,15 +65,29 @@ public class DialogUtils {
         JLabel titleLabel = new JLabel(titulo, SwingConstants.CENTER);
         titleLabel.setFont(new Font(LiteralesTexto.LITERAL_BOOKMAN_OLD_STYLE, Font.BOLD, 20)); // Cambiar el tamaño y estilo del título
         titleLabel.setForeground(new Color(103, 98, 98));
-        dialogPanel.add(titleLabel, BorderLayout.NORTH);
+        dialogPanel.add(titleLabel, BorderLayout.NORTH);        
         dialogPanel.add(panel, BorderLayout.CENTER);
 
         // Crear el JOptionPane
-        JOptionPane optionPane = new JOptionPane(dialogPanel, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
+        final JOptionPane optionPane = new JOptionPane(dialogPanel, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
 
         // Crear un JDialog y configurarlo
-        JDialog dialog = optionPane.createDialog(titulo);
+        final JDialog dialog = optionPane.createDialog(titulo);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE); // Asegura que se cierre
         dialog.setLocationRelativeTo(null); // Centrar el diálogo en la pantalla
+
+        // Cerrar el diálogo al hacer clic en "Aceptar"
+        optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent e) {
+                String prop = e.getPropertyName();
+                if (dialog.isVisible() && (e.getSource() == optionPane) && (prop.equals(JOptionPane.VALUE_PROPERTY))) {
+                    dialog.setVisible(false);
+                    dialog.dispose(); // Cierra el diálogo manualmente
+                }
+            }
+        });
+
         dialog.setVisible(true);
     }
 }

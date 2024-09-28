@@ -84,7 +84,7 @@ public class Utils extends DefaultTableCellRenderer{
 
     public static boolean validarCadena(String valorCadena) {
         return !valorCadena.isEmpty()
-                && valorCadena.matches("[a-zA-Z0-9 ]*")
+                && valorCadena.matches("[a-zA-Z0-9 .-]*")
                 && !valorCadena.equalsIgnoreCase("null");
     }
 
