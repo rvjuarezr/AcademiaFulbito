@@ -12,6 +12,7 @@ import academiafulbito.vista.interfaces.jifCanchas;
 import academiafulbito.vista.interfaces.jifCategorias;
 import academiafulbito.vista.interfaces.jifHorario;
 import academiafulbito.vista.interfaces.jifLugarEntrenamiento;
+import academiafulbito.vista.interfaces.jifMatricula;
 import academiafulbito.vista.interfaces.jifPadres;
 import academiafulbito.vista.interfaces.jifProfesores;
 import javax.swing.JDesktopPane;
@@ -73,6 +74,12 @@ public class VentanaManager {
                 jfPrincipal.menuAlumnos = new jifAlumnos(jdpVentanas);
             }
             ventana = jfPrincipal.menuAlumnos;
+
+        } else if(opcion.equals(LiteralesTexto.LITERAL_CONTROL_MATRICULA)){
+            if (jfPrincipal.menuMatricula == null || jfPrincipal.menuMatricula.isClosed()) {
+                jfPrincipal.menuMatricula = new jifMatricula(jdpVentanas);
+            }
+            ventana = jfPrincipal.menuMatricula;
 
         }
 
