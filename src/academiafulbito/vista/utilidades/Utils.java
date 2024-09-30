@@ -7,6 +7,8 @@ package academiafulbito.vista.utilidades;
 
 import academiafulbito.modelo.enums.Dia;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.modelo.enums.EstadoPago;
+import academiafulbito.modelo.enums.Sexo;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -297,4 +299,15 @@ public class Utils extends DefaultTableCellRenderer{
         return fecha; // Considera cómo manejar un retorno nulo
     }
 
+    public static void cargarComboEstadoPago(JComboBox cmbEstadoPago) {
+        for (EstadoPago estado : EstadoPago.values()) {
+            cmbEstadoPago.addItem(estado);
+        }
+    }
+
+    public static void cargarComboSexo(JComboBox cmbSexo) {
+        for (Sexo sexo : Sexo.values()) {
+            cmbSexo.addItem(sexo);
+        }
+    }
 }
