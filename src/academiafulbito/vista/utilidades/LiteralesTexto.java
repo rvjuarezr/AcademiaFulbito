@@ -78,5 +78,8 @@ public class LiteralesTexto {
     public static final String LITERAL_NOMBRE_LUGAR = "Nombre Lugar";
     public static final String LITERAL_DNI = "DNI";
     public static final String ERROR_DNI_CAMPO_VACIO = "Debe de escribir un dni valido!";
+    public static final String LITERAL_SEXO = "SEXO";
+    public static final String LITERAL_NACIONALIDAD = "NACIONALIDAD";
+    public static final String ERROR_NACIONALIDAD_CAMPO_VACIO = "Debe de escribir una nacionalidad valida!";
 
 }
