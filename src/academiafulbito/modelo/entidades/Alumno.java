@@ -5,6 +5,7 @@
 package academiafulbito.modelo.entidades;
 
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.modelo.enums.Sexo;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,11 +49,16 @@ public class Alumno {
     private Estado estado;
     @Column(name = "dni", nullable = false, length = 12)
     private String dniAlumno;
+    @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
+    @Column(name = "sexo")
+    private Sexo sexo;
+    @Column(name = "nacionalidad", nullable = false, length = 25)
+    private String nacionalidad;
 
     public Alumno() {
     }
 
-    public Alumno(String nombre, String apellido, Date fechaNacimiento, Categoria categoria, Padre padre, Estado estado, String dniAlumno) {
+    public Alumno(String nombre, String apellido, Date fechaNacimiento, Categoria categoria, Padre padre, Estado estado, String dniAlumno,Sexo sexo, String nacionalidad) {
         this.nombreAlumno = nombre;
         this.apellidoAlumno = apellido;
         this.fechaNacimiento = fechaNacimiento;
@@ -60,6 +66,8 @@ public class Alumno {
         this.padre = padre;
         this.estado = estado;
         this.dniAlumno = dniAlumno;
+        this.sexo=sexo;
+        this.nacionalidad=nacionalidad;
     }
 
     public String getApellidoAlumno() {
@@ -124,6 +132,22 @@ public class Alumno {
 
     public void setDniAlumno(String dniAlumno) {
         this.dniAlumno = dniAlumno;
+    }
+
+    public String getNacionalidad() {
+        return nacionalidad;
+    }
+
+    public void setNacionalidad(String nacionalidad) {
+        this.nacionalidad = nacionalidad;
+    }
+
+    public Sexo getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(Sexo sexo) {
+        this.sexo = sexo;
     }
 
 }

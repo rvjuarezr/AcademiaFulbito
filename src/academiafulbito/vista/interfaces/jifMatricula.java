@@ -11,8 +11,11 @@
 
 package academiafulbito.vista.interfaces;
 
+import academiafulbito.controlador.beans.AlumnoFacade;
+import academiafulbito.modelo.entidades.Alumno;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.util.Date;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 
@@ -24,6 +27,8 @@ public class jifMatricula extends javax.swing.JInternalFrame {
 
     /** Creates new form jifMatricula */
     JDesktopPane jDesktopPane;
+    public static Alumno alumno ;
+    public static AlumnoFacade alumnoFacade;
 
     int indicador;//para saber si estamos en modo de edicion
 
@@ -37,6 +42,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         Utils.cargarComboEstadoPago(jcbEstadoPago);
         Utils.cargarComboSexo(jcbSexo);
         accionBotones(false, false, false, false);
+        alumnoFacade =new AlumnoFacade();
     }
 
     /** This method is called from within the constructor to
@@ -64,12 +70,12 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         btnConsultarMatricula = new org.edisoncor.gui.button.ButtonRound();
         txtDniAlumno = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jPanel3 = new javax.swing.JPanel();
-        txtINombresAlumno = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtNombresAlumno = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jLabel3 = new javax.swing.JLabel();
         txtIdAlumno = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtApellidosMatricula = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtApellidosAlumno = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jLabel6 = new javax.swing.JLabel();
         txtFechaNac = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jLabel7 = new javax.swing.JLabel();
@@ -79,7 +85,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtTelefPadre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
-        txtINombresPadre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtNombresPadre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txtCategoriaAlumno = new org.edisoncor.gui.textField.TextFieldRoundBackground();
@@ -124,7 +130,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
 
         btnNuevaMatricula.setBackground(new java.awt.Color(156, 156, 247));
         btnNuevaMatricula.setText("+ MATRICULA");
-        btnNuevaMatricula.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnNuevaMatricula.setFont(new java.awt.Font("Arial", 1, 18));
         btnNuevaMatricula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevaMatriculaActionPerformed(evt);
@@ -178,7 +184,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 204));
-        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 36));
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVA MATRICULA");
@@ -203,7 +209,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         btnGuardar.setBorderPainted(true);
         btnGuardar.setContentAreaFilled(true);
         btnGuardar.setEnabled(false);
-        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
@@ -218,7 +224,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         btnConsultarMatricula.setBackground(new java.awt.Color(156, 156, 247));
         btnConsultarMatricula.setText("CONSULTAR");
         btnConsultarMatricula.setEnabled(false);
-        btnConsultarMatricula.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnConsultarMatricula.setFont(new java.awt.Font("Arial", 1, 18));
         btnConsultarMatricula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConsultarMatriculaActionPerformed(evt);
@@ -244,17 +250,17 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        txtINombresAlumno.setBackground(new java.awt.Color(255, 255, 204));
-        txtINombresAlumno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        txtINombresAlumno.setEditable(false);
-        txtINombresAlumno.setDescripcion("NOMBRES");
-        txtINombresAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtINombresAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNombresAlumno.setBackground(new java.awt.Color(255, 255, 204));
+        txtNombresAlumno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtNombresAlumno.setEditable(false);
+        txtNombresAlumno.setDescripcion("NOMBRES");
+        txtNombresAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombresAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtINombresAlumnoKeyTyped(evt);
+                txtNombresAlumnoKeyTyped(evt);
             }
         });
-        jPanel3.add(txtINombresAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 220, 50));
+        jPanel3.add(txtNombresAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 220, 50));
 
         jLabel3.setText("NOMBRES:");
         jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 160, 20));
@@ -277,17 +283,17 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jLabel5.setText("APELLIDOS:");
         jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 160, 20));
 
-        txtApellidosMatricula.setBackground(new java.awt.Color(255, 255, 204));
-        txtApellidosMatricula.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        txtApellidosMatricula.setEditable(false);
-        txtApellidosMatricula.setDescripcion("APELLIDOS");
-        txtApellidosMatricula.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtApellidosMatricula.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtApellidosAlumno.setBackground(new java.awt.Color(255, 255, 204));
+        txtApellidosAlumno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtApellidosAlumno.setEditable(false);
+        txtApellidosAlumno.setDescripcion("APELLIDOS");
+        txtApellidosAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtApellidosAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtApellidosMatriculaKeyTyped(evt);
+                txtApellidosAlumnoKeyTyped(evt);
             }
         });
-        jPanel3.add(txtApellidosMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, 510, 50));
+        jPanel3.add(txtApellidosAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, 510, 50));
 
         jLabel6.setText("FEC. NAC");
         jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 20, 60, 20));
@@ -352,17 +358,17 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         });
         jPanel3.add(txtTelefPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 180, 180, 50));
 
-        txtINombresPadre.setBackground(new java.awt.Color(255, 255, 204));
-        txtINombresPadre.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        txtINombresPadre.setEditable(false);
-        txtINombresPadre.setDescripcion("NOMBRES Y APELLIDOS DEL PADRE");
-        txtINombresPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtINombresPadre.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNombresPadre.setBackground(new java.awt.Color(255, 255, 204));
+        txtNombresPadre.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtNombresPadre.setEditable(false);
+        txtNombresPadre.setDescripcion("NOMBRES Y APELLIDOS DEL PADRE");
+        txtNombresPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombresPadre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtINombresPadreKeyTyped(evt);
+                txtNombresPadreKeyTyped(evt);
             }
         });
-        jPanel3.add(txtINombresPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 800, 50));
+        jPanel3.add(txtNombresPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 800, 50));
 
         jLabel11.setText("EDAD");
         jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 90, 100, 20));
@@ -579,8 +585,8 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         indicador = 0;//para poder guardar
         tphMatricula.setSelectedIndex(1);
-        /*limpiarCampos();
-        habilitarCampos(true);*/
+        /*limpiarCampos();*/
+        habilitarCampos(true);
         accionBotones(true, true, true, true);
 }//GEN-LAST:event_btnNuevaMatriculaActionPerformed
 
@@ -649,25 +655,32 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         }
 }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void txtINombresAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtINombresAlumnoKeyTyped
+    private void txtNombresAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresAlumnoKeyTyped
         // TODO add your handling code here:
-}//GEN-LAST:event_txtINombresAlumnoKeyTyped
+}//GEN-LAST:event_txtNombresAlumnoKeyTyped
 
     private void btnConsultarMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarMatriculaActionPerformed
         // TODO add your handling code here:
+        mostarDatosAlumno(txtDniAlumno.getText());
+        
     }//GEN-LAST:event_btnConsultarMatriculaActionPerformed
 
     private void txtDniAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniAlumnoKeyTyped
         // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        // Permitir solo dígitos y hasta 2 caracteres
+        if (!Character.isDigit(c) || txtDniAlumno.getText().length() >= 12) {
+            evt.consume(); // Ignorar el evento de tecla
+        }
     }//GEN-LAST:event_txtDniAlumnoKeyTyped
 
     private void txtIdAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdAlumnoKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdAlumnoKeyTyped
 
-    private void txtApellidosMatriculaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosMatriculaKeyTyped
+    private void txtApellidosAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosAlumnoKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtApellidosMatriculaKeyTyped
+    }//GEN-LAST:event_txtApellidosAlumnoKeyTyped
 
     private void txtFechaNacKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFechaNacKeyTyped
         // TODO add your handling code here:
@@ -685,9 +698,9 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTelefPadreKeyTyped
 
-    private void txtINombresPadreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtINombresPadreKeyTyped
+    private void txtNombresPadreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresPadreKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtINombresPadreKeyTyped
+    }//GEN-LAST:event_txtNombresPadreKeyTyped
 
     private void txtCategoriaAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCategoriaAlumnoKeyTyped
         // TODO add your handling code here:
@@ -788,7 +801,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     private javax.swing.JTextArea taObervaciones;
     private javax.swing.JTable tblHorarios;
     private javax.swing.JTabbedPane tphMatricula;
-    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtApellidosMatricula;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtApellidosAlumno;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtCancha;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtCategoriaAlumno;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtCodBarras;
@@ -796,13 +809,13 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtDniAlumno;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtEdadAlumno;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtFechaNac;
-    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtINombresAlumno;
-    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtINombresPadre;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdAlumno;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdHorario;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtLugarEntrenamiento;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtMontoPago;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNacionalidadAlumno;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombresAlumno;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombresPadre;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombresProf;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtTelefPadre;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtTelefProfesor;
@@ -813,5 +826,30 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         btnGuardar.setEnabled(b);
         btnConsultarMatricula.setEnabled(c);
         btnBuscarHorario.setEnabled(d);
+    }
+
+    private void mostarDatosAlumno(String dni){
+     alumno=alumnoFacade.findAlumnoByDni(dni);
+     if(alumno!=null){
+         txtIdAlumno.setText(""+alumno.getIdAlumno());
+         txtNombresAlumno.setText(alumno.getNombreAlumno());
+         txtApellidosAlumno.setText(alumno.getApellidoAlumno());
+         txtFechaNac.setText(Utils.getFechaFormateada(alumno.getFechaNacimiento()));
+         txtNacionalidadAlumno.setText(alumno.getNacionalidad());
+         jcbSexo.setSelectedItem(alumno.getSexo());
+         txtCategoriaAlumno.setText(alumno.getCategoria().getNombre());
+         txtNombresPadre.setText(alumno.getPadre().getNombrePadre()+" "+alumno.getPadre().getApellidoPadre());
+         txtTelefPadre.setText(alumno.getPadre().getTelefono());
+
+         //para calcular la edad
+           Date fechaNacimiento = alumno.getFechaNacimiento(); // Obtener la fecha de nacimiento del alumno
+           int edad = Utils.calcularEdad(fechaNacimiento);
+           txtEdadAlumno.setText(String.valueOf(edad)); // Convierte la edad a String
+     }
+    }
+
+    private void habilitarCampos(boolean band) {
+        txtDniAlumno.setEditable(band);
+
     }
 }
