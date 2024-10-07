@@ -15,17 +15,17 @@ import academiafulbito.controlador.beans.AlumnoFacade;
 import academiafulbito.controlador.beans.HorarioFacade;
 import academiafulbito.controlador.beans.MatriculaFacade;
 import academiafulbito.modelo.entidades.Matricula;
-import academiafulbito.vista.utilidades.LiteralesTexto;
-import academiafulbito.vista.utilidades.Utils;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import javax.swing.JDesktopPane;
-import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import academiafulbito.modelo.entidades.Alumno;
+import academiafulbito.vista.utilidades.LiteralesTexto;
+import academiafulbito.vista.utilidades.Utils;
+import java.util.Date;
+import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,6 +35,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
 
     /** Creates new form jifMatricula */
     JDesktopPane jDesktopPane;
+    public static Alumno alumno ;
 
     int indicador;//para saber si estamos en modo de edicion
 
@@ -211,7 +212,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
             new String [] {
 
             }
-        ));
+        ));        
         tblMatriculas.setOpaque(false);
         jspMatricula.setViewportView(tblMatriculas);
 
@@ -326,18 +327,6 @@ public class jifMatricula extends javax.swing.JInternalFrame {
 
         jLabel5.setText("APELLIDOS:");
         jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 160, 20));
-
-        txtApellidosMatricula.setBackground(new java.awt.Color(255, 255, 204));
-        txtApellidosMatricula.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        txtApellidosMatricula.setEditable(false);
-        txtApellidosMatricula.setDescripcion("APELLIDOS");
-        txtApellidosMatricula.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtApellidosMatricula.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtApellidosMatriculaKeyTyped(evt);
-            }
-        });
-        jPanel3.add(txtApellidosMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, 510, 50));
 
         jLabel6.setText("FEC. NAC");
         jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 20, 60, 20));
@@ -565,10 +554,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jLabel17.setText("FECHA DE MATRICULA");
         jPanel6.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 140, 20));
 
-        jdchFechaMatricula.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
-        jPanel6.add(jdchFechaMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 170, 30));
-
-        jLabel19.setText("MONTO DE PAGO");
+		jLabel19.setText("MONTO DE PAGO");
         jPanel6.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 100, 20));
 
         txtMontoPago.setBackground(new java.awt.Color(255, 255, 204));
@@ -646,6 +632,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
             paginaActual--;
             //listarMatriculas(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual, jfPrincipal.menuCategorias));
             listarMatriculas(paginaActual, tamanioPagina);
+
         }
 }//GEN-LAST:event_btnAnteriorActionPerformed
 
@@ -654,6 +641,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         if (paginaActual < totalPaginas) {
             paginaActual++;
             listarMatriculas(paginaActual, tamanioPagina);
+
         }
 }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -711,19 +699,27 @@ public class jifMatricula extends javax.swing.JInternalFrame {
 
     private void btnConsultarMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarMatriculaActionPerformed
         // TODO add your handling code here:
+        mostarDatosAlumno(txtDniAlumno.getText());
     }//GEN-LAST:event_btnConsultarMatriculaActionPerformed
 
     private void txtDniAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniAlumnoKeyTyped
         // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        // Permitir solo dígitos y hasta 2 caracteres
+        if (!Character.isDigit(c) || txtDniAlumno.getText().length() >= 12) {
+            evt.consume(); // Ignorar el evento de tecla
+        }
     }//GEN-LAST:event_txtDniAlumnoKeyTyped
 
     private void txtIdAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdAlumnoKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdAlumnoKeyTyped
 
-    private void txtApellidosMatriculaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosMatriculaKeyTyped
+
+    private void txtApellidosAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosAlumnoKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtApellidosMatriculaKeyTyped
+    }//GEN-LAST:event_txtApellidosAlumnoKeyTyped
+
 
     private void txtFechaNacKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFechaNacKeyTyped
         // TODO add your handling code here:
@@ -1124,5 +1120,24 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtMontoPago.setText(title);
         jdchFechaMatricula.setDate(Utils.getFechaActual());
         lblFotoAlumno.setIcon(null);
+    }
+
+    private void mostarDatosAlumno(String dni){
+     alumno=alumnosFacade.findAlumnoByDni(dni);
+     if(alumno!=null){
+         txtIdAlumno.setText(""+alumno.getIdAlumno());
+         txtNombresAlumno.setText(alumno.getNombreAlumno());
+         txtFechaNac.setText(Utils.getFechaFormateada(alumno.getFechaNacimiento()));
+         txtNacionalidadAlumno.setText(alumno.getNacionalidad());
+         jcbSexo.setSelectedItem(alumno.getSexo());
+         txtCategoriaAlumno.setText(alumno.getCategoria().getNombre());
+         txtNombresPadre.setText(alumno.getPadre().getNombrePadre()+" "+alumno.getPadre().getApellidoPadre());
+         txtTelefPadre.setText(alumno.getPadre().getTelefono());
+
+         //para calcular la edad
+           Date fechaNacimiento = alumno.getFechaNacimiento(); // Obtener la fecha de nacimiento del alumno
+           int edad = Utils.calcularEdad(fechaNacimiento);
+           txtEdadAlumno.setText(String.valueOf(edad)); // Convierte la edad a String
+     }
     }
 }

@@ -16,6 +16,7 @@ import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -314,4 +315,29 @@ public class Utils extends DefaultTableCellRenderer{
     public static Date getFechaActual(){
         return new Date();
     }
+
+    public static int calcularEdad(Date fechaNacimiento) {
+        if (fechaNacimiento == null) {
+            throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula");
+        }
+
+        // Crear un objeto Calendar para la fecha de nacimiento
+        Calendar fechaNacCal = Calendar.getInstance();
+        fechaNacCal.setTime(fechaNacimiento);
+
+        // Crear un objeto Calendar para la fecha actual
+        Calendar hoy = Calendar.getInstance();
+
+        // Calcular la edad
+        int edad = hoy.get(Calendar.YEAR) - fechaNacCal.get(Calendar.YEAR);
+
+        // Ajustar si el cumpleaños aún no ha ocurrido este año
+        if (hoy.get(Calendar.MONTH) < fechaNacCal.get(Calendar.MONTH)
+                || (hoy.get(Calendar.MONTH) == fechaNacCal.get(Calendar.MONTH) && hoy.get(Calendar.DAY_OF_MONTH) < fechaNacCal.get(Calendar.DAY_OF_MONTH))) {
+            edad--;
+        }
+
+        return edad;
+    }
+    
 }

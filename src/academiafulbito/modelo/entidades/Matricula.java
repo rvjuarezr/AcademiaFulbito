@@ -59,7 +59,7 @@ public class Matricula {
 
     @Column(name = "codigo_barras", length = 100)
     private String codigoBarras;
-
+    
     // Constructor vacío
     public Matricula() {}
 
@@ -96,7 +96,7 @@ public class Matricula {
     public void setHorario(Horario horario) {
         this.horario = horario;
     }
-
+    
     public String getObservaciones() {
         return observaciones;
     }

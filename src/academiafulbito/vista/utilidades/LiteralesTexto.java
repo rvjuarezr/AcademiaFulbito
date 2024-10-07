@@ -83,5 +83,8 @@ public class LiteralesTexto {
     public static final String LITERAL_MONTO_PAGO = "PAGO";
     public static final String LITERAL_OBSERVACIONES = "OBSERVACIONES";
     public static final String LITERAL_CODIGO_BARRAS = "COD. BARRAS";
+    public static final String LITERAL_SEXO = "SEXO";
+    public static final String LITERAL_NACIONALIDAD = "NACIONALIDAD";
+    public static final String ERROR_NACIONALIDAD_CAMPO_VACIO = "Debe de escribir una nacionalidad valida!";
 
 }
