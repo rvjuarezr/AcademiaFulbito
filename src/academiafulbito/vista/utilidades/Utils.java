@@ -310,4 +310,8 @@ public class Utils extends DefaultTableCellRenderer{
             cmbSexo.addItem(sexo);
         }
     }
+
+    public static Date getFechaActual(){
+        return new Date();
+    }
 }

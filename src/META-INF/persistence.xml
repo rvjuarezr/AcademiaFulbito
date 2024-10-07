@@ -11,6 +11,7 @@
     <class>academiafulbito.modelo.entidades.Cancha</class>
     <class>academiafulbito.modelo.entidades.LugarEntrenamiento</class>
     <class>academiafulbito.modelo.entidades.Horario</class>
+    <class>academiafulbito.modelo.entidades.Matricula</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/bdacademiafulbito"/>
       <property name="javax.persistence.jdbc.password" value="${db.password}"/>
