@@ -292,7 +292,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
             case 0://permite llamarlo desde una ventana externa
                 int nroFila = tblLugarEntrenamientos.getSelectedRow();
                 if(nroFila != -1){
-                    jfPrincipal.menuCanchas.txtIdLugarE.setText(tblLugarEntrenamientos.getValueAt(nroFila, 0).toString());
+                    jfPrincipal.menuCanchas.txtIdLugarE.setText(tblLugarEntrenamientos.getValueAt(nroFila, 0).toString());    // Encuentra el ID o PK ...
                     jfPrincipal.menuCanchas.txtNombreLugarE.setText(tblLugarEntrenamientos.getValueAt(nroFila, 1).toString()+" "+tblLugarEntrenamientos.getValueAt(nroFila, 2).toString());
 
                 }

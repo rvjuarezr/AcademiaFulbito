@@ -37,7 +37,7 @@ public class Horario {
     @Column(name = "Dia", nullable = false)
     private Dia dia;
 
-     @Column(name = "Hora_inicio", nullable = false)
+    @Column(name = "Hora_inicio", nullable = false)
     private Time horaInicio;
 
     @Column(name = "Hora_fin", nullable = false)
