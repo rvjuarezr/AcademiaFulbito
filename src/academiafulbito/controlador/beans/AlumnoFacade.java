@@ -6,6 +6,7 @@ package academiafulbito.controlador.beans;
 
 import academiafulbito.modelo.entidades.Alumno;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.modelo.enums.Sexo;
 import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -130,5 +131,19 @@ public class AlumnoFacade implements EntityFacade<Alumno>{
         } finally {
             em.close();
         }
+    }
+
+    public Alumno findAlumnoByDni(String dniAlumno) {
+        EntityManager em = getEntityManager();
+        String sql;
+        List<Alumno>lista;
+        Alumno alumno;
+        alumno=null;
+        sql="SELECT a.* FROM alumno a WHERE a.dni='"+dniAlumno+"'";
+        lista=em.createNativeQuery(sql,Alumno.class).getResultList();
+        if(lista.size()>0){
+            alumno=lista.get(0);
+        }
+        return alumno;
     }
 }
