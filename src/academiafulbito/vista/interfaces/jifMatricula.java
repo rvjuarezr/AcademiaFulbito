@@ -811,13 +811,13 @@ public class jifMatricula extends javax.swing.JInternalFrame {
 
     private void btnBuscarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarHorarioActionPerformed
         // TODO add your handling code here:
-        if (jfPrincipal.menuCategorias == null || jfPrincipal.menuCategorias.isClosed()) {
-            jfPrincipal.menuCategorias = new jifCategorias(jDesktopPane); // Instanciamos la ventana de Categorías
+         if (jfPrincipal.menuHorario == null || jfPrincipal.menuHorario.isClosed()) {
+            jfPrincipal.menuHorario = new jifHorario(jDesktopPane); // Instanciamos la ventana de Categorías
             // Llamamos al método para gestionar la visualización
-            Utils.visualizarInternalFrame(jfPrincipal.menuCategorias, jDesktopPane);
+            Utils.visualizarInternalFrame(jfPrincipal.menuHorario, jDesktopPane);
         }
-        jfPrincipal.menuCategorias.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de categorias
-        jfPrincipal.menuCategorias.toFront(); // Traer al frente
+        jfPrincipal.menuHorario.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de categorias
+        jfPrincipal.menuHorario.toFront(); // Traer al frente
 }//GEN-LAST:event_btnBuscarHorarioActionPerformed
 
     private void txtIdHorarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdHorarioKeyTyped
