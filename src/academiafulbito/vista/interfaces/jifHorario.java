@@ -50,6 +50,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
     jifProfesores menuProfesores;
     jifCanchas menuCanchas;
     public static HorarioFacade horarioFacade;
+    public static int permiteSelFila = -1;//este valor no permite seleccionar la fila en la tabla
     public static CategoriaFacade categoriaFacade;
     public static ProfesorFacade profesorFacade;
     public static CanchaFacade canchaFacade;
@@ -130,7 +131,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
         setTitle("MANTENIMIENTO HORARIOS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphHorarios.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphHorarios.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jpListado.setBackground(new java.awt.Color(255, 255, 255));
         jpListado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -181,6 +182,11 @@ public class jifHorario extends javax.swing.JInternalFrame {
             }
         ));
         tblHorarios.setOpaque(false);
+        tblHorarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblHorariosMouseClicked(evt);
+            }
+        });
         jspHorarios.setViewportView(tblHorarios);
 
         jpListado.add(jspHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 1130, 230));
@@ -497,6 +503,31 @@ public class jifHorario extends javax.swing.JInternalFrame {
         }
 
 }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void tblHorariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHorariosMouseClicked
+        // TODO add your handling code here:
+                switch(permiteSelFila){
+            case 0:
+                int seleccionFila=tblHorarios.getSelectedRow();
+                if(seleccionFila!=-1){
+                    int idHorario=Integer.parseInt(tblHorarios.getValueAt(seleccionFila,0).toString());
+                    Horario miHorario=horarioFacade.findHorarioById(idHorario);
+                    jfPrincipal.menuMatricula.txtIdHorario.setText(""+miHorario.getIdHorario());
+                    jfPrincipal.menuMatricula.txtDiasHorarioProf.setText(miHorario.getDia()+" "+miHorario.getHoraInicio().toString()+"-"+miHorario.getHoraFin().toString());
+                    jfPrincipal.menuMatricula.txtLugarEntrenamiento.setText(miHorario.getCancha().getId_lugar().getNombre());
+                    jfPrincipal.menuMatricula.txtCancha.setText(miHorario.getCancha().getNombre());
+                    jfPrincipal.menuMatricula.txtNombresProf.setText(miHorario.getProfesor().getNombreProfesor()+" "+miHorario.getProfesor().getApellidoProfesor());
+                    jfPrincipal.menuMatricula.txtTelefProfesor.setText(miHorario.getProfesor().getTelefono());
+                }
+                try{
+                    setClosed(true);
+                } catch(Exception ex){
+                    ex.printStackTrace();
+                }
+                break;
+        }
+
+    }//GEN-LAST:event_tblHorariosMouseClicked
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
