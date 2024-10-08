@@ -115,7 +115,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtIdAlumno = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtApellidosMatricula = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtApellidosAlumno = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jLabel6 = new javax.swing.JLabel();
         txtFechaNac = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jLabel7 = new javax.swing.JLabel();
@@ -327,6 +327,18 @@ public class jifMatricula extends javax.swing.JInternalFrame {
 
         jLabel5.setText("APELLIDOS:");
         jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 160, 20));
+
+        txtApellidosAlumno.setBackground(new java.awt.Color(255, 255, 204));
+        txtApellidosAlumno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtApellidosAlumno.setEditable(false);
+        txtApellidosAlumno.setDescripcion("APELLIDOS");
+        txtApellidosAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtApellidosAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidosAlumnoKeyTyped(evt);
+            }
+        });
+        jPanel3.add(txtApellidosAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, 510, 50));
 
         jLabel6.setText("FEC. NAC");
         jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 20, 60, 20));
@@ -872,7 +884,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     private javax.swing.JTextArea taObervaciones;
     private javax.swing.JTable tblMatriculas;
     private javax.swing.JTabbedPane tphMatricula;
-    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtApellidosMatricula;
+    public static org.edisoncor.gui.textField.TextFieldRoundBackground txtApellidosAlumno;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtCancha;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtCategoriaAlumno;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtCodBarras;
@@ -1098,7 +1110,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         //datos del alumno
         txtIdAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtNombresAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtApellidosMatricula.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtApellidosAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtFechaNac.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtNacionalidadAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtCategoriaAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
@@ -1127,6 +1139,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
      if(alumno!=null){
          txtIdAlumno.setText(""+alumno.getIdAlumno());
          txtNombresAlumno.setText(alumno.getNombreAlumno());
+         txtApellidosAlumno.setText(alumno.getApellidoAlumno());
          txtFechaNac.setText(Utils.getFechaFormateada(alumno.getFechaNacimiento()));
          txtNacionalidadAlumno.setText(alumno.getNacionalidad());
          jcbSexo.setSelectedItem(alumno.getSexo());
