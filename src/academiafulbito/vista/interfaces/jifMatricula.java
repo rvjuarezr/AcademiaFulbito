@@ -12,6 +12,14 @@
 package academiafulbito.vista.interfaces;
 
 import academiafulbito.controlador.beans.AlumnoFacade;
+import academiafulbito.controlador.beans.HorarioFacade;
+import academiafulbito.controlador.beans.MatriculaFacade;
+import academiafulbito.modelo.entidades.Matricula;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.List;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 import academiafulbito.modelo.entidades.Alumno;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
@@ -28,7 +36,6 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     /** Creates new form jifMatricula */
     JDesktopPane jDesktopPane;
     public static Alumno alumno ;
-    public static AlumnoFacade alumnoFacade;
 
     int indicador;//para saber si estamos en modo de edicion
 
@@ -36,13 +43,46 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     private int paginaActual = 1;
     private int tamanioPagina = 10;//para el paginado de tabla
     private int totalPaginas;
+    private MatriculaFacade matriculaFacade;
+    private AlumnoFacade alumnosFacade;
+    private HorarioFacade horarioFacade;
+    DefaultTableModel modelo;
+    String[] nombreColumnas = {
+        LiteralesTexto.LITERAL_ID,
+        LiteralesTexto.LITERAL_ID,//alumnos
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_APELLIDO,
+        LiteralesTexto.LITERAL_FECHA_NACIMIENTO,
+        LiteralesTexto.LITERAL_COLUMNA_CATEGORIA,
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_TELEFONO,
+        LiteralesTexto.LITERAL_ID,//horarios
+        LiteralesTexto.LITERAL_DIA,
+        LiteralesTexto.LITERAL_HORA_INI,
+        LiteralesTexto.LITERAL_HORA_FIN,
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_NOMBRE,
+        LiteralesTexto.LITERAL_TELEFONO,
+        LiteralesTexto.LITERAL_OBSERVACIONES,
+        LiteralesTexto.LITERAL_CODIGO_BARRAS,
+        LiteralesTexto.LITERAL_MONTO_PAGO,
+        LiteralesTexto.LITERAL_FECHA_PAGO,
+        LiteralesTexto.LITERAL_VER,
+        LiteralesTexto.LITERAL_EDITAR,
+        LiteralesTexto.LITERAL_ELIMINAR
+    };
+
     public jifMatricula(JDesktopPane jdpModAF) {
         initComponents();
         jDesktopPane = jdpModAF;
         Utils.cargarComboEstadoPago(jcbEstadoPago);
         Utils.cargarComboSexo(jcbSexo);
         accionBotones(false, false, false, false);
-        alumnoFacade =new AlumnoFacade();
+        matriculaFacade = new MatriculaFacade();
+        alumnosFacade = new AlumnoFacade();
+        horarioFacade = new HorarioFacade();
+        listarMatriculas(paginaActual, tamanioPagina);
     }
 
     /** This method is called from within the constructor to
@@ -61,7 +101,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         btnAnterior = new org.edisoncor.gui.button.ButtonRound();
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
         jspMatricula = new javax.swing.JScrollPane();
-        tblHorarios = new javax.swing.JTable();
+        tblMatriculas = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
@@ -108,7 +148,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jLabel23 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
-        jdcFechaMatricula = new com.toedter.calendar.JDateChooser();
+        jdchFechaMatricula = new com.toedter.calendar.JDateChooser();
         jLabel19 = new javax.swing.JLabel();
         txtMontoPago = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtCodBarras = new org.edisoncor.gui.textField.TextFieldRoundBackground();
@@ -165,16 +205,16 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         });
         jpListado.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 500, -1, 50));
 
-        tblHorarios.setModel(new javax.swing.table.DefaultTableModel(
+        tblMatriculas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
 
             }
-        ));
-        tblHorarios.setOpaque(false);
-        jspMatricula.setViewportView(tblHorarios);
+        ));        
+        tblMatriculas.setOpaque(false);
+        jspMatricula.setViewportView(tblMatriculas);
 
         jpListado.add(jspMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 1180, 420));
 
@@ -237,6 +277,11 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtDniAlumno.setEditable(false);
         txtDniAlumno.setDescripcion("DNI ALUMNO");
         txtDniAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtDniAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDniAlumnoActionPerformed(evt);
+            }
+        });
         txtDniAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtDniAlumnoKeyTyped(evt);
@@ -427,6 +472,11 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtNombresProf.setEditable(false);
         txtNombresProf.setDescripcion("NOMBRES Y APELLIDOS PROFESOR");
         txtNombresProf.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombresProf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombresProfActionPerformed(evt);
+            }
+        });
         txtNombresProf.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNombresProfKeyTyped(evt);
@@ -516,15 +566,13 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jLabel17.setText("FECHA DE MATRICULA");
         jPanel6.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 140, 20));
 
-        jdcFechaMatricula.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
-        jPanel6.add(jdcFechaMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 170, 30));
-
-        jLabel19.setText("MONTO DE PAGO");
+		jLabel19.setText("MONTO DE PAGO");
         jPanel6.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 100, 20));
 
         txtMontoPago.setBackground(new java.awt.Color(255, 255, 204));
         txtMontoPago.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtMontoPago.setEditable(false);
+        txtMontoPago.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtMontoPago.setDescripcion("S/ 0.00");
         txtMontoPago.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtMontoPago.addActionListener(new java.awt.event.ActionListener() {
@@ -585,7 +633,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         indicador = 0;//para poder guardar
         tphMatricula.setSelectedIndex(1);
-        /*limpiarCampos();*/
+        limpiarCampos();
         habilitarCampos(true);
         accionBotones(true, true, true, true);
 }//GEN-LAST:event_btnNuevaMatriculaActionPerformed
@@ -594,8 +642,9 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (paginaActual > 1) {
             paginaActual--;
-            //listarCategorias(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual, jfPrincipal.menuCategorias));
-            //listarCategorias(paginaActual, tamanioPagina);
+            //listarMatriculas(Utils.cargarPaginado(paginaActual, tamanioPagina, lblPaginaActual, jfPrincipal.menuCategorias));
+            listarMatriculas(paginaActual, tamanioPagina);
+
         }
 }//GEN-LAST:event_btnAnteriorActionPerformed
 
@@ -603,14 +652,15 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (paginaActual < totalPaginas) {
             paginaActual++;
-            //listarCategorias(paginaActual, tamanioPagina);
+            listarMatriculas(paginaActual, tamanioPagina);
+
         }
 }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        //limpiarCampos();
-        //habilitarCampos(false);
+        limpiarCampos();
+        habilitarCampos(false);
         tphMatricula.setSelectedIndex(0);
         accionBotones(false, false, false, false);
 }//GEN-LAST:event_btnCancelarActionPerformed
@@ -618,38 +668,38 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         try {
-            //if (validarDatosCategoria()) {
-            String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
-            if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
-                /*Horario horario;
-                switch (indicador) {
-                    case 0://registrar horario
-                        horario = new Horario();
-                        horarioFacade.guardarHorario(getDatosHorario(horario));
-                        Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
-                        break;
-                    case 1://actualizar horario
-                        horario = horarioFacade.findHorarioById(idSeleccionada);
-                        if(horario != null){
-                            horarioFacade.actualizarHorario(getDatosHorario(horario));
-                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+            if (validarDatosMatricula()) {
+                String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+                if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+                    Matricula matricula;
+                    switch (indicador) {
+                        case 0://registrar horario
+                            matricula = new Matricula();
+                            matriculaFacade.guardarMatricula(getDatosMatricula(matricula));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                            break;
+                        case 1://actualizar horario
+                            matricula = matriculaFacade.findMatriculaById(idSeleccionada);
+                            if(matricula != null){
+                                matriculaFacade.actualizarMatricula(getDatosMatricula(matricula));
+                                Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
 
-                        } else{
-                            Utils.mensajeError(LiteralesTexto.ERROR_AL_ACTUALIZAR_EL_REGISTRO);
-                        }
+                            } else{
+                                Utils.mensajeError(LiteralesTexto.ERROR_AL_ACTUALIZAR_EL_REGISTRO);
+                            }
 
-                        break;
+                            break;
+                    }
+
+                    listarMatriculas(paginaActual, tamanioPagina);
+                    limpiarCampos();
+                    habilitarCampos(false);
+                    accionBotones(false, false, false, false);
+                    btnGuardar.setText("Añadir");
+                    indicador = 0;
+                    tphMatricula.setSelectedIndex(0);
                 }
-
-                listarHorarios(paginaActual, tamanioPagina);
-                limpiarCampos();
-                habilitarCampos(false);
-                accionBotones(false, false, false, false, false);*/
-                btnGuardar.setText("Añadir");
-                indicador = 0;
-                tphMatricula.setSelectedIndex(0);
             }
-            //}
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -662,7 +712,6 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     private void btnConsultarMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarMatriculaActionPerformed
         // TODO add your handling code here:
         mostarDatosAlumno(txtDniAlumno.getText());
-        
     }//GEN-LAST:event_btnConsultarMatriculaActionPerformed
 
     private void txtDniAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniAlumnoKeyTyped
@@ -678,9 +727,11 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdAlumnoKeyTyped
 
+
     private void txtApellidosAlumnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosAlumnoKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txtApellidosAlumnoKeyTyped
+
 
     private void txtFechaNacKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFechaNacKeyTyped
         // TODO add your handling code here:
@@ -728,6 +779,30 @@ public class jifMatricula extends javax.swing.JInternalFrame {
 
     private void txtMontoPagoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoPagoKeyTyped
         // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        String valorMonto = txtMontoPago.getText();
+
+        // Permitir solo dígitos, un punto decimal y evitar más de un punto decimal
+        if (!Character.isDigit(c) && c != '.') {
+            evt.consume(); // Ignorar el evento de tecla
+        }
+
+        // Si ya existe un punto decimal, no permitir más de uno
+        if (c == '.' && valorMonto.contains(".")) {
+            evt.consume(); // Ignorar el evento de tecla
+        }
+
+        // Limitar el número total de caracteres (5 antes del punto decimal)
+        if (valorMonto.length() >= 7) {
+            evt.consume(); // Limitar a 7 caracteres (ej. 999.99)
+        }
+
+        // Limitar a 2 decimales si ya hay un punto
+        String texto = valorMonto;
+        int puntoPos = texto.indexOf(".");
+        if (puntoPos != -1 && texto.substring(puntoPos + 1).length() >= 2) {
+            evt.consume(); // Ignorar si hay más de 2 decimales
+        }
     }//GEN-LAST:event_txtMontoPagoKeyTyped
 
     private void txtCodBarrasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodBarrasKeyTyped
@@ -752,6 +827,14 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     private void txtMontoPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoPagoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMontoPagoActionPerformed
+
+    private void txtNombresProfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombresProfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombresProfActionPerformed
+
+    private void txtDniAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDniAlumnoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDniAlumnoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -793,13 +876,13 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstadoPago;
     private org.edisoncor.gui.comboBox.ComboBoxRound jcbSexo;
-    private com.toedter.calendar.JDateChooser jdcFechaMatricula;
+    private com.toedter.calendar.JDateChooser jdchFechaMatricula;
     private javax.swing.JPanel jpListado;
     private javax.swing.JScrollPane jspMatricula;
     private javax.swing.JLabel lblFotoAlumno;
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTextArea taObervaciones;
-    private javax.swing.JTable tblHorarios;
+    private javax.swing.JTable tblMatriculas;
     private javax.swing.JTabbedPane tphMatricula;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtApellidosAlumno;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtCancha;
@@ -828,8 +911,231 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         btnBuscarHorario.setEnabled(d);
     }
 
+    private boolean validarDatosMatricula(){
+        /*if(!validarCampo(txtIdAlumno.getText(), LiteralesTexto.ERROR_ID_CAMPO_VACIO)){
+            return false;
+        }
+
+        if(!validarCampo(txtIdHorario.getText(), LiteralesTexto.ERROR_ID_CAMPO_VACIO)){
+            return false;
+        }*/
+
+        if(!validarCampo(txtMontoPago.getText(), LiteralesTexto.ERROR_MONTO_NO_VALIDO)){
+            return false;
+        }
+
+        Date fechaSeleccionada = jdchFechaMatricula.getDate();
+        if (fechaSeleccionada == null) {
+            Utils.mensajeError(LiteralesTexto.ERROR_FECHA_NO_VALIDA);
+            return false;
+        }
+
+        if (!validarFecha(fechaSeleccionada)) return false;
+
+        return true;
+    }
+
+    private boolean validarCampo(String valor, String mensajeError) {
+        if (!Utils.validarCadena(valor)) {
+            Utils.mensajeError(mensajeError);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarFecha(Date fechaSeleccionada) {
+
+        /*Utiliza Calendar para establecer la fecha seleccionada y la fecha de hoy a medianoche,
+         asegurando así que la comparación se haga solo sobre la parte de la fecha
+         (sin horas, minutos, segundos o milisegundos).*/
+        Calendar calFechaSeleccionada = Calendar.getInstance();
+        calFechaSeleccionada.setTime(fechaSeleccionada);
+        calFechaSeleccionada.set(Calendar.HOUR_OF_DAY, 0);
+        calFechaSeleccionada.set(Calendar.MINUTE, 0);
+        calFechaSeleccionada.set(Calendar.SECOND, 0);
+        calFechaSeleccionada.set(Calendar.MILLISECOND, 0);
+
+        Calendar calHoy = Calendar.getInstance();
+        calHoy.set(Calendar.HOUR_OF_DAY, 0);
+        calHoy.set(Calendar.MINUTE, 0);
+        calHoy.set(Calendar.SECOND, 0);
+        calHoy.set(Calendar.MILLISECOND, 0);
+
+        Date fechaSeleccionadaSinTiempo = calFechaSeleccionada.getTime();
+        Date fechaHoySinTiempo = calHoy.getTime();
+
+        if (fechaSeleccionadaSinTiempo.before(fechaHoySinTiempo)) {
+            Utils.mensajeError(LiteralesTexto.ERROR_FECHA_RANGO);
+            return false;
+        }
+        return true;
+    }
+
+    private Matricula getDatosMatricula(Matricula matricula){
+        //matricula.setAlumno(alumnosFacade.findAlumnoById(Integer.parseInt(txtIdAlumno.getText())));
+        matricula.setAlumno(alumnosFacade.findAlumnoById(Integer.parseInt("2")));
+        matricula.setCodigoBarras(txtCodBarras.getText());
+        matricula.setFechaMatricula(jdchFechaMatricula.getDate());
+        //matricula.setHorario(horarioFacade.findHorarioById(Integer.parseInt(txtIdHorario.getText())));
+        matricula.setHorario(horarioFacade.findHorarioById(Integer.parseInt("3")));
+        matricula.setMontoPago(new BigDecimal(txtMontoPago.getText()));
+        matricula.setObservaciones(taObervaciones.getText());
+        return matricula;
+    }
+
+    private void listarMatriculas(int paginaActual, int tamanioPagina) {
+        totalPaginas = horarioFacade.obtenerTotalPaginas(tamanioPagina);
+
+        List<Matricula> listaMatriculas = matriculaFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+
+        // Actualizar el JLabel con la página actual
+        lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
+
+        // Mostrar en la tabla
+        listarMatriculas(listaMatriculas);
+        actualizarEstadoBotones();// Actualizar el estado de los botones
+
+    }
+
+    private void actualizarEstadoBotones() {
+        btnAnterior.setEnabled(paginaActual > 1);
+        btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
+    private void listarMatriculas(List<Matricula> lista){
+        // Selecciona el primer tab en un JTabbedPane
+        tphMatricula.setSelectedIndex(0);
+
+        modelo = Utils.generarModeloTabla(nombreColumnas);
+
+        // Asignar el modelo a la tabla
+        tblMatriculas.setModel(modelo);
+        // Asegurar que la cabecera de la tabla se muestre y se mueva
+        jspMatricula.setColumnHeaderView(tblMatriculas.getTableHeader());
+
+        int[] anchoColumnas = {15, 15, 20, 30, 20, 20,40,15, 20,20,20,20,20,40,15,25,20, 20,20, 10, 15,15,15}; // Anchos específicos para cada columna
+        Utils.setAnchoColumnas(tblMatriculas, anchoColumnas);
+        Utils.ocultarColumnas(tblMatriculas, 0);//ocultar la primera columna
+        Utils.ocultarColumnas(tblMatriculas, 1);//
+        Utils.ocultarColumnas(tblMatriculas, 4);
+        Utils.ocultarColumnas(tblMatriculas, 5);
+        Utils.ocultarColumnas(tblMatriculas, 6);
+        Utils.ocultarColumnas(tblMatriculas, 7);//
+        Utils.ocultarColumnas(tblMatriculas, 8);
+        Utils.ocultarColumnas(tblMatriculas, 12);
+        Utils.ocultarColumnas(tblMatriculas, 13);
+        Utils.ocultarColumnas(tblMatriculas, 14);
+        Utils.ocultarColumnas(tblMatriculas, 15);
+        Utils.ocultarColumnas(tblMatriculas, 16);
+        Utils.ocultarColumnas(tblMatriculas, 17);
+
+        // limpia los datos existentes en la tabla.
+        Utils.limpiarModeloTabla(modelo, tblMatriculas);
+
+        // Verificar si la lista de socios tiene elementos
+        if (lista.size() > 0) {
+
+            // Iterar sobre la lista de canchas y agregar cada cancha a la tabla
+            for (Matricula matricula : lista) {
+
+                // Crea un array de objetos con los datos de la cancha para agregar a la tabla.
+                Object[] fila = new Object[]{
+                    matricula.getIdMatricula(),
+                    //datos del alumno
+                    matricula.getAlumno().getIdAlumno(),
+                    //dni
+                    matricula.getAlumno().getNombreAlumno(),
+                    matricula.getAlumno().getApellidoAlumno(),
+                    Utils.getFechaFormateada(matricula.getAlumno().getFechaNacimiento()),
+                    //nacionalidad
+                    matricula.getAlumno().getCategoria(),
+                    //edad caluclar
+                    //sexo
+                    matricula.getAlumno().getPadre().getNombrePadre()+matricula.getAlumno().getPadre().getApellidoPadre(),
+                    matricula.getAlumno().getPadre().getTelefono(),
+                    //datos del horario
+                    matricula.getHorario().getIdHorario(),
+                    matricula.getHorario().getDia(),
+                    matricula.getHorario().getHoraInicio(),
+                    matricula.getHorario().getHoraFin(),
+                    matricula.getHorario().getCancha().getId_lugar().getNombre(),
+                    matricula.getHorario().getCancha().getNombre(),
+                    matricula.getHorario().getProfesor().getNombreProfesor()+matricula.getHorario().getProfesor().getApellidoProfesor(),
+                    matricula.getHorario().getProfesor().getTelefono(),
+                    //--
+                    matricula.getObservaciones(),
+                    matricula.getCodigoBarras(),
+                    matricula.getMontoPago().toString(),
+                    matricula.getFechaMatricula(),
+                    //estado del pago
+                    LiteralesTexto.LITERAL_VER,
+                    LiteralesTexto.LITERAL_EDITAR,
+                    LiteralesTexto.LITERAL_ELIMINAR
+                };
+                modelo.addRow(fila); // Agregar la fila al modelo de la tabla
+            }
+            // Establece un renderizador personalizado para las celdas de la tabla.
+            tblMatriculas.setDefaultRenderer(Object.class, new Utils(18));
+
+            // Establece el modo de selección de filas para permitir solo una selección a la vez.
+            tblMatriculas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+            Utils.configurarEstiloTabla(tblMatriculas, jspMatricula);
+            Utils.configurarBotonesAccion(tblMatriculas);
+
+
+        }
+    }
+
+    private void habilitarCampos(boolean band){
+        if(indicador == 0){
+            jcbEstadoPago.setSelectedIndex(0);
+            jcbEstadoPago.setEnabled(band);
+            jcbSexo.setSelectedIndex(0);
+            jcbSexo.setEnabled(band);
+        } else{
+            jcbEstadoPago.setEnabled(band);
+            jcbSexo.setEnabled(band);
+        }
+
+        txtDniAlumno.setEditable(band);
+        jdchFechaMatricula.setEnabled(band);
+        txtMontoPago.setEditable(band);
+        txtCodBarras.setEditable(band);
+        taObervaciones.setEditable(band);
+    }
+
+    private void limpiarCampos(){
+        txtDniAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        //datos del alumno
+        txtIdAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombresAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtApellidosAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtFechaNac.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNacionalidadAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtCategoriaAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtEdadAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        jcbSexo.setSelectedIndex(0);
+        txtNombresPadre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtTelefPadre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        //datos del horario
+        txtIdHorario.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtDiasHorarioProf.setText(title);
+        txtLugarEntrenamiento.setText(title);
+        txtCancha.setText(title);
+        txtNombresProf.setText(title);
+        txtTelefProfesor.setText(title);
+        //--
+        taObervaciones.setText(title);
+        jcbEstadoPago.setSelectedIndex(0);
+        txtCodBarras.setText(title);
+        txtMontoPago.setText(title);
+        jdchFechaMatricula.setDate(Utils.getFechaActual());
+        lblFotoAlumno.setIcon(null);
+    }
+
     private void mostarDatosAlumno(String dni){
-     alumno=alumnoFacade.findAlumnoByDni(dni);
+     alumno=alumnosFacade.findAlumnoByDni(dni);
      if(alumno!=null){
          txtIdAlumno.setText(""+alumno.getIdAlumno());
          txtNombresAlumno.setText(alumno.getNombreAlumno());
@@ -846,10 +1152,5 @@ public class jifMatricula extends javax.swing.JInternalFrame {
            int edad = Utils.calcularEdad(fechaNacimiento);
            txtEdadAlumno.setText(String.valueOf(edad)); // Convierte la edad a String
      }
-    }
-
-    private void habilitarCampos(boolean band) {
-        txtDniAlumno.setEditable(band);
-
     }
 }

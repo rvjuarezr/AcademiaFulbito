@@ -6,6 +6,7 @@
 package academiafulbito.modelo.entidades;
 
 import academiafulbito.modelo.enums.EstadoPago;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,6 +51,15 @@ public class Matricula {
     @Column(name = "estado")
     private EstadoPago estado;
 
+    @Column(name = "observaciones", columnDefinition = "LONGTEXT")
+    private String observaciones;
+
+    @Column(name = "monto_pago", precision = 10, scale = 2, nullable = false)
+    private BigDecimal montoPago;
+
+    @Column(name = "codigo_barras", length = 100)
+    private String codigoBarras;
+    
     // Constructor vacío
     public Matricula() {}
 
@@ -85,6 +95,30 @@ public class Matricula {
 
     public void setHorario(Horario horario) {
         this.horario = horario;
+    }
+    
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public BigDecimal getMontoPago() {
+        return montoPago;
+    }
+
+    public void setMontoPago(BigDecimal montoPago) {
+        this.montoPago = montoPago;
+    }
+
+    public String getCodigoBarras() {
+        return codigoBarras;
+    }
+
+    public void setCodigoBarras(String codigoBarras) {
+        this.codigoBarras = codigoBarras;
     }
 
     @Override

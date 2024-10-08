@@ -78,6 +78,11 @@ public class LiteralesTexto {
     public static final String LITERAL_NOMBRE_LUGAR = "Nombre Lugar";
     public static final String LITERAL_DNI = "DNI";
     public static final String ERROR_DNI_CAMPO_VACIO = "Debe de escribir un dni valido!";
+    public static final String ERROR_MONTO_NO_VALIDO = "Debe de escribir un MONTO valido!";
+    public static final String LITERAL_FECHA_PAGO = "FEC_PAGO";
+    public static final String LITERAL_MONTO_PAGO = "PAGO";
+    public static final String LITERAL_OBSERVACIONES = "OBSERVACIONES";
+    public static final String LITERAL_CODIGO_BARRAS = "COD. BARRAS";
     public static final String LITERAL_SEXO = "SEXO";
     public static final String LITERAL_NACIONALIDAD = "NACIONALIDAD";
     public static final String ERROR_NACIONALIDAD_CAMPO_VACIO = "Debe de escribir una nacionalidad valida!";

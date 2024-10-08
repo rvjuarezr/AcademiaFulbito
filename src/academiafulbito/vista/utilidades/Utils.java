@@ -312,6 +312,10 @@ public class Utils extends DefaultTableCellRenderer{
         }
     }
 
+    public static Date getFechaActual(){
+        return new Date();
+    }
+
     public static int calcularEdad(Date fechaNacimiento) {
         if (fechaNacimiento == null) {
             throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula");
@@ -335,5 +339,5 @@ public class Utils extends DefaultTableCellRenderer{
 
         return edad;
     }
-
+    
 }
