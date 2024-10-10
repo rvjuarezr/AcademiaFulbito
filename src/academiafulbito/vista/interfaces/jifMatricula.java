@@ -972,12 +972,10 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     }
 
     private Matricula getDatosMatricula(Matricula matricula){
-        //matricula.setAlumno(alumnosFacade.findAlumnoById(Integer.parseInt(txtIdAlumno.getText())));
-        matricula.setAlumno(alumnosFacade.findAlumnoById(Integer.parseInt("2")));
+        matricula.setAlumno(alumnosFacade.findAlumnoById(Integer.parseInt(txtIdAlumno.getText())));
         matricula.setCodigoBarras(txtCodBarras.getText());
         matricula.setFechaMatricula(jdchFechaMatricula.getDate());
-        //matricula.setHorario(horarioFacade.findHorarioById(Integer.parseInt(txtIdHorario.getText())));
-        matricula.setHorario(horarioFacade.findHorarioById(Integer.parseInt("3")));
+        matricula.setHorario(horarioFacade.findHorarioById(Integer.parseInt(txtIdHorario.getText())));
         matricula.setMontoPago(new BigDecimal(txtMontoPago.getText()));
         matricula.setObservaciones(taObervaciones.getText());
         return matricula;
@@ -1120,16 +1118,16 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtTelefPadre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         //datos del horario
         txtIdHorario.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtDiasHorarioProf.setText(title);
-        txtLugarEntrenamiento.setText(title);
-        txtCancha.setText(title);
-        txtNombresProf.setText(title);
-        txtTelefProfesor.setText(title);
+        txtDiasHorarioProf.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtLugarEntrenamiento.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtCancha.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombresProf.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtTelefProfesor.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         //--
-        taObervaciones.setText(title);
+        taObervaciones.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         jcbEstadoPago.setSelectedIndex(0);
-        txtCodBarras.setText(title);
-        txtMontoPago.setText(title);
+        txtCodBarras.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtMontoPago.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         jdchFechaMatricula.setDate(Utils.getFechaActual());
         lblFotoAlumno.setIcon(null);
     }
