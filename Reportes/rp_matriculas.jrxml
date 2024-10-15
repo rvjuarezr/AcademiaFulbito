@@ -3,14 +3,14 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="dniAlumno" class="java.lang.String"/>
+	<parameter name="idMatricula" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select concat(a.Nombre,',',a.Apellido) as nombres_alumno, c.Nombre as categoria_alumno,a.nacionalidad as nacionalidad_alumno,
 a.Fecha_nacimiento as fec_nac_alumno, a.sexo as sexo_alumno, p.Telefono as telefono_alumno from bdacademiafulbito.matricula m
 inner join bdacademiafulbito.alumno a on m.ID_alumno = a.ID_alumno
 inner join bdacademiafulbito.categoria c on a.ID_categoria = c.ID_categoria
 inner join bdacademiafulbito.padre p on a.ID_padre = p.ID_padre
-where m.ID_matricula = $P{dniAlumno};]]>
+where m.ID_matricula = $P{idMatricula};]]>
 	</queryString>
 	<field name="nombres_alumno" class="java.lang.String"/>
 	<field name="categoria_alumno" class="java.lang.String"/>
@@ -113,18 +113,6 @@ where m.ID_matricula = $P{dniAlumno};]]>
 				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="120" y="91" width="163" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{telefono_alumno}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="289" y="92" width="108" height="20"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DNI:]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="ad39389c-d56e-4f48-92eb-ba9060ad6973" x="397" y="92" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{dniAlumno}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

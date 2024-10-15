@@ -11,6 +11,7 @@ import academiafulbito.vista.interfaces.jifCanchas;
 import academiafulbito.vista.interfaces.jifCategorias;
 import academiafulbito.vista.interfaces.jifHorario;
 import academiafulbito.vista.interfaces.jifLugarEntrenamiento;
+import academiafulbito.vista.interfaces.jifMatricula;
 import academiafulbito.vista.interfaces.jifPadres;
 import academiafulbito.vista.interfaces.jifProfesores;
 import java.awt.Component;
@@ -168,6 +169,10 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         }
         if (jfPrincipal.menuCanchas instanceof jifCanchas) {
             jfPrincipal.menuCanchas.mostrarInformacionCancha(selectedRow); // Llama al método en el JInternalFrame
+        }
+
+        if (jfPrincipal.menuMatricula instanceof jifMatricula) {
+            jfPrincipal.menuMatricula.mostrarInformacionMatricula(selectedRow); // Llama al método en el JInternalFrame
         }
     }
 }
