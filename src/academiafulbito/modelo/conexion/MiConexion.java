@@ -27,6 +27,7 @@ public class MiConexion {
     private static String dbDriver = "com.mysql.jdbc.Driver";     //Controlador jdbc para bd relacional
     private static String nombreDeUsuario;
     private static String claveDeUsuario;
+    public static String rutaReportes;
 
     public static void cargarPropiedades() {
         Properties prop = new Properties();
@@ -41,9 +42,10 @@ public class MiConexion {
             prop.load(fis);
             nombreDeUsuario = prop.getProperty("db.user");
             claveDeUsuario = prop.getProperty("db.password");
+            rutaReportes = prop.getProperty("reportes");
 
-            if (nombreDeUsuario == null || claveDeUsuario == null) {
-                throw new IOException("Propiedades de usuario o clave no están definidas en config.properties");
+            if (nombreDeUsuario == null || claveDeUsuario == null || rutaReportes == null) {
+                throw new IOException("Propiedades de usuario o clave o reportes no están definidas en config.properties");
             }
         } catch (IOException ex) {
             Logger.getLogger(MiConexion.class.getName()).log(Level.SEVERE, "Error al leer config.properties", ex);

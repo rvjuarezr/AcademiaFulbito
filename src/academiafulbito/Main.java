@@ -7,6 +7,7 @@ package academiafulbito;
 
 import academiafulbito.modelo.conexion.MiConexion;
 import academiafulbito.vista.logueo.JFLogin;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,15 +18,13 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-    public static MiConexion miConexion;
-
+    public static Connection miConexion;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         MiConexion.cargarPropiedades(); // Cargar las propiedades antes de intentar la conexión
-        miConexion = new MiConexion();
-        MiConexion.obtenerConexion();
+        miConexion = MiConexion.obtenerConexion();
 
         java.awt.EventQueue.invokeLater(new Runnable() {
 
