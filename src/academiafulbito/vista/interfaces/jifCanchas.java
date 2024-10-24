@@ -189,11 +189,6 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         txtIdLugarE.setEditable(false);
         txtIdLugarE.setDescripcion("Id*");
         txtIdLugarE.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtIdLugarE.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtIdLugarEKeyTyped(evt);
-            }
-        });
         jPanel2.add(txtIdLugarE, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 110, 50));
 
         btnBucarLugarE.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/lupa.png"))); // NOI18N
@@ -238,12 +233,6 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 220, 40));
-
-        txtIdCancha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdCanchaActionPerformed(evt);
-            }
-        });
         jPanel2.add(txtIdCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 50, -1));
         txtIdCancha.setVisible(false);
 
@@ -293,10 +282,6 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         char c = evt.getKeyChar();
         evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
 }//GEN-LAST:event_txtNombreLugarEKeyTyped
-
-    private void txtIdLugarEKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdLugarEKeyTyped
-        // TODO add your handling code here:
-}//GEN-LAST:event_txtIdLugarEKeyTyped
 
     private void btnBucarLugarEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBucarLugarEActionPerformed
         // TODO add your handling code here:
@@ -368,10 +353,6 @@ public class jifCanchas extends javax.swing.JInternalFrame {
                 break;
         }
     }//GEN-LAST:event_tblCanchaMouseClicked
-
-    private void txtIdCanchaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdCanchaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdCanchaActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
@@ -509,21 +490,6 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         txtNombreCancha.setText(tblCancha.getValueAt(filaSeleccionada, 1).toString());
         txtIdLugarE.setText(tblCancha.getValueAt(filaSeleccionada, 2).toString());
         txtNombreLugarE.setText(tblCancha.getValueAt(filaSeleccionada, 3).toString());
-
-        // Supongamos que tienes un modelo de tabla que almacena los datos.
-        /*String nombreLugar = (String) tblCancha.getValueAt(filaSeleccionada, 3); // Ajusta el índice de columna según tu tabla
-        String nombreCancha = (String)tblCancha.getValueAt(filaSeleccionada, 1).toString();
-        Estado estado = (Estado)tblCancha.getValueAt(filaSeleccionada, 4);
-
-        // Crear un mapa con los datos a mostrar
-        Map<String, String> datos = new LinkedHashMap<String, String>(5);
-        datos.put("Nombre Cancha:", nombreCancha);
-        datos.put("Nombre Lugar:", nombreLugar);
-        datos.put("Estado:", estado.toString());
-
-        // Llamar al método genérico para mostrar la información
-        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE CANCHA", datos, 18, 20);*/
     }
     public void eliminarCanchaSeleccionada(int filaSeleccionada) {
         if (filaSeleccionada != -1) {
