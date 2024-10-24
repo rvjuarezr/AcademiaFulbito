@@ -15,9 +15,11 @@ import academiafulbito.controlador.beans.CanchaFacade;
 import academiafulbito.controlador.beans.LugarEntrenamientoFacade;
 import academiafulbito.modelo.entidades.Cancha;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,6 +93,8 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         btnGuardar = new org.edisoncor.gui.button.ButtonRound();
         txtNombreCancha = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
+        txtIdCancha = new org.edisoncor.gui.textField.TextField();
+        btnReporte = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 204, 255));
         setClosable(true);
@@ -185,11 +189,6 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         txtIdLugarE.setEditable(false);
         txtIdLugarE.setDescripcion("Id*");
         txtIdLugarE.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtIdLugarE.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtIdLugarEKeyTyped(evt);
-            }
-        });
         jPanel2.add(txtIdLugarE, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 110, 50));
 
         btnBucarLugarE.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/lupa.png"))); // NOI18N
@@ -234,6 +233,17 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 220, 40));
+        jPanel2.add(txtIdCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 50, -1));
+        txtIdCancha.setVisible(false);
+
+        btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnReporte.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, -1, -1));
 
         tphCancha.addTab("REGISTRO", jPanel2);
 
@@ -272,10 +282,6 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         char c = evt.getKeyChar();
         evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
 }//GEN-LAST:event_txtNombreLugarEKeyTyped
-
-    private void txtIdLugarEKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdLugarEKeyTyped
-        // TODO add your handling code here:
-}//GEN-LAST:event_txtIdLugarEKeyTyped
 
     private void btnBucarLugarEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBucarLugarEActionPerformed
         // TODO add your handling code here:
@@ -348,6 +354,15 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tblCanchaMouseClicked
 
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+        // TODO add your handling code here:
+        Map parametros = new HashMap();
+        parametros.put("idCancha", txtIdCancha.getText()); // Ejemplo de parámetro para el reporte
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_canchas.jasper");
+
+    }//GEN-LAST:event_btnReporteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
@@ -355,6 +370,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
     private org.edisoncor.gui.button.ButtonRound btnNuevoHorario;
+    private javax.swing.JButton btnReporte;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -364,6 +380,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblCancha;
     private javax.swing.JTabbedPane tphCancha;
+    private org.edisoncor.gui.textField.TextField txtIdCancha;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdLugarE;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCancha;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreLugarE;
@@ -467,21 +484,12 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         return cancha;
     }
     public void mostrarInformacionCancha(int filaSeleccionada) {
-
-        // Supongamos que tienes un modelo de tabla que almacena los datos.
-        String nombreLugar = (String) tblCancha.getValueAt(filaSeleccionada, 3); // Ajusta el índice de columna según tu tabla
-        String nombreCancha = (String)tblCancha.getValueAt(filaSeleccionada, 1).toString();
-        Estado estado = (Estado)tblCancha.getValueAt(filaSeleccionada, 4);
-
-        // Crear un mapa con los datos a mostrar
-        Map<String, String> datos = new LinkedHashMap<String, String>(5);
-        datos.put("Nombre Cancha:", nombreCancha);
-        datos.put("Nombre Lugar:", nombreLugar);
-        datos.put("Estado:", estado.toString());
-
-        // Llamar al método genérico para mostrar la información
-        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE CANCHA", datos, 18, 20);
+        tphCancha.setSelectedIndex(1);
+        txtIdCancha.setText(tblCancha.getValueAt(filaSeleccionada, 0).toString());
+        //datos del alumno
+        txtNombreCancha.setText(tblCancha.getValueAt(filaSeleccionada, 1).toString());
+        txtIdLugarE.setText(tblCancha.getValueAt(filaSeleccionada, 2).toString());
+        txtNombreLugarE.setText(tblCancha.getValueAt(filaSeleccionada, 3).toString());
     }
     public void eliminarCanchaSeleccionada(int filaSeleccionada) {
         if (filaSeleccionada != -1) {

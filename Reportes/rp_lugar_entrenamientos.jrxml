@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_matriculas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfa77bb9-9c62-437c-a840-d77c46f24c18">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_lugar" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select le.Nombre as nombre_lugar, le.Direccion as Direccion, le.Ubigeo as Ubigeo, le.estado as Estado
+from bdacademiafulbito.lugar_entrenamiento le
+where le.ID_lugar = $P{ID_lugar};]]>
+	</queryString>
+	<field name="nombre_lugar" class="java.lang.String"/>
+	<field name="Direccion" class="java.lang.String"/>
+	<field name="Ubigeo" class="java.lang.String"/>
+	<field name="Estado" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="69e493b6-b2a2-4476-8507-b59f5aa2c588" x="67" y="13" width="458" height="24"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LISTADO DE LUGAR DE ENTRENAMIENTOS]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="140" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="15" y="10" width="266" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DEL LUGAR ENTRENAM.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="13" y="33" width="146" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DE LUGAR E.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="170" y="33" width="163" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nombre_lugar}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="52" width="108" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="170" y="52" width="163" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Direccion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="92" width="108" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="170" y="92" width="163" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Estado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="72" width="108" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UBIGEO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="169" y="76" width="163" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Ubigeo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

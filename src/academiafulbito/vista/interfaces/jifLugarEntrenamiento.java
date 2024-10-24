@@ -14,6 +14,7 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.LugarEntrenamientoFacade;
 import academiafulbito.modelo.entidades.LugarEntrenamiento;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
@@ -84,6 +85,8 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
+        txtIdLugarEntrenamiento = new javax.swing.JTextField();
+        btnImprimirLugarEntrenamiento = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -167,11 +170,6 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         txtDireccion.setEditable(false);
         txtDireccion.setDescripcion("Dirección*");
         txtDireccion.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtDireccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDireccionActionPerformed(evt);
-            }
-        });
         jPanel2.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
 
         txtUbigeo.setEditable(false);
@@ -212,6 +210,17 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
+        jPanel2.add(txtIdLugarEntrenamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 50, -1));
+        txtIdLugarEntrenamiento.setVisible(false);
+
+        btnImprimirLugarEntrenamiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimirLugarEntrenamiento.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimirLugarEntrenamiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirLugarEntrenamientoActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnImprimirLugarEntrenamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 0, -1, -1));
 
         tphLugarEntrenamientos.addTab("REGISTRO", jPanel2);
 
@@ -282,10 +291,6 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
-    private void txtDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDireccionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDireccionActionPerformed
-
     private void tblLugarEntrenamientosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLugarEntrenamientosMouseClicked
         // TODO add your handling code here:
         switch(permiteSelFila){
@@ -305,11 +310,20 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tblLugarEntrenamientosMouseClicked
 
+    private void btnImprimirLugarEntrenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirLugarEntrenamientoActionPerformed
+        // TODO add your handling code here:
+        Map parametros = new HashMap();
+        parametros.put("ID_lugar", txtIdLugarEntrenamiento.getText()); // Ejemplo de parámetro para el reporte
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_lugar_entrenamientos.jasper");
+    }//GEN-LAST:event_btnImprimirLugarEntrenamientoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
+    private javax.swing.JButton btnImprimirLugarEntrenamiento;
     private org.edisoncor.gui.button.ButtonRound btnNuevaLugarEntrenamiento;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
@@ -321,6 +335,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
     private javax.swing.JTable tblLugarEntrenamientos;
     private javax.swing.JTabbedPane tphLugarEntrenamientos;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtDireccion;
+    private javax.swing.JTextField txtIdLugarEntrenamiento;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtUbigeo;
     // End of variables declaration//GEN-END:variables
@@ -489,22 +504,11 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
 
 
     public void mostrarInformacionLugarE(int filaSeleccionada) {
-
-        // Supongamos que tienes un modelo de tabla que almacena los datos.
-        String nombreLugar = (String) tblLugarEntrenamientos.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
-        String direccion = (String)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 2).toString();
-        String ubigeo = (String)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 3).toString();
-        Estado estado = (Estado)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 4);
-
-        // Crear un mapa con los datos a mostrar
-        Map<String, String> datos = new HashMap<String, String>(5);
-        datos.put("Nombre:", nombreLugar);
-        datos.put("Direccion:", direccion);
-        datos.put("Ubigeo", ubigeo);
-        datos.put("Estado:", estado.toString());
-
-        // Llamar al método genérico para mostrar la información
-        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE LUGAR ENTRENAM.", datos, 18, 20);
+        tphLugarEntrenamientos.setSelectedIndex(1);
+        txtIdLugarEntrenamiento.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 0).toString());
+        //datos del alumno
+        txtNombre.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 1).toString());
+        txtDireccion.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 2).toString());
+        txtUbigeo.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 3).toString());
     }
 }

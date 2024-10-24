@@ -29,15 +29,13 @@ public class Reportes {
     }
 
     // Método para cargar el reporte y generar JasperPrint
-    public static JasperPrint cargarReporte(String rutaReporte, Map<String, Object> parametros, Connection conexion) throws JRException {
+    public static JasperPrint cargarReporte(String rutaReporte, String nombreJasper, Map<String, Object> parametros, Connection conexion) throws JRException {
         System.out.println("rutaReporte:"+rutaReporte);
         // Cargar el archivo .jasper desde la ruta especificada
-        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(rutaReporte);
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(rutaReporte+nombreJasper);
 
         // Agregar el directorio de subreportes a los parámetros si es necesario
-        if (parametros != null && !parametros.containsKey("SUBREPORT_DIR")) {
-            parametros.put("SUBREPORT_DIR", rutaReporte.substring(0, rutaReporte.lastIndexOf('/') + 1));
-        }
+        parametros.put("SUBREPORT_DIR", rutaReporte);
 
         // Generar y llenar el reporte con datos y parámetros
         return JasperFillManager.fillReport(jasperReport, parametros, conexion);
@@ -55,7 +53,7 @@ public class Reportes {
     // Método principal que integra la lógica de conexión, carga y visualización del reporte
     public static void imprimirReporte(Map<String, Object> parametros, String jasper) {
         try {
-            JasperPrint reporteLleno = cargarReporte(MiConexion.rutaReportes+jasper, parametros, Main.miConexion);
+            JasperPrint reporteLleno = cargarReporte(MiConexion.rutaReportes, jasper, parametros, Main.miConexion);
             mostrarReporte(reporteLleno, "Reporte Academia Fulbito");
         } catch (JRException e) {
             Utils.mensajeError("NO SE HA CARGADO SU REPORTE");

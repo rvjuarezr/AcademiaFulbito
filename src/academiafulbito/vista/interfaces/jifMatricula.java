@@ -21,6 +21,8 @@ import java.util.List;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import academiafulbito.modelo.entidades.Alumno;
+import academiafulbito.modelo.enums.EstadoPago;
+import academiafulbito.modelo.enums.Sexo;
 import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
@@ -57,7 +59,10 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_NOMBRE,
         LiteralesTexto.LITERAL_APELLIDO,
         LiteralesTexto.LITERAL_FECHA_NACIMIENTO,
+        LiteralesTexto.LITERAL_NACIONALIDAD,
         LiteralesTexto.LITERAL_COLUMNA_CATEGORIA,
+        LiteralesTexto.LITERAL_EDAD_MAX,
+        LiteralesTexto.LITERAL_SEXO,
         LiteralesTexto.LITERAL_NOMBRE,
         LiteralesTexto.LITERAL_TELEFONO,
         LiteralesTexto.LITERAL_ID,//horarios
@@ -72,6 +77,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_CODIGO_BARRAS,
         LiteralesTexto.LITERAL_MONTO_PAGO,
         LiteralesTexto.LITERAL_FECHA_PAGO,
+        LiteralesTexto.LITERAL_ESTADO,
         LiteralesTexto.LITERAL_VER,
         LiteralesTexto.LITERAL_EDITAR,
         LiteralesTexto.LITERAL_ELIMINAR
@@ -166,6 +172,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jLabel21 = new javax.swing.JLabel();
         btnImprimirMatricula = new javax.swing.JButton();
         txtIdMatricula = new javax.swing.JTextField();
+        btnFoto = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("MATRICULA DEL ALUMNO");
@@ -322,6 +329,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtIdAlumno.setBackground(new java.awt.Color(255, 255, 204));
         txtIdAlumno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtIdAlumno.setEditable(false);
+        txtIdAlumno.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtIdAlumno.setDescripcion("ID");
         txtIdAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtIdAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -347,14 +355,15 @@ public class jifMatricula extends javax.swing.JInternalFrame {
                 txtApellidosAlumnoKeyTyped(evt);
             }
         });
-        jPanel3.add(txtApellidosAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, 400, 50));
+        jPanel3.add(txtApellidosAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, 370, 50));
 
         jLabel6.setText("FEC. NAC");
-        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 20, 60, 20));
+        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 20, 60, 20));
 
         txtFechaNac.setBackground(new java.awt.Color(255, 255, 204));
         txtFechaNac.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtFechaNac.setEditable(false);
+        txtFechaNac.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtFechaNac.setDescripcion("DD-MM-YYYY");
         txtFechaNac.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtFechaNac.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -362,7 +371,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
                 txtFechaNacKeyTyped(evt);
             }
         });
-        jPanel3.add(txtFechaNac, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 40, 170, 50));
+        jPanel3.add(txtFechaNac, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 40, 140, 50));
 
         jLabel7.setText("NACIONALIDAD:");
         jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 280, 20));
@@ -382,6 +391,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtEdadAlumno.setBackground(new java.awt.Color(255, 255, 204));
         txtEdadAlumno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtEdadAlumno.setEditable(false);
+        txtEdadAlumno.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtEdadAlumno.setDescripcion("EDAD");
         txtEdadAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtEdadAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -389,20 +399,21 @@ public class jifMatricula extends javax.swing.JInternalFrame {
                 txtEdadAlumnoKeyTyped(evt);
             }
         });
-        jPanel3.add(txtEdadAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 110, 110, 50));
+        jPanel3.add(txtEdadAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 110, 180, 50));
 
         jLabel8.setText("SEXO");
-        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 90, 100, 20));
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 20, 40, 20));
 
         jLabel9.setText("NOMBRES Y APELLIDOS DEL PADRE");
         jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 280, 20));
 
         jLabel10.setText("TELEF. PADRE");
-        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 160, 100, 20));
+        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 160, 100, 20));
 
         txtTelefPadre.setBackground(new java.awt.Color(255, 255, 204));
         txtTelefPadre.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtTelefPadre.setEditable(false);
+        txtTelefPadre.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtTelefPadre.setDescripcion("TELEF. PADRE");
         txtTelefPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtTelefPadre.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -410,7 +421,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
                 txtTelefPadreKeyTyped(evt);
             }
         });
-        jPanel3.add(txtTelefPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 180, 180, 50));
+        jPanel3.add(txtTelefPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 180, 320, 50));
 
         txtNombresPadre.setBackground(new java.awt.Color(255, 255, 204));
         txtNombresPadre.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -422,10 +433,10 @@ public class jifMatricula extends javax.swing.JInternalFrame {
                 txtNombresPadreKeyTyped(evt);
             }
         });
-        jPanel3.add(txtNombresPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 800, 50));
+        jPanel3.add(txtNombresPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 660, 50));
 
         jLabel11.setText("EDAD");
-        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 90, 100, 20));
+        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 90, 100, 20));
 
         jLabel12.setText("CATEGORIA:");
         jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 90, 180, 20));
@@ -440,37 +451,38 @@ public class jifMatricula extends javax.swing.JInternalFrame {
                 txtCategoriaAlumnoKeyTyped(evt);
             }
         });
-        jPanel3.add(txtCategoriaAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 110, 400, 50));
+        jPanel3.add(txtCategoriaAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 110, 370, 50));
 
         jcbSexo.setBackground(new java.awt.Color(255, 255, 204));
         jcbSexo.setEnabled(false);
-        jcbSexo.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jcbSexo.setFont(new java.awt.Font("Bookman Old Style", 1, 14)); // NOI18N
         jcbSexo.setOpaque(true);
-        jPanel3.add(jcbSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 110, 180, 50));
+        jPanel3.add(jcbSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 40, 180, 50));
 
         txtDniAlumno.setBackground(new java.awt.Color(255, 255, 204));
         txtDniAlumno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtDniAlumno.setEditable(false);
-        txtDniAlumno.setDescripcion("DD-MM-YYYY");
-        txtDniAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtDniAlumno.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtDniAlumno.setDescripcion(" ");
+        txtDniAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         txtDniAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtDniAlumnoKeyTyped(evt);
             }
         });
-        jPanel3.add(txtDniAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 40, 110, 50));
+        jPanel3.add(txtDniAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 110, 140, 50));
 
         jLabel24.setText("DNI");
-        jPanel3.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 20, -1, 20));
+        jPanel3.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 90, 40, 20));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 1000, 240));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 204), 1, true), "Foto Alumno", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Bookman Old Style", 0, 12))); // NOI18N
         jPanel4.setOpaque(false);
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel4.add(lblFotoAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 170, 210));
+        jPanel4.add(lblFotoAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 170, 200));
 
-        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 100, 190, 240));
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 100, 190, 230));
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true), "Horarios y Datos de Entrenamiento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Bookman Old Style", 0, 12))); // NOI18N
         jPanel5.setOpaque(false);
@@ -511,8 +523,9 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtTelefProfesor.setBackground(new java.awt.Color(255, 255, 204));
         txtTelefProfesor.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtTelefProfesor.setEditable(false);
+        txtTelefProfesor.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtTelefProfesor.setDescripcion("TELEF. PROF.");
-        txtTelefProfesor.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtTelefProfesor.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         txtTelefProfesor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtTelefProfesorKeyTyped(evt);
@@ -521,7 +534,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jPanel5.add(txtTelefProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 110, 190, 50));
 
         jLabel18.setText("TELEF. PROFESOR");
-        jPanel5.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 90, 100, 20));
+        jPanel5.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 90, 120, 20));
 
         jLabel22.setText("NOMBRES Y APELLIDOS DEL PROFESOR");
         jPanel5.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 230, 20));
@@ -569,6 +582,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtIdHorario.setBackground(new java.awt.Color(255, 255, 204));
         txtIdHorario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtIdHorario.setEditable(false);
+        txtIdHorario.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtIdHorario.setDescripcion("ID");
         txtIdHorario.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtIdHorario.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -614,7 +628,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         });
         jPanel6.add(txtMontoPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 170, 50));
 
-        jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 340, 190, 170));
+        jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 360, 190, 150));
 
         txtCodBarras.setBackground(new java.awt.Color(255, 255, 204));
         txtCodBarras.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -638,7 +652,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 510, 390, 50));
 
         jLabel20.setText("ESTADO DEL PAGO:");
-        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 510, 110, 50));
+        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 510, 120, 50));
 
         jcbEstadoPago.setBackground(new java.awt.Color(255, 255, 204));
         jcbEstadoPago.setEnabled(false);
@@ -649,7 +663,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jLabel21.setText("CODIGO DE BARRAS:");
         jPanel2.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 510, 120, 50));
 
-        btnImprimirMatricula.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimirMatricula.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/imprimir-pdf.png"))); // NOI18N
         btnImprimirMatricula.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         btnImprimirMatricula.setContentAreaFilled(false);
         btnImprimirMatricula.addActionListener(new java.awt.event.ActionListener() {
@@ -660,6 +674,11 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         jPanel2.add(btnImprimirMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 30, 120, 70));
         jPanel2.add(txtIdMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 50, 80, 30));
         txtIdMatricula.setVisible(false);
+
+        btnFoto.setText("FOTO");
+        btnFoto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnFoto.setContentAreaFilled(false);
+        jPanel2.add(btnFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(1023, 330, 160, 30));
 
         tphMatricula.addTab("REGISTRO", jPanel2);
 
@@ -894,6 +913,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnBuscarHorario;
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnConsultarMatricula;
+    private javax.swing.JButton btnFoto;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
     private javax.swing.JButton btnImprimirMatricula;
     private org.edisoncor.gui.button.ButtonRound btnNuevaMatricula;
@@ -1068,7 +1088,35 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         // Asegurar que la cabecera de la tabla se muestre y se mueva
         jspMatricula.setColumnHeaderView(tblMatriculas.getTableHeader());
 
-        int[] anchoColumnas = {15, 15, 15, 20, 30, 20, 20,40,15, 20,20,20,20,20,40,15,25,20, 20,20, 10, 15,15,15}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {15, //getIdMatricula
+        15,// getIdAlumno
+        15, //getDniAlumno
+        50, //getNombreAlumno
+        50, //getApellidoAlumno
+        20, //getFechaNacimiento
+        20, //getNacionalidad
+        20, //getCategoria
+        15, //edad
+        16, //sexo
+        40, //nombres+apellidos alumno
+        15, //getTelefono alumno
+        20, //getIdHorario
+        15, //getDia
+        18, //getHoraInicio
+        15, //getHoraFin
+        20, //nombre LugarEntrenamiento
+        40, //nombreCancha
+        15, //nombre+apellidos profesor
+        25, //telef profesor
+        20, //getObservaciones
+        12, //getCodigoBarras
+        20, //getMontoPago
+        10, //getFechaMatricula
+        15, //estadoPago
+        12, //ver
+        15, //editar
+        15 //eliminar
+        }; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblMatriculas, anchoColumnas);
         Utils.ocultarColumnas(tblMatriculas, 0);//ocultar la primera columna
         Utils.ocultarColumnas(tblMatriculas, 1);//
@@ -1078,12 +1126,16 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         Utils.ocultarColumnas(tblMatriculas, 7);
         Utils.ocultarColumnas(tblMatriculas, 8);//
         Utils.ocultarColumnas(tblMatriculas, 9);
-        Utils.ocultarColumnas(tblMatriculas, 13);
-        Utils.ocultarColumnas(tblMatriculas, 14);
+        Utils.ocultarColumnas(tblMatriculas, 10);
+        Utils.ocultarColumnas(tblMatriculas, 11);
         Utils.ocultarColumnas(tblMatriculas, 15);
         Utils.ocultarColumnas(tblMatriculas, 16);
         Utils.ocultarColumnas(tblMatriculas, 17);
         Utils.ocultarColumnas(tblMatriculas, 18);
+        Utils.ocultarColumnas(tblMatriculas, 19);
+        Utils.ocultarColumnas(tblMatriculas, 20);
+        Utils.ocultarColumnas(tblMatriculas, 21);
+        Utils.ocultarColumnas(tblMatriculas, 23);
 
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblMatriculas);
@@ -1103,11 +1155,11 @@ public class jifMatricula extends javax.swing.JInternalFrame {
                     matricula.getAlumno().getNombreAlumno(),
                     matricula.getAlumno().getApellidoAlumno(),
                     Utils.getFechaFormateada(matricula.getAlumno().getFechaNacimiento()),
-                    //nacionalidad
-                    matricula.getAlumno().getCategoria(),
-                    //edad caluclar
-                    //sexo
-                    matricula.getAlumno().getPadre().getNombrePadre()+matricula.getAlumno().getPadre().getApellidoPadre(),
+                    matricula.getAlumno().getNacionalidad(),
+                    matricula.getAlumno().getCategoria().getNombre(),
+                    Utils.calcularEdad(matricula.getAlumno().getFechaNacimiento()),
+                    matricula.getAlumno().getSexo(),
+                    matricula.getAlumno().getPadre().getNombrePadre()+", "+matricula.getAlumno().getPadre().getApellidoPadre(),
                     matricula.getAlumno().getPadre().getTelefono(),
                     //datos del horario
                     matricula.getHorario().getIdHorario(),
@@ -1116,14 +1168,14 @@ public class jifMatricula extends javax.swing.JInternalFrame {
                     matricula.getHorario().getHoraFin(),
                     matricula.getHorario().getCancha().getId_lugar().getNombre(),
                     matricula.getHorario().getCancha().getNombre(),
-                    matricula.getHorario().getProfesor().getNombreProfesor()+matricula.getHorario().getProfesor().getApellidoProfesor(),
+                    matricula.getHorario().getProfesor().getNombreProfesor()+" "+matricula.getHorario().getProfesor().getApellidoProfesor(),
                     matricula.getHorario().getProfesor().getTelefono(),
                     //--
                     matricula.getObservaciones(),
                     matricula.getCodigoBarras(),
                     matricula.getMontoPago().toString(),
-                    matricula.getFechaMatricula(),
-                    //estado del pago
+                    Utils.getFechaFormateada(matricula.getFechaMatricula()),
+                    matricula.getEstadoPago(),
                     LiteralesTexto.LITERAL_VER,
                     LiteralesTexto.LITERAL_EDITAR,
                     LiteralesTexto.LITERAL_ELIMINAR
@@ -1221,46 +1273,27 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtNombresAlumno.setText(tblMatriculas.getValueAt(filaSeleccionada, 3).toString());
         txtApellidosAlumno.setText(tblMatriculas.getValueAt(filaSeleccionada, 4).toString());
         txtFechaNac.setText(tblMatriculas.getValueAt(filaSeleccionada, 5).toString());
-        txtNacionalidadAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtCategoriaAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtEdadAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        jcbSexo.setSelectedIndex(0);
-        txtNombresPadre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtTelefPadre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        /*Utils.getFechaFormateada(matricula.getAlumno().getFechaNacimiento()),
-                    //nacionalidad
-                    matricula.getAlumno().getCategoria(),
-                    //edad caluclar
-                    //sexo
-                    matricula.getAlumno().getPadre().getNombrePadre()+matricula.getAlumno().getPadre().getApellidoPadre(),
-                    matricula.getAlumno().getPadre().getTelefono(),
-                    //datos del horario
-                    matricula.getHorario().getIdHorario(),
-                    matricula.getHorario().getDia(),
-                    matricula.getHorario().getHoraInicio(),
-                    matricula.getHorario().getHoraFin(),
-                    matricula.getHorario().getCancha().getId_lugar().getNombre(),
-                    matricula.getHorario().getCancha().getNombre(),
-                    matricula.getHorario().getProfesor().getNombreProfesor()+matricula.getHorario().getProfesor().getApellidoProfesor(),
-                    matricula.getHorario().getProfesor().getTelefono(),
-                    //--
-                    matricula.getObservaciones(),
-                    matricula.getCodigoBarras(),
-                    matricula.getMontoPago().toString(),
-                    matricula.getFechaMatricula()*/
+        txtNacionalidadAlumno.setText(tblMatriculas.getValueAt(filaSeleccionada, 6).toString());
+        txtCategoriaAlumno.setText(tblMatriculas.getValueAt(filaSeleccionada, 7).toString());
+        txtEdadAlumno.setText(tblMatriculas.getValueAt(filaSeleccionada, 8).toString());
+        jcbSexo.setSelectedItem((Sexo)tblMatriculas.getValueAt(filaSeleccionada, 9));
+        txtNombresPadre.setText(tblMatriculas.getValueAt(filaSeleccionada, 10).toString());
+        txtTelefPadre.setText(tblMatriculas.getValueAt(filaSeleccionada, 11).toString());
         //datos del horario
-        txtIdHorario.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtDiasHorarioProf.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtLugarEntrenamiento.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtCancha.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtNombresProf.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtTelefProfesor.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtIdHorario.setText(tblMatriculas.getValueAt(filaSeleccionada, 12).toString());
+        txtDiasHorarioProf.setText(tblMatriculas.getValueAt(filaSeleccionada, 13).toString()+", "+
+                tblMatriculas.getValueAt(filaSeleccionada, 14).toString()+" - "+
+                tblMatriculas.getValueAt(filaSeleccionada, 15).toString());
+        txtLugarEntrenamiento.setText(tblMatriculas.getValueAt(filaSeleccionada, 16).toString());
+        txtCancha.setText(tblMatriculas.getValueAt(filaSeleccionada, 17).toString());
+        txtNombresProf.setText(tblMatriculas.getValueAt(filaSeleccionada, 18).toString());
+        txtTelefProfesor.setText(tblMatriculas.getValueAt(filaSeleccionada, 19).toString());
         //--
-        taObervaciones.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        jcbEstadoPago.setSelectedIndex(0);
-        txtCodBarras.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        txtMontoPago.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
-        jdcFechaMatricula.setDate(Utils.getFechaActual());
+        taObervaciones.setText(tblMatriculas.getValueAt(filaSeleccionada, 20).toString());
+        txtCodBarras.setText(tblMatriculas.getValueAt(filaSeleccionada, 21).toString());
+        txtMontoPago.setText(tblMatriculas.getValueAt(filaSeleccionada, 22).toString());
+        jdcFechaMatricula.setDate(Utils.getDate(tblMatriculas.getValueAt(filaSeleccionada, 23).toString()));
+        jcbEstadoPago.setSelectedItem((EstadoPago)tblMatriculas.getValueAt(filaSeleccionada, 24));
         lblFotoAlumno.setIcon(null);
         accionBotones(true, false, false, false, true);
     }
