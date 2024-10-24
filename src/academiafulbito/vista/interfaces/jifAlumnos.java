@@ -17,6 +17,7 @@ import academiafulbito.modelo.entidades.Alumno;
 import academiafulbito.modelo.entidades.Categoria;
 import academiafulbito.modelo.enums.Estado;
 import academiafulbito.modelo.enums.Sexo;
+import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
@@ -123,6 +124,8 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         jcbSexo = new org.edisoncor.gui.comboBox.ComboBoxRound();
         jLabel6 = new javax.swing.JLabel();
         txtNacionalidad = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        btnImprimir = new javax.swing.JButton();
+        txtIdAlumno = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -219,7 +222,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 290, 170, 70));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 290, 170, 70));
 
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -235,10 +238,10 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 210, 220, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 210, 180, 70));
 
         jcbEstado.setEnabled(false);
-        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 320, 300, 40));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14));
@@ -328,6 +331,17 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(txtNacionalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 130, 380, 40));
+
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 250, -1, -1));
+        jPanel2.add(txtIdAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 90, 40));
+        txtIdAlumno.setVisible(false);
 
         tphAlumnos.addTab("REGISTRO", jPanel2);
 
@@ -468,12 +482,21 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
     }//GEN-LAST:event_txtNacionalidadKeyTyped
 
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        // TODO add your handling code here:
+        Map parametros = new HashMap();
+        parametros.put("idAlumno", txtIdPadre.getText()); // Ejemplo de parámetro para el reporte
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_alumno.jasper");
+    }//GEN-LAST:event_btnImprimirActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBuscarCategoria;
     private javax.swing.JButton btnBuscarPadre;
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
+    private javax.swing.JButton btnImprimir;
     private org.edisoncor.gui.button.ButtonRound btnNuevoAlumno;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
@@ -493,6 +516,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
     private javax.swing.JTabbedPane tphAlumnos;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtApellido;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtDni;
+    private javax.swing.JTextField txtIdAlumno;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCategoria;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdPadre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNacionalidad;
@@ -719,7 +743,26 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
     public void mostrarInformacionAlumno(int filaSeleccionada) {
 
-        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        tphAlumnos.setSelectedIndex(1);
+        txtIdAlumno.setText(tblAlumnos.getValueAt(filaSeleccionada, 0).toString());
+
+        txtNombre.setText(tblAlumnos.getValueAt(filaSeleccionada, 1).toString());
+        txtApellido.setText(tblAlumnos.getValueAt(filaSeleccionada, 2).toString());
+        txtDni.setText(tblAlumnos.getValueAt(filaSeleccionada, 10).toString());
+        txtIdCategoria.setText(tblAlumnos.getValueAt(filaSeleccionada, 4).toString());
+        txtNombreCategoria.setText(tblAlumnos.getValueAt(filaSeleccionada, 5).toString());
+        txtIdPadre.setText(tblAlumnos.getValueAt(filaSeleccionada, 6).toString());
+        txtNombrePadre.setText(tblAlumnos.getValueAt(filaSeleccionada, 7).toString());
+        txtNacionalidad.setText(tblAlumnos.getValueAt(filaSeleccionada, 12).toString());
+
+        String fechaNacimiento= (String) tblAlumnos.getValueAt(filaSeleccionada, 3);
+        jdcFechaNacimiento.setDate(Utils.getDate(fechaNacimiento));
+        Sexo sexo = (Sexo) tblAlumnos.getValueAt(filaSeleccionada, 11);
+        jcbSexo.setSelectedItem(sexo);
+
+
+
+        /*// Supongamos que tienes un modelo de tabla que almacena los datos.
         String nombreAlumno = (String) tblAlumnos.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
         String apellidoAlumno = (String) tblAlumnos.getValueAt(filaSeleccionada, 2);
         String fechaNacimiento= (String) tblAlumnos.getValueAt(filaSeleccionada, 3);
@@ -748,7 +791,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
         // Llamar al método genérico para mostrar la información
         //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL ALUMNO", datos, 18, 20);
+        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL ALUMNO", datos, 18, 20);*/
     }
 
      private boolean validarDatosCategoria() {

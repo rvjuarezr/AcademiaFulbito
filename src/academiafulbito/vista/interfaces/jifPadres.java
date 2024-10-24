@@ -13,6 +13,7 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.PadreFacade;
 import academiafulbito.modelo.entidades.Padre;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
@@ -90,6 +91,8 @@ public class jifPadres extends javax.swing.JInternalFrame {
         btnCancelar = new javax.swing.JButton();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
         txtDni = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        btnImprimir = new javax.swing.JButton();
+        txtIdPadre = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -206,7 +209,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 265, 170, 70));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 280, 170, 70));
 
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -222,7 +225,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 280, 220, 70));
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
@@ -237,6 +240,17 @@ public class jifPadres extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, 720, 40));
+
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 270, -1, -1));
+        jPanel2.add(txtIdPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 110, 30));
+        txtIdPadre.setVisible(false);
 
         tphPadres.addTab("REGISTRO", jPanel2);
 
@@ -366,10 +380,19 @@ public class jifPadres extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtDniKeyTyped
 
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        // TODO add your handling code here:
+        Map parametros = new HashMap();
+        parametros.put("idPadre", txtIdPadre.getText()); // Ejemplo de parámetro para el reporte
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_padre.jasper");
+    }//GEN-LAST:event_btnImprimirActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
+    private javax.swing.JButton btnImprimir;
     private org.edisoncor.gui.button.ButtonRound btnNuevoPadre;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
@@ -382,6 +405,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
     private javax.swing.JTabbedPane tphPadres;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtApellido;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtDni;
+    private javax.swing.JTextField txtIdPadre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtTelefono;
     // End of variables declaration//GEN-END:variables
@@ -558,7 +582,14 @@ public class jifPadres extends javax.swing.JInternalFrame {
 
     public void mostrarInformacionPadre(int filaSeleccionada) {
 
-        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        tphPadres.setSelectedIndex(1);
+        txtIdPadre.setText(tblPadres.getValueAt(filaSeleccionada, 0).toString());
+
+        txtNombre.setText(tblPadres.getValueAt(filaSeleccionada, 1).toString());
+        txtApellido.setText(tblPadres.getValueAt(filaSeleccionada, 2).toString());
+        txtTelefono.setText(tblPadres.getValueAt(filaSeleccionada, 3).toString());
+        txtDni.setText(tblPadres.getValueAt(filaSeleccionada, 5).toString());
+        /* // Supongamos que tienes un modelo de tabla que almacena los datos.
         String nombrePadre = (String) tblPadres.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
         String apellidoPadre = (String) tblPadres.getValueAt(filaSeleccionada, 2).toString();
         String telefono = (String) tblPadres.getValueAt(filaSeleccionada, 3).toString();
@@ -576,7 +607,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
 
         // Llamar al método genérico para mostrar la información
         //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL PADRE", datos, 18, 20);
+        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL PADRE", datos, 18, 20);*/
     }
      private boolean validarDatosCategoria(){
         if(!validarCampo(txtNombre.getText(), LiteralesTexto.ERROR_NOMBRE_CAMPO_VACIO)){

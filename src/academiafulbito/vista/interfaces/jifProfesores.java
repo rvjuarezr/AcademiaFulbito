@@ -13,6 +13,7 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.ProfesorFacade;
 import academiafulbito.modelo.entidades.Profesor;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
@@ -86,6 +87,8 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
+        btnImprimir = new javax.swing.JButton();
+        txtIdProfesor = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -202,7 +205,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 310, 170, 70));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 310, 170, 70));
 
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -218,11 +221,22 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 320, 220, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 310, 220, 70));
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
+
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 300, -1, -1));
+        jPanel2.add(txtIdProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 250, 90, 30));
+        txtIdProfesor.setVisible(false);
 
         tphProfesores.addTab("REGISTRO", jPanel2);
 
@@ -343,10 +357,19 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtTelefonoKeyTyped
 
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        // TODO add your handling code here:
+        Map parametros = new HashMap();
+        parametros.put("idProfesor", txtIdProfesor.getText()); // Ejemplo de parámetro para el reporte
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_profesor.jasper");
+    }//GEN-LAST:event_btnImprimirActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
+    private javax.swing.JButton btnImprimir;
     private org.edisoncor.gui.button.ButtonRound btnNuevoProfesor;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
@@ -358,6 +381,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
     private javax.swing.JTable tblProfesores;
     private javax.swing.JTabbedPane tphProfesores;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtApellido;
+    private javax.swing.JTextField txtIdProfesor;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtTelefono;
     // End of variables declaration//GEN-END:variables
@@ -527,7 +551,13 @@ public class jifProfesores extends javax.swing.JInternalFrame {
 
     public void mostrarInformacionProfesor(int filaSeleccionada) {
 
-        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        tphProfesores.setSelectedIndex(1);
+        txtIdProfesor.setText(tblProfesores.getValueAt(filaSeleccionada, 0).toString());
+
+        txtNombre.setText(tblProfesores.getValueAt(filaSeleccionada, 1).toString());
+        txtApellido.setText(tblProfesores.getValueAt(filaSeleccionada, 2).toString());
+        txtTelefono.setText(tblProfesores.getValueAt(filaSeleccionada, 3).toString());
+        /*// Supongamos que tienes un modelo de tabla que almacena los datos.
         String nombreProfesor = (String) tblProfesores.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
         String apellidoProfesor = (String) tblProfesores.getValueAt(filaSeleccionada, 2).toString();
         String telefono = (String) tblProfesores.getValueAt(filaSeleccionada, 3).toString();
@@ -544,7 +574,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
 
         // Llamar al método genérico para mostrar la información
         //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar", "INFORMACIÓN DEL PROFESOR", datos, 18, 20);
+        DialogUtils.mostrarInformacion("Aceptar", "INFORMACIÓN DEL PROFESOR", datos, 18, 20);*/
     }
 
     private boolean validarDatosCategoria(){
