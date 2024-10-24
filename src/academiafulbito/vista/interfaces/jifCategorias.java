@@ -14,6 +14,7 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.CategoriaFacade;
 import academiafulbito.modelo.entidades.Categoria;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
@@ -76,6 +77,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         lblPaginaActual = new javax.swing.JLabel();
         btnAnterior = new org.edisoncor.gui.button.ButtonRound();
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
+        btnRepAlumnosPorCateg = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtEdadMin = new org.edisoncor.gui.textField.TextFieldRoundBackground();
@@ -115,7 +117,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         });
         jspCategorias.setViewportView(tblCategorias);
 
-        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
+        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 850, 270));
 
         btnNuevaCategoria.setBackground(new java.awt.Color(156, 156, 247));
         btnNuevaCategoria.setText("+ CATEGORIA");
@@ -125,12 +127,12 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 btnNuevaCategoriaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevaCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 140, 50));
+        jPanel1.add(btnNuevaCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 0, 140, 70));
 
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
-        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, 220, 50));
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 360, 220, 50));
 
         btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
         btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
@@ -141,7 +143,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 330, -1, 50));
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 360, -1, 50));
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
@@ -152,7 +154,17 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, -1, 50));
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 360, -1, 50));
+
+        btnRepAlumnosPorCateg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/imprimir-pdf.png"))); // NOI18N
+        btnRepAlumnosPorCateg.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnRepAlumnosPorCateg.setContentAreaFilled(false);
+        btnRepAlumnosPorCateg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRepAlumnosPorCategActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnRepAlumnosPorCateg, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 0, 120, 70));
 
         tphCategorias.addTab("LISTADO", jPanel1);
 
@@ -225,7 +237,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
         tphCategorias.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 430));
+        getContentPane().add(tphCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 470));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -348,12 +360,21 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_tblCategoriasMouseClicked
 
+    private void btnRepAlumnosPorCategActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepAlumnosPorCategActionPerformed
+        // TODO add your handling code here:
+        // Definir los parámetros necesarios para el reporte
+        Map parametros = new HashMap();
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_alumnos_por_categoria.jasper");
+}//GEN-LAST:event_btnRepAlumnosPorCategActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
     private org.edisoncor.gui.button.ButtonRound btnNuevaCategoria;
+    private javax.swing.JButton btnRepAlumnosPorCateg;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
