@@ -170,11 +170,6 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         txtDireccion.setEditable(false);
         txtDireccion.setDescripcion("Dirección*");
         txtDireccion.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtDireccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDireccionActionPerformed(evt);
-            }
-        });
         jPanel2.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
 
         txtUbigeo.setEditable(false);
@@ -295,10 +290,6 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
             listarLugarEntrenamientos(paginaActual, tamanioPagina);
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
-
-    private void txtDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDireccionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDireccionActionPerformed
 
     private void tblLugarEntrenamientosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLugarEntrenamientosMouseClicked
         // TODO add your handling code here:
@@ -519,22 +510,5 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         txtNombre.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 1).toString());
         txtDireccion.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 2).toString());
         txtUbigeo.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 3).toString());
-
-        // Supongamos que tienes un modelo de tabla que almacena los datos.
-        /* String nombreLugar = (String) tblLugarEntrenamientos.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
-        String direccion = (String)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 2).toString();
-        String ubigeo = (String)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 3).toString();
-        Estado estado = (Estado)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 4);
-
-        // Crear un mapa con los datos a mostrar
-        Map<String, String> datos = new HashMap<String, String>(5);
-        datos.put("Nombre:", nombreLugar);
-        datos.put("Direccion:", direccion);
-        datos.put("Ubigeo", ubigeo);
-        datos.put("Estado:", estado.toString());
-
-        // Llamar al método genérico para mostrar la información
-        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE LUGAR ENTRENAM.", datos, 18, 20);*/
     }
 }
