@@ -15,7 +15,6 @@ import academiafulbito.controlador.beans.CategoriaFacade;
 import academiafulbito.modelo.entidades.Categoria;
 import academiafulbito.modelo.enums.Estado;
 import academiafulbito.vista.reportes.Reportes;
-import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
 import java.util.HashMap;
@@ -86,6 +85,8 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
+        txtIdCategoria = new javax.swing.JTextField();
+        btnImprimir = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -212,7 +213,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 270, 170, 70));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 270, 170, 70));
 
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
@@ -229,11 +230,22 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 270, 220, 70));
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
+        jPanel2.add(txtIdCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, 90, 40));
+
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 260, -1, -1));
+        txtIdCategoria.setVisible(false);
 
         tphCategorias.addTab("REGISTRO", jPanel2);
 
@@ -360,6 +372,14 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_tblCategoriasMouseClicked
 
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        // TODO add your handling code here:
+        Map parametros = new HashMap();
+        parametros.put("idCategoria", txtIdCategoria.getText()); // Ejemplo de parámetro para el reporte
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_categoria.jasper");
+    }//GEN-LAST:event_btnImprimirActionPerformed
+
     private void btnRepAlumnosPorCategActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepAlumnosPorCategActionPerformed
         // TODO add your handling code here:
         // Definir los parámetros necesarios para el reporte
@@ -369,10 +389,12 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 }//GEN-LAST:event_btnRepAlumnosPorCategActionPerformed
 
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
+    private javax.swing.JButton btnImprimir;
     private org.edisoncor.gui.button.ButtonRound btnNuevaCategoria;
     private javax.swing.JButton btnRepAlumnosPorCateg;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
@@ -386,6 +408,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     private javax.swing.JTabbedPane tphCategorias;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtEdadMax;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtEdadMin;
+    private javax.swing.JTextField txtIdCategoria;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
     // End of variables declaration//GEN-END:variables
 
@@ -552,7 +575,13 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
     public void mostrarInformacionCategoria(int filaSeleccionada) {
 
-        // Supongamos que tienes un modelo de tabla que almacena los datos.
+        tphCategorias.setSelectedIndex(1);
+        txtIdCategoria.setText(tblCategorias.getValueAt(filaSeleccionada, 0).toString());
+
+        txtNombre.setText(tblCategorias.getValueAt(filaSeleccionada, 1).toString());
+        txtEdadMin.setText(tblCategorias.getValueAt(filaSeleccionada, 2).toString());
+        txtEdadMax.setText(tblCategorias.getValueAt(filaSeleccionada, 3).toString());
+        /*// Supongamos que tienes un modelo de tabla que almacena los datos.
         String nombreCategoria = (String) tblCategorias.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
         int edadMin = Integer.parseInt(tblCategorias.getValueAt(filaSeleccionada, 2).toString());
         int edadMax = Integer.parseInt(tblCategorias.getValueAt(filaSeleccionada, 3).toString());
@@ -567,7 +596,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
         // Llamar al método genérico para mostrar la información
         //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE LA CATEGORÍA", datos, 18, 20);
+        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE LA CATEGORÍA", datos, 18, 20);*/
     }
 
     private boolean validarDatosCategoria(){

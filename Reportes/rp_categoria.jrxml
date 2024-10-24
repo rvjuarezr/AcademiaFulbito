@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_matriculas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfa77bb9-9c62-437c-a840-d77c46f24c18">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idCategoria" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select c.Nombre as nombre_categoria, c.Edad_min as edad_min_categoria,
+c.Edad_max as edad_max_categoria
+from categoria c
+where c.ID_categoria =$P{idCategoria};]]>
+	</queryString>
+	<field name="nombre_categoria" class="java.lang.String"/>
+	<field name="edad_min_categoria" class="java.lang.Integer"/>
+	<field name="edad_max_categoria" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="69e493b6-b2a2-4476-8507-b59f5aa2c588" x="161" y="6" width="239" height="24" forecolor="#000000"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE CATEGORIAS]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="4a245de5-aa30-4ffe-9251-8da6e3f910d2" x="9" y="30" width="546" height="1"/>
+				<graphicElement>
+					<pen lineWidth="3.5" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="124" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="10" width="218" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DE LA CATEGORIA   :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7b447b81-07b8-4622-a49c-e6ad6146b3c9" x="283" y="10" width="224" height="20"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre_categoria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="42" width="218" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EDAD MINIMA CATEGORIA     :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="283" y="42" width="224" height="20"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{edad_min_categoria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="283" y="73" width="224" height="20"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{edad_max_categoria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="73" width="218" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EDAD MAXIMA CATEGORIA     :]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
