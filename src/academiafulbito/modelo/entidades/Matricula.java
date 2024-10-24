@@ -49,7 +49,7 @@ public class Matricula {
 
     @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
     @Column(name = "estado")
-    private EstadoPago estado;
+    private EstadoPago estadoPago;
 
     @Column(name = "observaciones", columnDefinition = "LONGTEXT")
     private String observaciones;
@@ -119,6 +119,14 @@ public class Matricula {
 
     public void setCodigoBarras(String codigoBarras) {
         this.codigoBarras = codigoBarras;
+    }
+
+    public EstadoPago getEstadoPago() {
+        return estadoPago;
+    }
+
+    public void setEstadoPago(EstadoPago estadoPago) {
+        this.estadoPago = estadoPago;
     }
 
     @Override

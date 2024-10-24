@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_alumnos_por_categoria" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a12e7101-cf6f-4932-b731-7db5c1ccb1e3">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\RONALD\\club grau\\Proyecto\\Reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from bdacademiafulbito.categoria c where c.estado = 'ACTIVO';]]>
+	</queryString>
+	<field name="ID_categoria" class="java.lang.Integer"/>
+	<field name="Nombre" class="java.lang.String"/>
+	<field name="Edad_min" class="java.lang.Integer"/>
+	<field name="Edad_max" class="java.lang.Integer"/>
+	<field name="estado" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="efeaec47-47e4-4700-9856-4927e80193c1" mode="Opaque" x="0" y="20" width="555" height="20" backcolor="#FFCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LISTADO DE ALUMNOS POR CATEGORIA]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a795e211-d9da-4076-8544-c6ecb0452059" x="14" y="2" width="86" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CATEGORIA:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d8246f74-b812-4d48-a1a7-97ffddd41daf" x="100" y="2" width="134" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ba59f985-0995-4d0d-887f-2701fdf71678" x="249" y="2" width="72" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EDAD MIN.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="905a3605-50dc-4a25-ab83-bb30fa439333" x="321" y="2" width="74" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Edad_min}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0ad62824-d4a3-44b1-9439-226746e1a13a" x="395" y="2" width="70" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EDAD MAX.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fa04a58d-6907-424a-b5b3-1c417083505d" x="465" y="2" width="86" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Edad_max}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="10" y="28" width="45" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DNI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="63" y="28" width="124" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="193" y="28" width="146" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[APELLIDOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="339" y="28" width="71" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FEC. NAC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="416" y="28" width="49" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEXO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="479" y="28" width="86" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NACIONALIDAD]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="354b76d0-2db0-4d05-82dd-c8f542d3492c" x="-13" y="21" width="68" height="22"/>
+				<subreportParameter name="sub_rp_id_categ">
+					<subreportParameterExpression><![CDATA[$F{ID_categoria}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "sub_rp_alumnos_por_categoria.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
