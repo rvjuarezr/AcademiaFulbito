@@ -42,7 +42,7 @@ public class Utils extends DefaultTableCellRenderer{
 
     DecimalFormat df;
 
-    int tamanioLetra=18;//valor por defecto
+    int tamanioLetra=14;//valor por defecto
     public Utils(int tamLetra){
         df=new DecimalFormat("##0.00");
         tamanioLetra = tamLetra;
@@ -115,11 +115,11 @@ public class Utils extends DefaultTableCellRenderer{
     }
 
     public static int posicionX(JInternalFrame jif, JDesktopPane dpMostrar){
-        return (dpMostrar.getWidth()-jif.getWidth())/2;
+        return 20;//(dpMostrar.getWidth()-jif.getWidth())/2;
     }
 
     public static int posicionY(JInternalFrame jif, JDesktopPane dpMostrar){
-        return (dpMostrar.getHeight()-jif.getHeight())/3;
+        return 0;//(dpMostrar.getHeight()-jif.getHeight())/3;
     }
 
     @Override

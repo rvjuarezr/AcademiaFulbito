@@ -14,6 +14,9 @@ from bdacademiafulbito.alumno a where a.ID_categoria = $P{sub_rp_id_categ};]]>
 	<field name="Fecha_nacimiento" class="java.lang.String"/>
 	<field name="sexo" class="java.lang.String"/>
 	<field name="nacionalidad" class="java.lang.String"/>
+	<variable name="contador" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{dni}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -79,6 +82,22 @@ from bdacademiafulbito.alumno a where a.ID_categoria = $P{sub_rp_id_categ};]]>
 		<band splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band splitType="Stretch"/>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f040545d-309e-406d-bdad-530cdfc16d69" x="433" y="0" width="50" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL   :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fdfe61f6-faee-4a1b-8ee4-1c9849e1d75a" x="483" y="0" width="72" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{contador}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="d8cbdfeb-7109-4685-b89a-2e62b9932a9d" x="0" y="14" width="555" height="1"/>
+			</line>
+		</band>
 	</summary>
 </jasperReport>

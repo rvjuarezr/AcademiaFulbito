@@ -17,6 +17,7 @@ import academiafulbito.modelo.enums.Estado;
 import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.awt.Cursor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         initComponents();
         jdp=jdpModAF;
         Utils.cargarComboEstado(jcbEstado);
-        accionBotones(false, false);
+        accionBotones(false, false, false);
         categoriaFacade = new CategoriaFacade();
         listarCategorias(paginaActual, tamanioPagina);
     }
@@ -72,28 +73,28 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jspCategorias = new javax.swing.JScrollPane();
         tblCategorias = new javax.swing.JTable();
-        btnNuevaCategoria = new org.edisoncor.gui.button.ButtonRound();
         lblPaginaActual = new javax.swing.JLabel();
         btnAnterior = new org.edisoncor.gui.button.ButtonRound();
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
         btnRepAlumnosPorCateg = new javax.swing.JButton();
+        btnNuevaCategoria = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtEdadMin = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtEdadMax = new org.edisoncor.gui.textField.TextFieldRoundBackground();
-        btnGuardar = new org.edisoncor.gui.button.ButtonRound();
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
         txtIdCategoria = new javax.swing.JTextField();
         btnImprimir = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(135, 135, 246));
+        setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
         setTitle("MANTENIMIENTO CATEGORIAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -116,24 +117,19 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 tblCategoriasMouseClicked(evt);
             }
         });
-        jspCategorias.setViewportView(tblCategorias);
-
-        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 850, 270));
-
-        btnNuevaCategoria.setBackground(new java.awt.Color(156, 156, 247));
-        btnNuevaCategoria.setText("+ CATEGORIA");
-        btnNuevaCategoria.setFont(new java.awt.Font("Arial", 1, 18));
-        btnNuevaCategoria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevaCategoriaActionPerformed(evt);
+        tblCategorias.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                tblCategoriasMouseMoved(evt);
             }
         });
-        jPanel1.add(btnNuevaCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 0, 140, 70));
+        jspCategorias.setViewportView(tblCategorias);
+
+        jPanel1.add(jspCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 1130, 280));
 
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
-        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 360, 220, 50));
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 420, 220, 50));
 
         btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
         btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
@@ -144,7 +140,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 360, -1, 50));
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 420, -1, 50));
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
@@ -155,17 +151,36 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 360, -1, 50));
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 420, -1, 50));
 
+        btnRepAlumnosPorCateg.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnRepAlumnosPorCateg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/imprimir-pdf.png"))); // NOI18N
+        btnRepAlumnosPorCateg.setText("<html><center>ALUMNOS POR<br> CATEGORIA</center></html>");
+        btnRepAlumnosPorCateg.setToolTipText("Visualiza reporte de alumnos por categoria");
         btnRepAlumnosPorCateg.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         btnRepAlumnosPorCateg.setContentAreaFilled(false);
+        btnRepAlumnosPorCateg.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRepAlumnosPorCateg.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnRepAlumnosPorCateg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRepAlumnosPorCategActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRepAlumnosPorCateg, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 0, 120, 70));
+        jPanel1.add(btnRepAlumnosPorCateg, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 0, 170, 120));
+
+        btnNuevaCategoria.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnNuevaCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
+        btnNuevaCategoria.setText("<html><center>NUEVA<br>CATEGORIA</center></html>");
+        btnNuevaCategoria.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnNuevaCategoria.setContentAreaFilled(false);
+        btnNuevaCategoria.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNuevaCategoria.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNuevaCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevaCategoriaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevaCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 0, 160, 120));
 
         tphCategorias.addTab("LISTADO", jPanel1);
 
@@ -202,19 +217,6 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         });
         jPanel2.add(txtEdadMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
 
-        btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
-        btnGuardar.setBorder(null);
-        btnGuardar.setText("AÑADIR");
-        btnGuardar.setBorderPainted(true);
-        btnGuardar.setContentAreaFilled(true);
-        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 270, 170, 70));
-
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -224,85 +226,58 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
         btnCancelar.setText("VOLVER");
+        btnCancelar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         btnCancelar.setContentAreaFilled(false);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 270, 220, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 50, 190, 80));
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
         jPanel2.add(txtIdCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, 90, 40));
 
+        btnImprimir.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimir.setText("REPORTE");
         btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimir.setContentAreaFilled(false);
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnImprimirActionPerformed(evt);
             }
         });
-        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 260, -1, -1));
+        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 230, 190, 80));
         txtIdCategoria.setVisible(false);
+
+        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/guardar-datos.png"))); // NOI18N
+        btnGuardar.setText("GUARDAR");
+        btnGuardar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnGuardar.setContentAreaFilled(false);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 140, 190, 80));
 
         tphCategorias.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 470));
+        getContentPane().add(tphCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 520));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnNuevaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaCategoriaActionPerformed
-        // TODO add your handling code here:
-        indicador = 0;//para poder guardar
-        tphCategorias.setSelectedIndex(1);
-        limpiarCampos();
-        habilitarCampos(true);
-        accionBotones(true, true);
-    }//GEN-LAST:event_btnNuevaCategoriaActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-        try {
-            if (validarDatosCategoria()) {
-                String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
-                if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
-                    Categoria categoria;
-                    switch (indicador) {
-                        case 0://registrar categoria
-                            categoria = new Categoria();
-                            categoriaFacade.guardarCategoria(getDatosCategoria(categoria));
-                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
-                            break;
-                        case 1://actualizar categoria
-                            categoria = categoriaFacade.findCategoriaById(idSeleccionada);
-                            categoriaFacade.actualizarCategoria(getDatosCategoria(categoria));
-                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
-                            break;
-                    }
-
-                    listarCategorias(paginaActual, tamanioPagina);
-                    limpiarCampos();
-                    habilitarCampos(false);
-                    accionBotones(false, false);
-                    btnGuardar.setText("Añadir");
-                    indicador = 0;
-                    tphCategorias.setSelectedIndex(0);
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
         limpiarCampos();
         habilitarCampos(false);
         tphCategorias.setSelectedIndex(0);
-        accionBotones(false, false);
+        accionBotones(false, false, false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
@@ -388,14 +363,70 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         Reportes.imprimirReporte(parametros, "rp_alumnos_por_categoria.jasper");
 }//GEN-LAST:event_btnRepAlumnosPorCategActionPerformed
 
+    private void btnNuevaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaCategoriaActionPerformed
+        // TODO add your handling code here:
+        indicador = 0;//para poder guardar
+        tphCategorias.setSelectedIndex(1);
+        limpiarCampos();
+        habilitarCampos(true);
+        accionBotones(true, true,false);
+    }//GEN-LAST:event_btnNuevaCategoriaActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (validarDatosCategoria()) {
+                String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+                if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+                    Categoria categoria;
+                    switch (indicador) {
+                        case 0://registrar categoria
+                            categoria = new Categoria();
+                            categoriaFacade.guardarCategoria(getDatosCategoria(categoria));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                            break;
+                        case 1://actualizar categoria
+                            categoria = categoriaFacade.findCategoriaById(idSeleccionada);
+                            categoriaFacade.actualizarCategoria(getDatosCategoria(categoria));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                            break;
+                    }
+
+                    listarCategorias(paginaActual, tamanioPagina);
+                    limpiarCampos();
+                    habilitarCampos(false);
+                    accionBotones(false, false, false);
+                    btnGuardar.setText("Añadir");
+                    indicador = 0;
+                    tphCategorias.setSelectedIndex(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void tblCategoriasMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoriasMouseMoved
+        // TODO add your handling code here:
+        int col = tblCategorias.columnAtPoint(evt.getPoint());
+        int row = tblCategorias.rowAtPoint(evt.getPoint());
+        if (col >= 0 && (tblCategorias.getColumnName(col).equals(LiteralesTexto.LITERAL_VER) ||
+                         tblCategorias.getColumnName(col).equals(LiteralesTexto.LITERAL_EDITAR) ||
+                         tblCategorias.getColumnName(col).equals(LiteralesTexto.LITERAL_ELIMINAR))) {
+            tblCategorias.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        } else {
+            tblCategorias.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+    }//GEN-LAST:event_tblCategoriasMouseMoved
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
-    private org.edisoncor.gui.button.ButtonRound btnGuardar;
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimir;
-    private org.edisoncor.gui.button.ButtonRound btnNuevaCategoria;
+    private javax.swing.JButton btnNuevaCategoria;
     private javax.swing.JButton btnRepAlumnosPorCateg;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
@@ -448,7 +479,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
-            tblCategorias.setDefaultRenderer(Object.class, new Utils(18));
+            tblCategorias.setDefaultRenderer(Object.class, new Utils(14));
             
             Utils.configurarEstiloTabla(tblCategorias, jspCategorias);
             Utils.configurarBotonesAccion(tblCategorias);
@@ -483,9 +514,10 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         
     }
 
-    private void accionBotones(boolean d, boolean e) {
+    private void accionBotones(boolean d, boolean e, boolean f) {
         btnCancelar.setEnabled(d);
         btnGuardar.setEnabled(e);
+        btnImprimir.setEnabled(f);
     }
 
     public void cargarDatosEnFormulario(int row) {
@@ -511,7 +543,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
             tphCategorias.setSelectedIndex(1);            
             btnGuardar.setText("Modificar");
             indicador = 1;
-            accionBotones(true, true);
+            accionBotones(true, true, false);
             habilitarCampos(true);
         } else{
             //colocar alguna alerta
@@ -581,22 +613,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         txtNombre.setText(tblCategorias.getValueAt(filaSeleccionada, 1).toString());
         txtEdadMin.setText(tblCategorias.getValueAt(filaSeleccionada, 2).toString());
         txtEdadMax.setText(tblCategorias.getValueAt(filaSeleccionada, 3).toString());
-        /*// Supongamos que tienes un modelo de tabla que almacena los datos.
-        String nombreCategoria = (String) tblCategorias.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
-        int edadMin = Integer.parseInt(tblCategorias.getValueAt(filaSeleccionada, 2).toString());
-        int edadMax = Integer.parseInt(tblCategorias.getValueAt(filaSeleccionada, 3).toString());
-        Estado estado = (Estado)tblCategorias.getValueAt(filaSeleccionada, 4);
-
-        // Crear un mapa con los datos a mostrar
-        Map<String, String> datos = new HashMap<String, String>(5);
-        datos.put("Categoría:", nombreCategoria);
-        datos.put("Edad Mínima:", String.valueOf(edadMin));
-        datos.put("Edad Máxima:", String.valueOf(edadMax));
-        datos.put("Estado:", estado.toString());
-
-        // Llamar al método genérico para mostrar la información
-        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE LA CATEGORÍA", datos, 18, 20);*/
+        accionBotones(true, false, true);
     }
 
     private boolean validarDatosCategoria(){

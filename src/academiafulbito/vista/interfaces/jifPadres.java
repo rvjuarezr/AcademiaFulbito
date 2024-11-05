@@ -447,7 +447,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
-            tblPadres.setDefaultRenderer(Object.class, new Utils(18));
+            tblPadres.setDefaultRenderer(Object.class, new Utils(14));
 
 
             Utils.configurarEstiloTabla(tblPadres, jspPadres);
