@@ -2,6 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_matriculas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfa77bb9-9c62-437c-a840-d77c46f24c18">
 	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
+
 	<property name="ireport.y" value="2"/>
 	<parameter name="idPadre" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -9,6 +10,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\ProyectoAcademia\\Reportes\\"]]></defaultValueExpression>
 	</parameter>
+
 	<queryString>
 		<![CDATA[select concat(p.Nombre," ",p.apellido) as nombre_padre, p.Telefono as telefono_padre, p.dni as dni_padre from padre p where p.ID_padre=$P{idPadre};]]>
 	</queryString>
@@ -42,7 +44,9 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
+
 		<band height="193" splitType="Stretch">
+
 			<staticText>
 				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="10" width="206" height="20"/>
 				<textElement>
@@ -85,6 +89,7 @@
 				</textElement>
 				<text><![CDATA[TELEFONO DEL PADRE  :]]></text>
 			</staticText>
+
 			<subreport>
 				<reportElement uuid="69fd4076-df51-4e1b-bf40-3c178c894d40" x="-13" y="93" width="21" height="29"/>
 				<subreportParameter name="sub_rp_id_padre">
@@ -128,6 +133,7 @@
 				</textElement>
 				<text><![CDATA[NACIONALIDAD]]></text>
 			</staticText>
+
 		</band>
 	</detail>
 	<columnFooter>

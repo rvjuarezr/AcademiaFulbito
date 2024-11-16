@@ -80,7 +80,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         padreFacade=new PadreFacade();
         alumnoFacade=new AlumnoFacade();
 
-        accionBotones(false, false);
+        accionBotones(false, false, false);
         alumnoFacade = new AlumnoFacade();
         listarAlumnos(paginaActual, tamanioPagina);
     }
@@ -98,14 +98,13 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jspPadres = new javax.swing.JScrollPane();
         tblAlumnos = new javax.swing.JTable();
-        btnNuevoAlumno = new org.edisoncor.gui.button.ButtonRound();
         btnAnterior = new org.edisoncor.gui.button.ButtonRound();
         lblPaginaActual = new javax.swing.JLabel();
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
+        btnNuevoAlumno = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtApellido = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtIdPadre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
-        btnGuardar = new org.edisoncor.gui.button.ButtonRound();
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
@@ -127,12 +126,16 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         btnImprimir = new javax.swing.JButton();
         txtIdAlumno = new javax.swing.JTextField();
 
-        setBackground(new java.awt.Color(135, 135, 246));
+        btnGuardar = new javax.swing.JButton();
+
+
+        setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
         setTitle("MANTENIMIENTO ALUMNOS");
+        setPreferredSize(new java.awt.Dimension(1006, 640));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphAlumnos.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphAlumnos.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -152,17 +155,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         tblAlumnos.setOpaque(false);
         jspPadres.setViewportView(tblAlumnos);
 
-        jPanel1.add(jspPadres, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 220));
-
-        btnNuevoAlumno.setBackground(new java.awt.Color(156, 156, 247));
-        btnNuevoAlumno.setText("+ ALUMNOS");
-        btnNuevoAlumno.setFont(new java.awt.Font("Arial", 1, 18));
-        btnNuevoAlumno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoAlumnoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnNuevoAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 140, 50));
+        jPanel1.add(jspPadres, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 940, 270));
 
         btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
         btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
@@ -173,12 +166,12 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 320, -1, 50));
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 390, -1, 50));
 
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
-        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 320, 220, 50));
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 390, 220, 50));
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
@@ -189,7 +182,19 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 320, -1, 50));
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 390, -1, 50));
+
+        btnNuevoAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnNuevoAlumno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
+        btnNuevoAlumno.setText("NUEVO");
+        btnNuevoAlumno.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnNuevoAlumno.setContentAreaFilled(false);
+        btnNuevoAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoAlumnoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevoAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 10, 160, 80));
 
         tphAlumnos.addTab("LISTADO", jPanel1);
 
@@ -211,34 +216,25 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         txtIdPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(txtIdPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 270, 60, 40));
 
-        btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
-        btnGuardar.setBorder(null);
-        btnGuardar.setText("AÑADIR");
-        btnGuardar.setBorderPainted(true);
-        btnGuardar.setContentAreaFilled(true);
-        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 290, 170, 70));
 
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVO ALUMNO");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 250, 20));
 
-        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
         btnCancelar.setText("VOLVER");
+        btnCancelar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         btnCancelar.setContentAreaFilled(false);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 210, 180, 70));
+
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 190, 180, 70));
+
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
@@ -330,7 +326,33 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
                 txtNacionalidadKeyTyped(evt);
             }
         });
-        jPanel2.add(txtNacionalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 130, 380, 40));
+        jPanel2.add(txtNacionalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 130, 390, 40));
+
+        btnImprimir.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/imprimir-pdf.png"))); // NOI18N
+        btnImprimir.setText("REPORTE");
+        btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimir.setContentAreaFilled(false);
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 350, 180, 70));
+        jPanel2.add(txtIdAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 380, 90, 40));
+        txtIdAlumno.setVisible(false);
+
+        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/guardar-datos.png"))); // NOI18N
+        btnGuardar.setText("GUARDAR");
+        btnGuardar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnGuardar.setContentAreaFilled(false);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(681, 270, 180, 70));
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
         btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -345,68 +367,17 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
         tphAlumnos.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphAlumnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 420));
+        getContentPane().add(tphAlumnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 990, 490));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnNuevoAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoAlumnoActionPerformed
-        // TODO add your handling code here:
-        indicador = 0;//para poder guardar
-        tphAlumnos.setSelectedIndex(1);
-        limpiarCampos();
-        habilitarCampos(true);
-        accionBotones(true, true);
-    }//GEN-LAST:event_btnNuevoAlumnoActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-        try {
-            if (validarDatosCategoria()) {
-                String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
-                if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
-                    Alumno alumno;
-                    switch (indicador) {
-                        case 0: // Registrar alumno
-                            alumno = new Alumno();
-                            alumno = getDatosAlumno(alumno); // Obtener los datos del alumno
-                            if (alumno != null) {
-                                alumnoFacade.guardarAlumno(alumno);
-                                Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
-                            }
-                            break;
-                        /*case 0://registrar alumno
-                        alumno = new Alumno();
-                        alumnoFacade.guardarAlumno(getDatosAlumno(alumno));
-                        Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
-                        break;*/
-                        case 1://actualizar alumno
-                            alumno = alumnoFacade.findAlumnoById(idSeleccionada);
-                            alumnoFacade.actualizarAlumno(getDatosAlumno(alumno));
-                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
-                            break;
-                    }
-
-                    listarAlumnos(paginaActual, tamanioPagina);
-                    limpiarCampos();
-                    habilitarCampos(false);
-                    accionBotones(false, false);
-                    btnGuardar.setText("Añadir");
-                    indicador = 0;
-                    tphAlumnos.setSelectedIndex(0);
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
         limpiarCampos();
         habilitarCampos(false);
         tphAlumnos.setSelectedIndex(0);
-        accionBotones(false,false);
+        accionBotones(false,false, false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
@@ -490,14 +461,65 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         Reportes.imprimirReporte(parametros, "rp_alumno.jasper");
     }//GEN-LAST:event_btnImprimirActionPerformed
 
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (validarDatosCategoria()) {
+                String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+                if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+                    Alumno alumno;
+                    switch (indicador) {
+                        case 0: // Registrar alumno
+                            alumno = new Alumno();
+                            alumno = getDatosAlumno(alumno); // Obtener los datos del alumno
+                            if (alumno != null) {
+                                alumnoFacade.guardarAlumno(alumno);
+                                Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                            }
+                            break;
+                            
+                        case 1://actualizar alumno
+                            alumno = alumnoFacade.findAlumnoById(idSeleccionada);
+                            alumnoFacade.actualizarAlumno(getDatosAlumno(alumno));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                            break;
+                    }
+
+                    listarAlumnos(paginaActual, tamanioPagina);
+                    limpiarCampos();
+                    habilitarCampos(false);
+                    accionBotones(false, false, false);
+                    btnGuardar.setText("Añadir");
+                    indicador = 0;
+                    tphAlumnos.setSelectedIndex(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnNuevoAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoAlumnoActionPerformed
+        // TODO add your handling code here:
+        indicador = 0;//para poder guardar
+        tphAlumnos.setSelectedIndex(1);
+        limpiarCampos();
+        habilitarCampos(true);
+        accionBotones(true, true,false);
+    }//GEN-LAST:event_btnNuevoAlumnoActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBuscarCategoria;
     private javax.swing.JButton btnBuscarPadre;
     private javax.swing.JButton btnCancelar;
-    private org.edisoncor.gui.button.ButtonRound btnGuardar;
+
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimir;
-    private org.edisoncor.gui.button.ButtonRound btnNuevoAlumno;
+    private javax.swing.JButton btnNuevoAlumno;
+
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -576,7 +598,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
-            tblAlumnos.setDefaultRenderer(Object.class, new Utils(18));
+            tblAlumnos.setDefaultRenderer(Object.class, new Utils(14));
 
 
             Utils.configurarEstiloTabla(tblAlumnos, jspPadres);
@@ -635,9 +657,10 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         txtNacionalidad.setEditable(band);
     }
 
-    private void accionBotones(boolean d, boolean e) {
+    private void accionBotones(boolean d, boolean e, boolean f) {
         btnCancelar.setEnabled(d);
         btnGuardar.setEnabled(e);
+        btnImprimir.setEnabled(f);
     }
 
     public void cargarDatosEnFormulario(int row) throws ParseException {
@@ -679,7 +702,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
             tphAlumnos.setSelectedIndex(1);
             btnGuardar.setText("Modificar");
             indicador = 1;
-            accionBotones(true, true);
+            accionBotones(true, true, true);
             habilitarCampos(true);
         } else {
             //colocar alguna alerta

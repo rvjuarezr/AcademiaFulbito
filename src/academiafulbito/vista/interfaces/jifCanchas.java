@@ -424,7 +424,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
-            tblCancha.setDefaultRenderer(Object.class, new Utils(18));
+            tblCancha.setDefaultRenderer(Object.class, new Utils(14));
 
             // Establece el modo de selección de filas para permitir solo una selección a la vez.
             tblCancha.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

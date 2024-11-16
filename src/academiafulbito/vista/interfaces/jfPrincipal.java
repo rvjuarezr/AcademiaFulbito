@@ -145,6 +145,7 @@ public class jfPrincipal extends javax.swing.JFrame {
         button.setOpaque(true); // Permite el uso de un color de fondo
         button.setBackground(Color.WHITE); // Establece el fondo blanco
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100)); // Ajusta el tamaño del botón
+        button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
         return button;
     }
 
@@ -184,7 +185,7 @@ public class jfPrincipal extends javax.swing.JFrame {
             subMenuActual = jpm;// Guardar referencia al submenú visible
 
             resetButtonBorders(jpMenuVertical);  // Resetea los colores de todos los botones
-            btn.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));  // Cambia el borde del botón activo;  // Cambia el color del botón activo
+            btn.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));  // Cambia el borde del botón activo;  // Cambia el color del botón activo
             
         }
     }
@@ -274,7 +275,7 @@ public class jfPrincipal extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 resetButtonBorders(jpMenuVertical);
-                btnSalir.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));
+                btnSalir.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
                 salirDelSistema();
             }
         });
@@ -325,7 +326,8 @@ public class jfPrincipal extends javax.swing.JFrame {
         for (Component comp : jpMenuVertical.getComponents()) {
             if (comp instanceof JButton) {
                 JButton button = (JButton) comp;
-                button.setBorder(BorderFactory.createEmptyBorder());  // Restablece el borde a vacío
+                //button.setBorder(BorderFactory.createEmptyBorder());  // Restablece el borde a vacío
+                button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
             }
         }
     }

@@ -6,9 +6,11 @@
 	<parameter name="idProfesor" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\ProyectoAcademia\\Reportes\\"]]></defaultValueExpression>
 	</parameter>
+
 	<queryString>
 		<![CDATA[select concat(p.Nombre," ",p.apellido) as nombre_profesor, p.Telefono as telefono_profesor from profesor p where p.ID_profesor=$P{idProfesor};]]>
 	</queryString>
@@ -41,35 +43,44 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
+
 		<band height="92" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="9" y="2" width="206" height="20"/>
+
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NOMBRE DEL PROFESOR     :]]></text>
 			</staticText>
 			<textField>
+
 				<reportElement uuid="7b447b81-07b8-4622-a49c-e6ad6146b3c9" x="259" y="2" width="224" height="20"/>
+
 				<textElement>
 					<font fontName="Bookman Old Style" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre_profesor}]]></textFieldExpression>
 			</textField>
 			<staticText>
+
 				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="9" y="34" width="218" height="20"/>
+
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TELEFONO DEL PROFESOR  :]]></text>
 			</staticText>
 			<textField>
+
 				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="259" y="34" width="224" height="20"/>
+
 				<textElement>
 					<font fontName="Bookman Old Style" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{telefono_profesor}]]></textFieldExpression>
 			</textField>
+
 			<subreport>
 				<reportElement uuid="f7da6dfa-f9af-41d2-b621-431ac6fd7871" x="0" y="63" width="42" height="27"/>
 				<subreportParameter name="sub_rp_id_profesor">
@@ -119,6 +130,7 @@
 					<pen lineWidth="3.5" lineStyle="Double"/>
 				</graphicElement>
 			</line>
+
 		</band>
 	</detail>
 	<columnFooter>

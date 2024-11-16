@@ -3,6 +3,12 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<style name="style1">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue() % 2 == 0)]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FFFFCC"/>
+		</conditionalStyle>
+	</style>
 	<parameter name="sub_rp_id_categ" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select a.dni , a.Nombre , a.Apellido ,date_format(a.Fecha_nacimiento,'%Y-%m-%d') as Fecha_nacimiento ,a.sexo ,a.nacionalidad
@@ -14,6 +20,9 @@ from bdacademiafulbito.alumno a where a.ID_categoria = $P{sub_rp_id_categ};]]>
 	<field name="Fecha_nacimiento" class="java.lang.String"/>
 	<field name="sexo" class="java.lang.String"/>
 	<field name="nacionalidad" class="java.lang.String"/>
+	<variable name="contador" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{dni}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -29,42 +38,42 @@ from bdacademiafulbito.alumno a where a.ID_categoria = $P{sub_rp_id_categ};]]>
 	<detail>
 		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement uuid="8c4da903-fe2b-4e30-b99d-17908e03c1bb" x="0" y="0" width="56" height="12"/>
+				<reportElement uuid="8c4da903-fe2b-4e30-b99d-17908e03c1bb" style="style1" x="0" y="0" width="56" height="12"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dni}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="6b432883-7e78-43a2-91bd-3cd7378e61e6" x="56" y="0" width="131" height="12"/>
+				<reportElement uuid="6b432883-7e78-43a2-91bd-3cd7378e61e6" style="style1" x="56" y="0" width="131" height="12"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="ce4c6e8a-988e-46e2-8005-e065d4efb290" x="187" y="0" width="147" height="12"/>
+				<reportElement uuid="ce4c6e8a-988e-46e2-8005-e065d4efb290" style="style1" x="187" y="0" width="147" height="12"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Apellido}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="062f21d8-fbb5-4d64-986b-79ad46eb3097" x="334" y="0" width="69" height="12"/>
+				<reportElement uuid="062f21d8-fbb5-4d64-986b-79ad46eb3097" style="style1" x="334" y="0" width="69" height="12"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fecha_nacimiento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="516774ee-a15d-4bce-aee7-ff85a7a86127" x="409" y="0" width="73" height="12"/>
+				<reportElement uuid="516774ee-a15d-4bce-aee7-ff85a7a86127" style="style1" x="409" y="0" width="73" height="12"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sexo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="ca515f9c-736a-46fe-a639-d1d5be10f46b" x="482" y="0" width="73" height="12"/>
+				<reportElement uuid="ca515f9c-736a-46fe-a639-d1d5be10f46b" style="style1" x="482" y="0" width="73" height="12"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
@@ -79,6 +88,22 @@ from bdacademiafulbito.alumno a where a.ID_categoria = $P{sub_rp_id_categ};]]>
 		<band splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band splitType="Stretch"/>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f040545d-309e-406d-bdad-530cdfc16d69" x="433" y="0" width="50" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL   :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fdfe61f6-faee-4a1b-8ee4-1c9849e1d75a" x="483" y="0" width="72" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{contador}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="d8cbdfeb-7109-4685-b89a-2e62b9932a9d" x="0" y="14" width="555" height="1"/>
+			</line>
+		</band>
 	</summary>
 </jasperReport>

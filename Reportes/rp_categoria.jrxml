@@ -2,6 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_matriculas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfa77bb9-9c62-437c-a840-d77c46f24c18">
 	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
+
 	<property name="ireport.y" value="33"/>
 	<parameter name="idCategoria" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -9,6 +10,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\ProyectoAcademia\\Reportes\\"]]></defaultValueExpression>
 	</parameter>
+
 	<queryString>
 		<![CDATA[select c.Nombre as nombre_categoria, c.Edad_min as edad_min_categoria,
 c.Edad_max as edad_max_categoria
@@ -45,7 +47,9 @@ where c.ID_categoria =$P{idCategoria};]]>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
+
 		<band height="148" splitType="Stretch">
+
 			<staticText>
 				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="10" width="218" height="20"/>
 				<textElement>
@@ -61,33 +65,42 @@ where c.ID_categoria =$P{idCategoria};]]>
 				<textFieldExpression><![CDATA[$F{nombre_categoria}]]></textFieldExpression>
 			</textField>
 			<staticText>
+
 				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="33" width="218" height="20"/>
+
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[EDAD MINIMA CATEGORIA     :]]></text>
 			</staticText>
 			<textField>
+
 				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="283" y="33" width="224" height="20"/>
+
 				<textElement>
 					<font fontName="Bookman Old Style" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{edad_min_categoria}]]></textFieldExpression>
 			</textField>
 			<textField>
+
 				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="283" y="57" width="224" height="20"/>
+
 				<textElement>
 					<font fontName="Bookman Old Style" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{edad_max_categoria}]]></textFieldExpression>
 			</textField>
 			<staticText>
+
 				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="57" width="218" height="20"/>
+
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[EDAD MAXIMA CATEGORIA     :]]></text>
 			</staticText>
+
 			<staticText>
 				<reportElement uuid="7696fc72-7d17-4589-96eb-5942c7878649" x="28" y="100" width="31" height="15"/>
 				<textElement>
@@ -138,6 +151,7 @@ where c.ID_categoria =$P{idCategoria};]]>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "sub_rp_alumnos_categoria_seleccionada.jasper"]]></subreportExpression>
 			</subreport>
+
 		</band>
 	</detail>
 	<columnFooter>
