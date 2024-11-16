@@ -6,6 +6,9 @@
 	<parameter name="idProfesor" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\ProyectoAcademia\\Reportes\\"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select concat(p.Nombre," ",p.apellido) as nombre_profesor, p.Telefono as telefono_profesor from profesor p where p.ID_profesor=$P{idProfesor};]]>
 	</queryString>
@@ -38,35 +41,84 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="73" splitType="Stretch">
+		<band height="92" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="10" width="206" height="20"/>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="9" y="2" width="206" height="20"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NOMBRE DEL PROFESOR     :]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="7b447b81-07b8-4622-a49c-e6ad6146b3c9" x="262" y="10" width="224" height="20"/>
+				<reportElement uuid="7b447b81-07b8-4622-a49c-e6ad6146b3c9" x="259" y="2" width="224" height="20"/>
 				<textElement>
 					<font fontName="Bookman Old Style" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre_profesor}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="42" width="218" height="20"/>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="9" y="34" width="218" height="20"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TELEFONO DEL PROFESOR  :]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="262" y="42" width="224" height="20"/>
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="259" y="34" width="224" height="20"/>
 				<textElement>
 					<font fontName="Bookman Old Style" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{telefono_profesor}]]></textFieldExpression>
 			</textField>
+			<subreport>
+				<reportElement uuid="f7da6dfa-f9af-41d2-b621-431ac6fd7871" x="0" y="63" width="42" height="27"/>
+				<subreportParameter name="sub_rp_id_profesor">
+					<subreportParameterExpression><![CDATA[$P{idProfesor}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "sub_rp_alumnos_profesor_seleccionada.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="4c8e8cf7-047b-45f9-ad2a-0cc46a7a5d9b" x="18" y="65" width="34" height="22"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4c8e8cf7-047b-45f9-ad2a-0cc46a7a5d9b" x="77" y="65" width="45" height="22"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HORA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4c8e8cf7-047b-45f9-ad2a-0cc46a7a5d9b" x="170" y="63" width="96" height="22"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CATEGORIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4c8e8cf7-047b-45f9-ad2a-0cc46a7a5d9b" x="279" y="63" width="48" height="22"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4c8e8cf7-047b-45f9-ad2a-0cc46a7a5d9b" x="362" y="63" width="82" height="22"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ALUMNO]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="4a245de5-aa30-4ffe-9251-8da6e3f910d2" x="5" y="58" width="546" height="1"/>
+				<graphicElement>
+					<pen lineWidth="3.5" lineStyle="Double"/>
+				</graphicElement>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
