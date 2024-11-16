@@ -2,10 +2,15 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_matriculas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfa77bb9-9c62-437c-a840-d77c46f24c18">
 	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+
+	<property name="ireport.y" value="33"/>
 	<parameter name="idCategoria" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\ProyectoAcademia\\Reportes\\"]]></defaultValueExpression>
+	</parameter>
+
 	<queryString>
 		<![CDATA[select c.Nombre as nombre_categoria, c.Edad_min as edad_min_categoria,
 c.Edad_max as edad_max_categoria
@@ -42,7 +47,9 @@ where c.ID_categoria =$P{idCategoria};]]>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="124" splitType="Stretch">
+
+		<band height="148" splitType="Stretch">
+
 			<staticText>
 				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="10" width="218" height="20"/>
 				<textElement>
@@ -58,33 +65,93 @@ where c.ID_categoria =$P{idCategoria};]]>
 				<textFieldExpression><![CDATA[$F{nombre_categoria}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="42" width="218" height="20"/>
+
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="33" width="218" height="20"/>
+
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[EDAD MINIMA CATEGORIA     :]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="283" y="42" width="224" height="20"/>
+
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="283" y="33" width="224" height="20"/>
+
 				<textElement>
 					<font fontName="Bookman Old Style" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{edad_min_categoria}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="283" y="73" width="224" height="20"/>
+
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="283" y="57" width="224" height="20"/>
+
 				<textElement>
 					<font fontName="Bookman Old Style" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{edad_max_categoria}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="73" width="218" height="20"/>
+
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="57" width="218" height="20"/>
+
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[EDAD MAXIMA CATEGORIA     :]]></text>
 			</staticText>
+
+			<staticText>
+				<reportElement uuid="7696fc72-7d17-4589-96eb-5942c7878649" x="28" y="100" width="31" height="15"/>
+				<textElement>
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DNI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7696fc72-7d17-4589-96eb-5942c7878649" x="70" y="100" width="75" height="15"/>
+				<textElement>
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7696fc72-7d17-4589-96eb-5942c7878649" x="161" y="100" width="97" height="15"/>
+				<textElement>
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[APELLIDOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7696fc72-7d17-4589-96eb-5942c7878649" x="377" y="100" width="48" height="15"/>
+				<textElement>
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEXO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7696fc72-7d17-4589-96eb-5942c7878649" x="283" y="100" width="48" height="15"/>
+				<textElement>
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FEC NAC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7696fc72-7d17-4589-96eb-5942c7878649" x="453" y="100" width="82" height="15"/>
+				<textElement>
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NACIONALIDAD]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="26b267a1-c1a1-4e33-893b-9e15ffc0ddf6" x="3" y="96" width="21" height="21"/>
+				<subreportParameter name="sub_rp_id_categ">
+					<subreportParameterExpression><![CDATA[$P{idCategoria}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "sub_rp_alumnos_categoria_seleccionada.jasper"]]></subreportExpression>
+			</subreport>
+
 		</band>
 	</detail>
 	<columnFooter>

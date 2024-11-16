@@ -125,7 +125,9 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         txtNacionalidad = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         btnImprimir = new javax.swing.JButton();
         txtIdAlumno = new javax.swing.JTextField();
+
         btnGuardar = new javax.swing.JButton();
+
 
         setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
@@ -214,6 +216,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         txtIdPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(txtIdPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 270, 60, 40));
 
+
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVO ALUMNO");
@@ -229,7 +232,9 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
+
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 190, 180, 70));
+
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
@@ -349,6 +354,17 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(681, 270, 180, 70));
 
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 250, -1, -1));
+        jPanel2.add(txtIdAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 90, 40));
+        txtIdAlumno.setVisible(false);
+
         tphAlumnos.addTab("REGISTRO", jPanel2);
 
         getContentPane().add(tphAlumnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 990, 490));
@@ -445,6 +461,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         Reportes.imprimirReporte(parametros, "rp_alumno.jasper");
     }//GEN-LAST:event_btnImprimirActionPerformed
 
+
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         try {
@@ -492,14 +509,17 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         accionBotones(true, true,false);
     }//GEN-LAST:event_btnNuevoAlumnoActionPerformed
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBuscarCategoria;
     private javax.swing.JButton btnBuscarPadre;
     private javax.swing.JButton btnCancelar;
+
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnNuevoAlumno;
+
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

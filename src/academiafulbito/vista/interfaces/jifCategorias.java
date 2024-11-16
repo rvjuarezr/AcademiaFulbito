@@ -87,7 +87,9 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
         txtIdCategoria = new javax.swing.JTextField();
         btnImprimir = new javax.swing.JButton();
+
         btnGuardar = new javax.swing.JButton();
+
 
         setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
@@ -217,6 +219,8 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         });
         jPanel2.add(txtEdadMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
 
+
+
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -233,23 +237,28 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
+
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 50, 190, 80));
+
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
         jPanel2.add(txtIdCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, 90, 40));
 
+
         btnImprimir.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
         btnImprimir.setText("REPORTE");
         btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnImprimir.setContentAreaFilled(false);
+
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnImprimirActionPerformed(evt);
             }
         });
+
         jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 230, 190, 80));
         txtIdCategoria.setVisible(false);
 
@@ -264,6 +273,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 140, 190, 80));
+
 
         tphCategorias.addTab("REGISTRO", jPanel2);
 
@@ -421,12 +431,15 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
 
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
+
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnNuevaCategoria;
+
     private javax.swing.JButton btnRepAlumnosPorCateg;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
@@ -609,7 +622,6 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
         tphCategorias.setSelectedIndex(1);
         txtIdCategoria.setText(tblCategorias.getValueAt(filaSeleccionada, 0).toString());
-
         txtNombre.setText(tblCategorias.getValueAt(filaSeleccionada, 1).toString());
         txtEdadMin.setText(tblCategorias.getValueAt(filaSeleccionada, 2).toString());
         txtEdadMax.setText(tblCategorias.getValueAt(filaSeleccionada, 3).toString());
