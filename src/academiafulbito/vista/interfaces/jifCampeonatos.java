@@ -14,6 +14,7 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.controlador.beans.CampeonatoFacade;
 import academiafulbito.modelo.entidades.Campeonato;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
@@ -52,7 +53,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         initComponents();
         jdp=jdpModAF;
         Utils.cargarComboEstado(jcbEstado);
-        accionBotones(false, false);
+        accionBotones(false, false, false);
         campeonatoFacade = new CampeonatoFacade();
         listarCampeonatos(paginaActual, tamanioPagina);
     }
@@ -81,6 +82,8 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         btnCancelar = new javax.swing.JButton();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
         btnGuardar = new javax.swing.JButton();
+        btnImprimir = new javax.swing.JButton();
+        txtIdCampamento = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
@@ -129,7 +132,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
         btnSiguiente.setText(">>");
-        btnSiguiente.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        btnSiguiente.setFont(new java.awt.Font("Arial", 1, 24));
         btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSiguienteActionPerformed(evt);
@@ -137,7 +140,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         });
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 420, -1, 50));
 
-        btnNuevaCampeonato.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnNuevaCampeonato.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnNuevaCampeonato.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
         btnNuevaCampeonato.setText("<html><center>NUEVO<br>CAMPEONATO</center></html>");
         btnNuevaCampeonato.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -188,7 +191,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 220, 40));
 
-        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/guardar-datos.png"))); // NOI18N
         btnGuardar.setText("GUARDAR");
         btnGuardar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -199,6 +202,20 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 140, 190, 70));
+
+        btnImprimir.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimir.setText("REPORTE");
+        btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimir.setContentAreaFilled(false);
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 220, 190, 80));
+        txtIdCampamento.setVisible(false);
+        jPanel2.add(txtIdCampamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 180, 90, 40));
 
         tphCampeonatos.addTab("REGISTRO", jPanel2);
 
@@ -212,7 +229,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         limpiarCampos();
         habilitarCampos(false);
         tphCampeonatos.setSelectedIndex(0);
-        accionBotones(false, false);
+        accionBotones(false, false, false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
@@ -238,7 +255,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         tphCampeonatos.setSelectedIndex(1);
         limpiarCampos();
         habilitarCampos(true);
-        accionBotones(true, true);
+        accionBotones(true, true, false);
     }//GEN-LAST:event_btnNuevaCampeonatoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -262,18 +279,27 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
             listarCampeonatos(campeonatoFacade.getListadoCampeonatos());
             limpiarCampos();
             habilitarCampos(false);
-            accionBotones(false, false);
+            accionBotones(false, false, false);
             btnGuardar.setText("Añadir");
             indicador = 0;
             tphCampeonatos.setSelectedIndex(0);
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        // TODO add your handling code here:
+        Map parametros = new HashMap();
+        parametros.put("idCampamento", txtIdCampamento.getText()); // Ejemplo de parámetro para el reporte
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_categoria.jasper");
+}//GEN-LAST:event_btnImprimirActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnNuevaCampeonato;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
@@ -284,6 +310,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblCampeonatos;
     private javax.swing.JTabbedPane tphCampeonatos;
+    private javax.swing.JTextField txtIdCampamento;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtTemporada;
     // End of variables declaration//GEN-END:variables
@@ -355,9 +382,10 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         
     }
 
-    private void accionBotones(boolean d, boolean e) {
+    private void accionBotones(boolean d, boolean e,boolean f) {
         btnCancelar.setEnabled(d);
         btnGuardar.setEnabled(e);
+        btnImprimir.setEnabled(f);
     }
 
     public void cargarDatosEnFormulario(int row) {
@@ -381,7 +409,7 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
             tphCampeonatos.setSelectedIndex(1);
             btnGuardar.setText("Modificar");
             indicador = 1;
-            accionBotones(true, true);
+            accionBotones(true, true, false);
             habilitarCampos(true);
         } else{
             //colocar alguna alerta
@@ -395,15 +423,11 @@ public class jifCampeonatos extends javax.swing.JInternalFrame {
         String temporada = (String)tblCampeonatos.getValueAt(filaSeleccionada, 2);
         Estado estado = (Estado)tblCampeonatos.getValueAt(filaSeleccionada, 3);
 
-        // Crear un mapa con los datos a mostrar
-        Map<String, String> datos = new HashMap<String, String>(5);
-        datos.put("Nombre:", nombreCampeonato);
-        datos.put("Temporada:", temporada);
-        datos.put("Estado:", estado.toString());
-
-        // Llamar al método genérico para mostrar la información
-        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL CAMPEONATO", datos, 18, 20);
+        tphCampeonatos.setSelectedIndex(1);
+        txtNombre.setText(nombreCampeonato);
+        txtTemporada.setText(temporada);
+        jcbEstado.setSelectedItem(estado);
+        accionBotones(true, false, true);
     }
 
     public void eliminarCampeonatoSeleccionada(int filaSeleccionada) {

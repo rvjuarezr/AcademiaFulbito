@@ -6,6 +6,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["D:\\RONALD\\club grau\\Proyecto\\Reportes\\"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="REPORT_DIR" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select * from bdacademiafulbito.categoria c where c.estado = 'ACTIVO';]]>
 	</queryString>
@@ -74,9 +75,9 @@
 				</textElement>
 				<text><![CDATA[EMPRESA]]></text>
 			</staticText>
-			<image>
-				<reportElement uuid="211769c7-2ad8-49f1-953e-c8c8ca408322" x="17" y="0" width="48" height="38"/>
-				<imageExpression><![CDATA["D:\\RONALD\\club grau\\Proyecto\\src\\academiafulbito\\vista\\imagenes\\maestras\\empresa.png"]]></imageExpression>
+			<image evaluationTime="Report">
+				<reportElement uuid="49b196b6-4f4a-44fd-8a3c-84d5a99d32a9" x="15" y="0" width="40" height="38"/>
+				<imageExpression><![CDATA[$P{REPORT_DIR}+"Reportes\\empresa.png"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
