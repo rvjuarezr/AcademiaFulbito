@@ -13,12 +13,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -338,6 +341,13 @@ public class Utils extends DefaultTableCellRenderer{
         }
 
         return edad;
+    }
+
+    //metodo que adecua la foto de acuerdo al ancho y alto de tu JLabel
+    public static void cargarImagenEnLabel(Image image, JLabel label) {
+        Icon icon = new ImageIcon(image.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
+        label.setIcon(icon);
+        label.repaint();
     }
     
 }

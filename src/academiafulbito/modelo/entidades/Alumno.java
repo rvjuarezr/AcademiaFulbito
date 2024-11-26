@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -54,7 +55,9 @@ public class Alumno {
     private Sexo sexo;
     @Column(name = "nacionalidad", nullable = false, length = 25)
     private String nacionalidad;
-
+    @Lob
+    @Column(name = "foto")
+    private byte[] foto;
     public Alumno() {
     }
 
@@ -148,6 +151,14 @@ public class Alumno {
 
     public void setSexo(Sexo sexo) {
         this.sexo = sexo;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
     }
 
 }
