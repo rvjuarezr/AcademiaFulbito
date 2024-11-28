@@ -18,6 +18,7 @@ import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.awt.Cursor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         initComponents();
         jdp=jdpModAF;
         Utils.cargarComboEstado(jcbEstado);
-        accionBotones(false, false);
+        accionBotones(false, false, false);
         lugarEntrenamientoFacade = new LugarEntrenamientoFacade();
         listarLugarEntrenamientos(paginaActual, tamanioPagina);
     }
@@ -73,28 +74,29 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jspLugarEntrenamientos = new javax.swing.JScrollPane();
         tblLugarEntrenamientos = new javax.swing.JTable();
-        btnNuevaLugarEntrenamiento = new org.edisoncor.gui.button.ButtonRound();
         lblPaginaActual = new javax.swing.JLabel();
         btnAnterior = new org.edisoncor.gui.button.ButtonRound();
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
+        btnNuevaLugarEntrenamiento = new javax.swing.JButton();
         btnRepCanchasPorLugaEnt = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtDireccion = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtUbigeo = new org.edisoncor.gui.textField.TextFieldRoundBackground();
-        btnGuardar = new org.edisoncor.gui.button.ButtonRound();
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
         txtIdLugarEntrenamiento = new javax.swing.JTextField();
         btnImprimirLugarEntrenamiento = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(135, 135, 246));
+
+        setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
         setTitle("MANTENIMIENTO LUGAR ENTRENAMIENTO");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphLugarEntrenamientos.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphLugarEntrenamientos.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -117,24 +119,19 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
                 tblLugarEntrenamientosMouseClicked(evt);
             }
         });
-        jspLugarEntrenamientos.setViewportView(tblLugarEntrenamientos);
-
-        jPanel1.add(jspLugarEntrenamientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
-
-        btnNuevaLugarEntrenamiento.setBackground(new java.awt.Color(156, 156, 247));
-        btnNuevaLugarEntrenamiento.setText("+ LUGAR ENTRENAMIENTO");
-        btnNuevaLugarEntrenamiento.setFont(new java.awt.Font("Arial", 1, 18));
-        btnNuevaLugarEntrenamiento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevaLugarEntrenamientoActionPerformed(evt);
+        tblLugarEntrenamientos.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                tblLugarEntrenamientosMouseMoved(evt);
             }
         });
-        jPanel1.add(btnNuevaLugarEntrenamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, 260, 50));
+        jspLugarEntrenamientos.setViewportView(tblLugarEntrenamientos);
+
+        jPanel1.add(jspLugarEntrenamientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 1150, 290));
 
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
-        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, 220, 50));
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 450, 220, 50));
 
         btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
         btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
@@ -145,7 +142,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 330, -1, 50));
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 450, -1, 50));
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
@@ -156,7 +153,21 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, -1, 50));
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 450, -1, 50));
+
+        btnNuevaLugarEntrenamiento.setFont(new java.awt.Font("Bookman Old Style", 3, 18)); // NOI18N
+        btnNuevaLugarEntrenamiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
+        btnNuevaLugarEntrenamiento.setText("<html><center>NUEVO<br>LUGAR ENT.</center></html>");
+        btnNuevaLugarEntrenamiento.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnNuevaLugarEntrenamiento.setContentAreaFilled(false);
+        btnNuevaLugarEntrenamiento.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNuevaLugarEntrenamiento.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNuevaLugarEntrenamiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevaLugarEntrenamientoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevaLugarEntrenamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 10, 170, 120));
 
         btnRepCanchasPorLugaEnt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/imprimir-pdf.png"))); // NOI18N
         btnRepCanchasPorLugaEnt.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -181,11 +192,6 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         txtDireccion.setEditable(false);
         txtDireccion.setDescripcion("Dirección*");
         txtDireccion.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtDireccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDireccionActionPerformed(evt);
-            }
-        });
         jPanel2.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
 
         txtUbigeo.setEditable(false);
@@ -193,35 +199,23 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         txtUbigeo.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(txtUbigeo, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
 
-        btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
-        btnGuardar.setBorder(null);
-        btnGuardar.setText("AÑADIR");
-        btnGuardar.setBorderPainted(true);
-        btnGuardar.setContentAreaFilled(true);
-        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 270, 170, 70));
-
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVO LUGAR DE ENTRENAMIENTO");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 520, 20));
 
-        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
         btnCancelar.setText("VOLVER");
+        btnCancelar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         btnCancelar.setContentAreaFilled(false);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 220, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 50, 190, 80));
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
@@ -229,21 +223,83 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         jPanel2.add(txtIdLugarEntrenamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 50, -1));
         txtIdLugarEntrenamiento.setVisible(false);
 
+        btnImprimirLugarEntrenamiento.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         btnImprimirLugarEntrenamiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimirLugarEntrenamiento.setText("REPORTE");
         btnImprimirLugarEntrenamiento.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimirLugarEntrenamiento.setContentAreaFilled(false);
         btnImprimirLugarEntrenamiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnImprimirLugarEntrenamientoActionPerformed(evt);
             }
         });
-        jPanel2.add(btnImprimirLugarEntrenamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 0, -1, -1));
+        jPanel2.add(btnImprimirLugarEntrenamiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 240, 190, -1));
+
+        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/guardar-datos.png"))); // NOI18N
+        btnGuardar.setText("GUARDAR");
+        btnGuardar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnGuardar.setContentAreaFilled(false);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 140, 190, 90));
+
 
         tphLugarEntrenamientos.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphLugarEntrenamientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 430));
+        getContentPane().add(tphLugarEntrenamientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1180, 560));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        limpiarCampos();
+        habilitarCampos(false);
+        tphLugarEntrenamientos.setSelectedIndex(0);
+        accionBotones(false, false, false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        // TODO add your handling code here:
+        int totalDePaginas = lugarEntrenamientoFacade.obtenerTotalPaginas(tamanioPagina);
+        if (paginaActual < totalDePaginas) {
+            paginaActual++;
+            listarLugarEntrenamientos(paginaActual, tamanioPagina);
+        }
+    }//GEN-LAST:event_btnSiguienteActionPerformed
+
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        // TODO add your handling code here:
+        if (paginaActual > 1) {
+            paginaActual--;
+            listarLugarEntrenamientos(paginaActual, tamanioPagina);
+        }
+    }//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void tblLugarEntrenamientosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLugarEntrenamientosMouseClicked
+        // TODO add your handling code here:
+        switch(permiteSelFila){
+            case 0://permite llamarlo desde una ventana externa
+                int nroFila = tblLugarEntrenamientos.getSelectedRow();
+                if(nroFila != -1){
+                    jfPrincipal.menuCanchas.txtIdLugarE.setText(tblLugarEntrenamientos.getValueAt(nroFila, 0).toString());    // Encuentra el ID o PK ...
+                    jfPrincipal.menuCanchas.txtNombreLugarE.setText(tblLugarEntrenamientos.getValueAt(nroFila, 1).toString()+" "+tblLugarEntrenamientos.getValueAt(nroFila, 2).toString());
+
+                }
+                try{
+                    setClosed(true);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+                break;
+        }
+    }//GEN-LAST:event_tblLugarEntrenamientosMouseClicked
+
+    
 
     private void btnNuevaLugarEntrenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaLugarEntrenamientoActionPerformed
         // TODO add your handling code here:
@@ -251,7 +307,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         tphLugarEntrenamientos.setSelectedIndex(1);
         limpiarCampos();
         habilitarCampos(true);
-        accionBotones(true, true);
+        accionBotones(true, true, false);
     }//GEN-LAST:event_btnNuevaLugarEntrenamientoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -275,60 +331,25 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
             listarLugarEntrenamientos(lugarEntrenamientoFacade.getListadoLugarEntrenamientos());
             limpiarCampos();
             habilitarCampos(false);
-            accionBotones(false, false);
+            accionBotones(false, false, false);
             btnGuardar.setText("Añadir");
             indicador = 0;
             tphLugarEntrenamientos.setSelectedIndex(0);
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void tblLugarEntrenamientosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLugarEntrenamientosMouseMoved
         // TODO add your handling code here:
-        limpiarCampos();
-        habilitarCampos(false);
-        tphLugarEntrenamientos.setSelectedIndex(0);
-        accionBotones(false, false);
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        // TODO add your handling code here:
-        int totalDePaginas = lugarEntrenamientoFacade.obtenerTotalPaginas(tamanioPagina);
-        if (paginaActual < totalDePaginas) {
-            paginaActual++;
-            listarLugarEntrenamientos(paginaActual, tamanioPagina);
+        int col = tblLugarEntrenamientos.columnAtPoint(evt.getPoint());
+        int row = tblLugarEntrenamientos.rowAtPoint(evt.getPoint());
+        if (col >= 0 && (tblLugarEntrenamientos.getColumnName(col).equals(LiteralesTexto.LITERAL_VER) ||
+                         tblLugarEntrenamientos.getColumnName(col).equals(LiteralesTexto.LITERAL_EDITAR) ||
+                         tblLugarEntrenamientos.getColumnName(col).equals(LiteralesTexto.LITERAL_ELIMINAR))) {
+            tblLugarEntrenamientos.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        } else {
+            tblLugarEntrenamientos.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
-    }//GEN-LAST:event_btnSiguienteActionPerformed
-
-    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
-        // TODO add your handling code here:
-        if (paginaActual > 1) {
-            paginaActual--;
-            listarLugarEntrenamientos(paginaActual, tamanioPagina);
-        }
-    }//GEN-LAST:event_btnAnteriorActionPerformed
-
-    private void txtDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDireccionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDireccionActionPerformed
-
-    private void tblLugarEntrenamientosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLugarEntrenamientosMouseClicked
-        // TODO add your handling code here:
-        switch(permiteSelFila){
-            case 0://permite llamarlo desde una ventana externa
-                int nroFila = tblLugarEntrenamientos.getSelectedRow();
-                if(nroFila != -1){
-                    jfPrincipal.menuCanchas.txtIdLugarE.setText(tblLugarEntrenamientos.getValueAt(nroFila, 0).toString());    // Encuentra el ID o PK ...
-                    jfPrincipal.menuCanchas.txtNombreLugarE.setText(tblLugarEntrenamientos.getValueAt(nroFila, 1).toString()+" "+tblLugarEntrenamientos.getValueAt(nroFila, 2).toString());
-
-                }
-                try{
-                    setClosed(true);
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
-                break;
-        }
-    }//GEN-LAST:event_tblLugarEntrenamientosMouseClicked
+    }//GEN-LAST:event_tblLugarEntrenamientosMouseMoved
 
     private void btnImprimirLugarEntrenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirLugarEntrenamientoActionPerformed
         // TODO add your handling code here:
@@ -350,9 +371,9 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
-    private org.edisoncor.gui.button.ButtonRound btnGuardar;
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimirLugarEntrenamiento;
-    private org.edisoncor.gui.button.ButtonRound btnNuevaLugarEntrenamiento;
+    private javax.swing.JButton btnNuevaLugarEntrenamiento;
     private javax.swing.JButton btnRepCanchasPorLugaEnt;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
@@ -418,7 +439,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
                 modelo.addRow(fila); // Agregar la fila al modelo de la tabla
             }
             // Establece un renderizador personalizado para las celdas de la tabla.
-            tblLugarEntrenamientos.setDefaultRenderer(Object.class, new Utils(18));
+            tblLugarEntrenamientos.setDefaultRenderer(Object.class, new Utils(14));
             
             Utils.configurarEstiloTabla(tblLugarEntrenamientos, jspLugarEntrenamientos);
             Utils.configurarBotonesAccion(tblLugarEntrenamientos);
@@ -453,9 +474,10 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         
     }
 
-    private void accionBotones(boolean d, boolean e) {
+    private void accionBotones(boolean d, boolean e, boolean f) {
         btnCancelar.setEnabled(d);
         btnGuardar.setEnabled(e);
+        btnImprimirLugarEntrenamiento.setEnabled(f);
     }
 
     public void cargarDatosEnFormulario(int row) {
@@ -481,7 +503,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
             tphLugarEntrenamientos.setSelectedIndex(1);
             btnGuardar.setText("Modificar");
             indicador = 1;
-            accionBotones(true, true);
+            accionBotones(true, true, false);
             habilitarCampos(true);
         } else{
             //colocar alguna alerta
@@ -540,21 +562,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         txtDireccion.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 2).toString());
         txtUbigeo.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 3).toString());
 
-        // Supongamos que tienes un modelo de tabla que almacena los datos.
-        /* String nombreLugar = (String) tblLugarEntrenamientos.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
-        String direccion = (String)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 2).toString();
-        String ubigeo = (String)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 3).toString();
-        Estado estado = (Estado)tblLugarEntrenamientos.getValueAt(filaSeleccionada, 4);
+        accionBotones(true, false, true);
 
-        // Crear un mapa con los datos a mostrar
-        Map<String, String> datos = new HashMap<String, String>(5);
-        datos.put("Nombre:", nombreLugar);
-        datos.put("Direccion:", direccion);
-        datos.put("Ubigeo", ubigeo);
-        datos.put("Estado:", estado.toString());
-
-        // Llamar al método genérico para mostrar la información
-        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE LUGAR ENTRENAM.", datos, 18, 20);*/
     }
 }

@@ -241,9 +241,6 @@
                   <Font name="Bookman Old Style" size="18" style="1"/>
                 </Property>
               </Properties>
-              <Events>
-                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtIdLugarEKeyTyped"/>
-              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
               </AuxValues>
@@ -345,9 +342,7 @@
               </Constraints>
             </Component>
             <Component class="org.edisoncor.gui.textField.TextField" name="txtIdCancha">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtIdCanchaActionPerformed"/>
-              </Events>
+
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="txtIdCancha.setVisible(false);"/>
               </AuxValues>

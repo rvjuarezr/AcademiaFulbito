@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_matriculas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfa77bb9-9c62-437c-a840-d77c46f24c18">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idAlumno" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select concat(a.Nombre," ",a.Apellido) as nombre_alumno, a.dni as dni_alumno, date_format(a.Fecha_nacimiento,'%Y-%m-%d') as fec_nac_alumno,
+c.Nombre as categoria_alumno, concat(p.Nombre," ",p.Apellido) as nombre_padre, a.sexo as sexo_alumno, a.nacionalidad as nacionalidad_alumno
+from alumno a
+inner join padre p on a.ID_padre =p.ID_padre
+inner join categoria c on a.ID_categoria = c.ID_categoria
+where a.ID_alumno =$P{idAlumno};]]>
+	</queryString>
+	<field name="nombre_alumno" class="java.lang.String"/>
+	<field name="dni_alumno" class="java.lang.String"/>
+	<field name="fec_nac_alumno" class="java.lang.String"/>
+	<field name="categoria_alumno" class="java.lang.String"/>
+	<field name="nombre_padre" class="java.lang.String"/>
+	<field name="sexo_alumno" class="java.lang.String"/>
+	<field name="nacionalidad_alumno" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="69e493b6-b2a2-4476-8507-b59f5aa2c588" x="161" y="6" width="239" height="24"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE ALUMNOS]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="4a245de5-aa30-4ffe-9251-8da6e3f910d2" x="9" y="30" width="546" height="1"/>
+				<graphicElement>
+					<pen lineWidth="3.5" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="192" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="10" width="206" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DEL ALUMNO   :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7b447b81-07b8-4622-a49c-e6ad6146b3c9" x="262" y="10" width="293" height="20"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre_alumno}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="36" width="218" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DNI DEL ALUMNO              :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="262" y="35" width="224" height="20"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dni_alumno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="262" y="61" width="224" height="20"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fec_nac_alumno}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="63" width="218" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FEC NAC ALUMNO             :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3081ad37-2b4c-4d20-8a05-d6eb4abb4e6a" x="262" y="87" width="224" height="20"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{categoria_alumno}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="89" width="218" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CATEGORIA ALUMNO        :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7b447b81-07b8-4622-a49c-e6ad6146b3c9" x="262" y="112" width="224" height="20"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre_padre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="112" width="206" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DEL PADRE            :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7b447b81-07b8-4622-a49c-e6ad6146b3c9" x="262" y="135" width="224" height="20"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sexo_alumno}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="135" width="206" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEXO DEL ALUMNO              :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7b447b81-07b8-4622-a49c-e6ad6146b3c9" x="262" y="160" width="224" height="20"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nacionalidad_alumno}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a4a2e8c-5a85-48e5-87b9-1a2a7fe3a62a" x="12" y="159" width="206" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NACIONALIDAD ALUMNO    :]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

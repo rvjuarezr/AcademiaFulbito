@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_alumnos_por_categoria" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a12e7101-cf6f-4932-b731-7db5c1ccb1e3">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["D:\\RONALD\\club grau\\Proyecto\\Reportes\\"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="REPORT_DIR" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select * from bdacademiafulbito.categoria c where c.estado = 'ACTIVO';]]>
 	</queryString>
@@ -14,6 +15,9 @@
 	<field name="Edad_min" class="java.lang.Integer"/>
 	<field name="Edad_max" class="java.lang.Integer"/>
 	<field name="estado" class="java.lang.String"/>
+	<variable name="contador" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{ID_categoria}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -21,14 +25,60 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="40" splitType="Stretch">
+		<band height="90" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="efeaec47-47e4-4700-9856-4927e80193c1" mode="Opaque" x="0" y="20" width="555" height="20" backcolor="#FFCCCC"/>
+				<reportElement uuid="efeaec47-47e4-4700-9856-4927e80193c1" mode="Opaque" x="0" y="70" width="555" height="20" backcolor="#FFCCCC"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[LISTADO DE ALUMNOS POR CATEGORIA]]></text>
 			</staticText>
+			<staticText>
+				<reportElement uuid="d02bf24b-1f18-46a6-87d4-e4589a46074f" x="458" y="0" width="48" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[FECHA    :]]></text>
+			</staticText>
+			<textField pattern="h:mm:ss a">
+				<reportElement uuid="4a29a59f-652b-4e49-ba21-e7e41e593c6f" x="506" y="12" width="49" height="12"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d02bf24b-1f18-46a6-87d4-e4589a46074f" x="458" y="12" width="48" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[HORA      :]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="4a29a59f-652b-4e49-ba21-e7e41e593c6f" x="506" y="0" width="49" height="12"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d02bf24b-1f18-46a6-87d4-e4589a46074f" x="17" y="50" width="48" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[PIURA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d02bf24b-1f18-46a6-87d4-e4589a46074f" x="10" y="38" width="70" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[EMPRESA]]></text>
+			</staticText>
+			<image evaluationTime="Report">
+				<reportElement uuid="49b196b6-4f4a-44fd-8a3c-84d5a99d32a9" x="15" y="0" width="40" height="38"/>
+				<imageExpression><![CDATA[$P{REPORT_DIR}+"Reportes\\empresa.png"]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -137,6 +187,14 @@
 		<band splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band splitType="Stretch"/>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement uuid="135f3262-afe8-43ae-868a-70f44b7f4c85" x="0" y="3" width="300" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CATEGORIAS  CONTABILIZADAS :  "+$V{contador}]]></textFieldExpression>
+			</textField>
+		</band>
 	</summary>
 </jasperReport>
