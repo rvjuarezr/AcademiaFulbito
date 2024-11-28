@@ -77,6 +77,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         lblPaginaActual = new javax.swing.JLabel();
         btnAnterior = new org.edisoncor.gui.button.ButtonRound();
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
+        btnRepCanchasPorLugaEnt = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtDireccion = new org.edisoncor.gui.textField.TextFieldRoundBackground();
@@ -156,6 +157,16 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, -1, 50));
+
+        btnRepCanchasPorLugaEnt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/imprimir-pdf.png"))); // NOI18N
+        btnRepCanchasPorLugaEnt.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnRepCanchasPorLugaEnt.setContentAreaFilled(false);
+        btnRepCanchasPorLugaEnt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRepCanchasPorLugaEntActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnRepCanchasPorLugaEnt, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 0, 120, 70));
 
         tphLugarEntrenamientos.addTab("LISTADO", jPanel1);
 
@@ -327,6 +338,14 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         Reportes.imprimirReporte(parametros, "rp_lugar_entrenamientos.jasper");
     }//GEN-LAST:event_btnImprimirLugarEntrenamientoActionPerformed
 
+    private void btnRepCanchasPorLugaEntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepCanchasPorLugaEntActionPerformed
+        // TODO add your handling code here:
+        // Definir los parámetros necesarios para el reporte
+        Map parametros = new HashMap();
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_canchas_por_lugar_entrenam.jasper");
+}//GEN-LAST:event_btnRepCanchasPorLugaEntActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
@@ -334,6 +353,7 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
     private javax.swing.JButton btnImprimirLugarEntrenamiento;
     private org.edisoncor.gui.button.ButtonRound btnNuevaLugarEntrenamiento;
+    private javax.swing.JButton btnRepCanchasPorLugaEnt;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

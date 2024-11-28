@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_horarios_por_canchas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a12e7101-cf6f-4932-b731-7db5c1ccb1e3">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Proyecto\\Reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select c.ID_cancha, c.Nombre , c.ID_lugar, c.estado
+from bdacademiafulbito.cancha c where c.estado = 'ACTIVO';]]>
+	</queryString>
+	<field name="ID_cancha" class="java.lang.Integer"/>
+	<field name="Nombre" class="java.lang.String"/>
+	<field name="ID_lugar" class="java.lang.Integer"/>
+	<field name="estado" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="efeaec47-47e4-4700-9856-4927e80193c1" mode="Opaque" x="0" y="20" width="555" height="20" backcolor="#FFCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LISTADO DE CANCHAS Y SUS HORARIOS]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a795e211-d9da-4076-8544-c6ecb0452059" x="1" y="2" width="62" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID CANCHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ba59f985-0995-4d0d-887f-2701fdf71678" x="158" y="2" width="116" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DE CANCHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="68" y="22" width="44" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="150" y="22" width="69" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HORA INICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="309" y="22" width="61" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROFESOR]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3e02dd98-c4ac-4391-88ab-5f370942ac17" x="74" y="1" width="73" height="19"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ID_cancha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d697170a-e240-4abe-af77-60f9e404d24e" x="274" y="0" width="266" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="236" y="22" width="69" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HORA FIN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="411" y="22" width="61" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CATEGORIA]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="6867c844-8d3d-45c9-b765-ec105f993ae0" x="46" y="14" width="101" height="20"/>
+				<subreportParameter name="sub_rp_ID_cancha">
+					<subreportParameterExpression><![CDATA[$F{ID_cancha}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "sub_rp_horarios_por_canchas.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

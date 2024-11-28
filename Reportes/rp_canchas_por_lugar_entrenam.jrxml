@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rp_alumnos_por_categoria" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a12e7101-cf6f-4932-b731-7db5c1ccb1e3">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="6"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Proyecto\\Reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from bdacademiafulbito.lugar_entrenamiento l where l.estado = 'ACTIVO';]]>
+	</queryString>
+	<field name="ID_lugar" class="java.lang.Integer"/>
+	<field name="Nombre" class="java.lang.String"/>
+	<field name="Direccion" class="java.lang.String"/>
+	<field name="Ubigeo" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="efeaec47-47e4-4700-9856-4927e80193c1" mode="Opaque" x="0" y="20" width="555" height="20" backcolor="#FFCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LISTADO DE CANCHAS POR LUGAR DE ENTRENAMIENTO]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a795e211-d9da-4076-8544-c6ecb0452059" x="0" y="2" width="87" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LUGAR ENTREN.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d8246f74-b812-4d48-a1a7-97ffddd41daf" x="87" y="2" width="195" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ba59f985-0995-4d0d-887f-2701fdf71678" x="277" y="2" width="60" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0ad62824-d4a3-44b1-9439-226746e1a13a" x="479" y="2" width="47" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UBIGEO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="53" y="28" width="60" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID_CANCHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="147" y="28" width="159" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DE CANCHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eec5cf5c-02dc-4029-b676-57f4f889f058" x="358" y="28" width="51" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1ad2237d-eca5-47f7-99be-58143b793a61" x="337" y="1" width="144" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Direccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5db9d7c2-a37c-4060-815a-eb91ac67141f" x="606" y="8" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Ubigeo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d20b3b26-2333-4dfd-84fb-4794fb79caa4" x="523" y="2" width="32" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Ubigeo}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="5e994367-43b9-4eed-bad6-ccfb87891ad2" x="10" y="28" width="200" height="12"/>
+				<subreportParameter name="sub_rp_ID_lugar">
+					<subreportParameterExpression><![CDATA[$F{ID_lugar}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "sub_rp_canchas_por_lugar_entrenam.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
