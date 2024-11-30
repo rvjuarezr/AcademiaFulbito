@@ -245,6 +245,19 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         });
         jPanel2.add(btnReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, -1, -1));
 
+        
+        jPanel2.add(txtIdCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 50, -1));
+        txtIdCancha.setVisible(false);
+
+        btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnReporte.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, -1, -1));
+
         tphCancha.addTab("REGISTRO", jPanel2);
 
         getContentPane().add(tphCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 520));
@@ -353,6 +366,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
                 break;
         }
     }//GEN-LAST:event_tblCanchaMouseClicked
+
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:

@@ -18,12 +18,14 @@ import academiafulbito.controlador.beans.ProfesorFacade;
 import academiafulbito.modelo.entidades.Horario;
 import academiafulbito.modelo.enums.Dia;
 import academiafulbito.modelo.enums.Estado;
+import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
 import java.sql.Time;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +105,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
         jspHorarios = new javax.swing.JScrollPane();
         tblHorarios = new javax.swing.JTable();
+        btnRepCanchasPorLugaEnt = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -131,7 +134,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
         setTitle("MANTENIMIENTO HORARIOS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphHorarios.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+        tphHorarios.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
 
         jpListado.setBackground(new java.awt.Color(255, 255, 255));
         jpListado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -190,6 +193,16 @@ public class jifHorario extends javax.swing.JInternalFrame {
         jspHorarios.setViewportView(tblHorarios);
 
         jpListado.add(jspHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 1130, 230));
+
+        btnRepCanchasPorLugaEnt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/imprimir-pdf.png"))); // NOI18N
+        btnRepCanchasPorLugaEnt.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnRepCanchasPorLugaEnt.setContentAreaFilled(false);
+        btnRepCanchasPorLugaEnt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRepCanchasPorLugaEntActionPerformed(evt);
+            }
+        });
+        jpListado.add(btnRepCanchasPorLugaEnt, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 0, 120, 70));
 
         tphHorarios.addTab("LISTADO", jpListado);
 
@@ -528,6 +541,14 @@ public class jifHorario extends javax.swing.JInternalFrame {
         }
 
     }//GEN-LAST:event_tblHorariosMouseClicked
+
+    private void btnRepCanchasPorLugaEntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepCanchasPorLugaEntActionPerformed
+        // TODO add your handling code here:
+        // Definir los parámetros necesarios para el reporte
+        Map parametros = new HashMap();
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_horarios_por_canchas.jasper");
+}//GEN-LAST:event_btnRepCanchasPorLugaEntActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
@@ -537,6 +558,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
     private org.edisoncor.gui.button.ButtonRound btnNuevoHorario;
+    private javax.swing.JButton btnRepCanchasPorLugaEnt;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;

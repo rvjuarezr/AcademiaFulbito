@@ -342,6 +342,7 @@
               </Constraints>
             </Component>
             <Component class="org.edisoncor.gui.textField.TextField" name="txtIdCancha">
+
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="txtIdCancha.setVisible(false);"/>
               </AuxValues>
