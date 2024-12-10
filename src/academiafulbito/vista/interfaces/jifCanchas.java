@@ -61,7 +61,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         initComponents();
         jDesktopPane = jdpModAF;
         Utils.cargarComboEstado(jcbEstado);
-        accionBotones(false, false);
+        accionBotones(false, false, false);
         canchaFacade = new CanchaFacade();
         lugarEFacade = new LugarEntrenamientoFacade();
         listarCanchas(paginaActual, tamanioPagina);
@@ -80,23 +80,23 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jspCanchas = new javax.swing.JScrollPane();
         tblCancha = new javax.swing.JTable();
-        btnNuevoHorario = new org.edisoncor.gui.button.ButtonRound();
         lblPaginaActual = new javax.swing.JLabel();
         btnAnterior = new org.edisoncor.gui.button.ButtonRound();
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
+        btnNuevoHorario = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtNombreLugarE = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtIdLugarE = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         btnBucarLugarE = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        btnGuardar = new org.edisoncor.gui.button.ButtonRound();
         txtNombreCancha = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
         txtIdCancha = new org.edisoncor.gui.textField.TextField();
-        btnReporte = new javax.swing.JButton();
+        btnImprimir = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(204, 204, 255));
+        setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
         setTitle("MANTENIMIENTO CANCHAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -126,22 +126,12 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         });
         jspCanchas.setViewportView(tblCancha);
 
-        jPanel1.add(jspCanchas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 850, 250));
-
-        btnNuevoHorario.setBackground(new java.awt.Color(156, 156, 247));
-        btnNuevoHorario.setText("+ CANCHA");
-        btnNuevoHorario.setFont(new java.awt.Font("Arial", 1, 18));
-        btnNuevoHorario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoHorarioActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnNuevoHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 140, 50));
+        jPanel1.add(jspCanchas, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 1110, 270));
 
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
-        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, 220, 50));
+        jPanel1.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 420, 220, 50));
 
         btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
         btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
@@ -152,7 +142,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 330, -1, 50));
+        jPanel1.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 420, -1, 50));
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
@@ -163,7 +153,21 @@ public class jifCanchas extends javax.swing.JInternalFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, -1, 50));
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 420, -1, 50));
+
+        btnNuevoHorario.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnNuevoHorario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
+        btnNuevoHorario.setText("<html><center>NUEVA<br>CANCHA</center></html>");
+        btnNuevoHorario.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnNuevoHorario.setContentAreaFilled(false);
+        btnNuevoHorario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNuevoHorario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNuevoHorario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoHorarioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevoHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 10, 180, 120));
 
         tphCancha.addTab("LISTADO", jPanel1);
 
@@ -201,29 +205,17 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         });
         jPanel2.add(btnBucarLugarE, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 120, 80, 60));
 
-        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
         btnCancelar.setText("VOLVER");
+        btnCancelar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnCancelar.setContentAreaFilled(false);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 380, 220, 70));
-
-        btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
-        btnGuardar.setBorder(null);
-        btnGuardar.setText("AÑADIR");
-        btnGuardar.setBorderPainted(true);
-        btnGuardar.setContentAreaFilled(true);
-        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 380, 170, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 50, 190, 70));
 
         txtNombreCancha.setEditable(false);
         txtNombreCancha.setDescripcion("Nombre*");
@@ -236,43 +228,36 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         jPanel2.add(txtIdCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 50, -1));
         txtIdCancha.setVisible(false);
 
-        btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
-        btnReporte.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+        btnImprimir.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
+        btnImprimir.setText("REPORTE");
+        btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnImprimir.setContentAreaFilled(false);
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReporteActionPerformed(evt);
+                btnImprimirActionPerformed(evt);
             }
         });
-        jPanel2.add(btnReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, -1, -1));
+        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 210, 190, -1));
 
-        
-        jPanel2.add(txtIdCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 50, -1));
-        txtIdCancha.setVisible(false);
-
-        btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
-        btnReporte.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/guardar-datos.png"))); // NOI18N
+        btnGuardar.setText("GUARDAR");
+        btnGuardar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnGuardar.setContentAreaFilled(false);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReporteActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, -1, -1));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 130, 190, 70));
 
         tphCancha.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 520));
+        getContentPane().add(tphCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 520));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnNuevoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoHorarioActionPerformed
-        // TODO add your handling code here:
-        indicador = 0;//para poder guardar
-        tphCancha.setSelectedIndex(1);
-        limpiarCampos();
-        habilitarCampos(true);
-        accionBotones(true, true);
-}//GEN-LAST:event_btnNuevoHorarioActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
         // TODO add your handling code here:
@@ -311,8 +296,46 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         limpiarCampos();
         habilitarCampos(false);
         tphCancha.setSelectedIndex(0);
-        accionBotones(false, false);
+        accionBotones(false, false, false);
 }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void tblCanchaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCanchaMouseClicked
+        // TODO add your handling code here:
+        switch(permiteSelFila){
+            case 0://permite llamarlo desde una ventana externa
+                int nroFila = tblCancha.getSelectedRow();
+                if(nroFila != -1){
+                    jfPrincipal.menuHorario.txtIdCancha.setText(tblCancha.getValueAt(nroFila, 0).toString());
+                    jfPrincipal.menuHorario.txtNombreCancha.setText(tblCancha.getValueAt(nroFila, 1).toString());
+
+                }
+                try{
+                    setClosed(true);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+                break;
+        }
+    }//GEN-LAST:event_tblCanchaMouseClicked
+
+
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        // TODO add your handling code here:
+        Map parametros = new HashMap();
+        parametros.put("idCancha", txtIdCancha.getText()); // Ejemplo de parámetro para el reporte
+        // Llamar al método para generar y mostrar el reporte
+        Reportes.imprimirReporte(parametros, "rp_canchas.jasper");
+
+    }//GEN-LAST:event_btnImprimirActionPerformed
+
+    private void btnNuevoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoHorarioActionPerformed
+        // TODO add your handling code here:
+        indicador = 0;//para poder guardar
+        tphCancha.setSelectedIndex(1);
+        limpiarCampos();
+        habilitarCampos(true);
+        accionBotones(true, true, false);
+}//GEN-LAST:event_btnNuevoHorarioActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
@@ -337,7 +360,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
                 listarCanchas(paginaActual, tamanioPagina);
                 limpiarCampos();
                 habilitarCampos(false);
-                accionBotones(false, false);
+                accionBotones(false, false, false);
                 btnGuardar.setText("Añadir");
                 indicador = 0;
                 tphCancha.setSelectedIndex(0);
@@ -346,45 +369,16 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-}//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void tblCanchaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCanchaMouseClicked
-        // TODO add your handling code here:
-        switch(permiteSelFila){
-            case 0://permite llamarlo desde una ventana externa
-                int nroFila = tblCancha.getSelectedRow();
-                if(nroFila != -1){
-                    jfPrincipal.menuHorario.txtIdCancha.setText(tblCancha.getValueAt(nroFila, 0).toString());
-                    jfPrincipal.menuHorario.txtNombreCancha.setText(tblCancha.getValueAt(nroFila, 1).toString());
-
-                }
-                try{
-                    setClosed(true);
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
-                break;
-        }
-    }//GEN-LAST:event_tblCanchaMouseClicked
-
-
-    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
-        // TODO add your handling code here:
-        Map parametros = new HashMap();
-        parametros.put("idCancha", txtIdCancha.getText()); // Ejemplo de parámetro para el reporte
-        // Llamar al método para generar y mostrar el reporte
-        Reportes.imprimirReporte(parametros, "rp_canchas.jasper");
-
-    }//GEN-LAST:event_btnReporteActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBucarLugarE;
     private javax.swing.JButton btnCancelar;
-    private org.edisoncor.gui.button.ButtonRound btnGuardar;
-    private org.edisoncor.gui.button.ButtonRound btnNuevoHorario;
-    private javax.swing.JButton btnReporte;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnImprimir;
+    private javax.swing.JButton btnNuevoHorario;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -448,9 +442,10 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         }
     }
 
-    private void accionBotones(boolean d, boolean e) {
+    private void accionBotones(boolean d, boolean e, boolean f) {
         btnCancelar.setEnabled(d);
         btnGuardar.setEnabled(e);
+        btnImprimir.setEnabled(f);
     }
 
     private void listarCanchas(int paginaActual, int tamanioPagina) {
@@ -504,6 +499,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         txtNombreCancha.setText(tblCancha.getValueAt(filaSeleccionada, 1).toString());
         txtIdLugarE.setText(tblCancha.getValueAt(filaSeleccionada, 2).toString());
         txtNombreLugarE.setText(tblCancha.getValueAt(filaSeleccionada, 3).toString());
+        accionBotones(true, false, true);
     }
     public void eliminarCanchaSeleccionada(int filaSeleccionada) {
         if (filaSeleccionada != -1) {
@@ -564,7 +560,7 @@ public class jifCanchas extends javax.swing.JInternalFrame {
             tphCancha.setSelectedIndex(1);
             btnGuardar.setText("Modificar");
             indicador = 1;
-            accionBotones(true, true);
+            accionBotones(true, true, false);
             habilitarCampos(true);
         } else{
             //colocar alguna alerta

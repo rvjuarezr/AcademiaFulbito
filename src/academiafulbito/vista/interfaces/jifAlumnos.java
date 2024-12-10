@@ -680,6 +680,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         txtNombrePadre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtDni.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtNacionalidad.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        lblFoto.setIcon(null);
     }
 
     private void habilitarCampos(boolean band) {

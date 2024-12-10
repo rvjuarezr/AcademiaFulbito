@@ -99,13 +99,13 @@ public class jifHorario extends javax.swing.JInternalFrame {
 
         tphHorarios = new javax.swing.JTabbedPane();
         jpListado = new javax.swing.JPanel();
-        btnNuevoHorario = new org.edisoncor.gui.button.ButtonRound();
         lblPaginaActual = new javax.swing.JLabel();
         btnAnterior = new org.edisoncor.gui.button.ButtonRound();
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
         jspHorarios = new javax.swing.JScrollPane();
         tblHorarios = new javax.swing.JTable();
         btnRepCanchasPorLugaEnt = new javax.swing.JButton();
+        btnNuevoHorario = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -128,8 +128,9 @@ public class jifHorario extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        txtIdHorario = new javax.swing.JTextField();
 
-        setBackground(new java.awt.Color(204, 204, 255));
+        setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
         setTitle("MANTENIMIENTO HORARIOS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -139,20 +140,10 @@ public class jifHorario extends javax.swing.JInternalFrame {
         jpListado.setBackground(new java.awt.Color(255, 255, 255));
         jpListado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnNuevoHorario.setBackground(new java.awt.Color(156, 156, 247));
-        btnNuevoHorario.setText("+ HORARIO");
-        btnNuevoHorario.setFont(new java.awt.Font("Arial", 1, 18));
-        btnNuevoHorario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoHorarioActionPerformed(evt);
-            }
-        });
-        jpListado.add(btnNuevoHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 10, 140, 50));
-
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPaginaActual.setText("10");
-        jpListado.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 330, 220, 50));
+        jpListado.add(lblPaginaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 420, 220, 50));
 
         btnAnterior.setBackground(new java.awt.Color(204, 204, 204));
         btnAnterior.setForeground(new java.awt.Color(51, 51, 51));
@@ -163,7 +154,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 btnAnteriorActionPerformed(evt);
             }
         });
-        jpListado.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 330, -1, 50));
+        jpListado.add(btnAnterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 420, -1, 50));
 
         btnSiguiente.setBackground(new java.awt.Color(204, 204, 204));
         btnSiguiente.setForeground(new java.awt.Color(51, 51, 51));
@@ -174,7 +165,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-        jpListado.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 330, -1, 50));
+        jpListado.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 420, -1, 50));
 
         tblHorarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -192,17 +183,35 @@ public class jifHorario extends javax.swing.JInternalFrame {
         });
         jspHorarios.setViewportView(tblHorarios);
 
-        jpListado.add(jspHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 1130, 230));
+        jpListado.add(jspHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 1130, 270));
 
+        btnRepCanchasPorLugaEnt.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         btnRepCanchasPorLugaEnt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/imprimir-pdf.png"))); // NOI18N
+        btnRepCanchasPorLugaEnt.setText("<html><center>HORARIOS POR<br> CANCHA</center></html>");
         btnRepCanchasPorLugaEnt.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         btnRepCanchasPorLugaEnt.setContentAreaFilled(false);
+        btnRepCanchasPorLugaEnt.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRepCanchasPorLugaEnt.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnRepCanchasPorLugaEnt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRepCanchasPorLugaEntActionPerformed(evt);
             }
         });
-        jpListado.add(btnRepCanchasPorLugaEnt, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 0, 120, 70));
+        jpListado.add(btnRepCanchasPorLugaEnt, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, 150, 120));
+
+        btnNuevoHorario.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnNuevoHorario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
+        btnNuevoHorario.setText("<html><center>NUEVO<br>CAMPEONATO</center></html>");
+        btnNuevoHorario.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnNuevoHorario.setContentAreaFilled(false);
+        btnNuevoHorario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNuevoHorario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNuevoHorario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoHorarioActionPerformed(evt);
+            }
+        });
+        jpListado.add(btnNuevoHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 10, 180, 120));
 
         tphHorarios.addTab("LISTADO", jpListado);
 
@@ -326,16 +335,17 @@ public class jifHorario extends javax.swing.JInternalFrame {
         });
         jPanel2.add(txtNombreCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 400, 450, 50));
 
-        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
         btnCancelar.setText("VOLVER");
+        btnCancelar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnCancelar.setContentAreaFilled(false);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 270, 220, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 60, 190, 70));
 
         btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
         btnGuardar.setBorder(null);
@@ -348,7 +358,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 170, 170, 70));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 150, 170, 70));
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
@@ -375,23 +385,16 @@ public class jifHorario extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel7.setText("DATOS DE LA CATEGORIA QUE PERTENECE:");
         jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 320, 30));
+        jPanel2.add(txtIdHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 470, 90, 40));
+        txtIdCategoria.setVisible(false);
 
         tphHorarios.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1150, 590));
+        getContentPane().add(tphHorarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1150, 540));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
-    private void btnNuevoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoHorarioActionPerformed
-        // TODO add your handling code here:
-        indicador = 0;//para poder guardar
-        tphHorarios.setSelectedIndex(1);
-        limpiarCampos();
-        habilitarCampos(true);
-        accionBotones(true, true, true, true, true);
-}//GEN-LAST:event_btnNuevoHorarioActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
         // TODO add your handling code here:
@@ -549,6 +552,15 @@ public class jifHorario extends javax.swing.JInternalFrame {
         // Llamar al método para generar y mostrar el reporte
         Reportes.imprimirReporte(parametros, "rp_horarios_por_canchas.jasper");
 }//GEN-LAST:event_btnRepCanchasPorLugaEntActionPerformed
+
+    private void btnNuevoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoHorarioActionPerformed
+        // TODO add your handling code here:
+        indicador = 0;//para poder guardar
+        tphHorarios.setSelectedIndex(1);
+        limpiarCampos();
+        habilitarCampos(true);
+        accionBotones(true, true, true, true, true);
+}//GEN-LAST:event_btnNuevoHorarioActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
@@ -557,7 +569,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnBuscarCategoria;
     private javax.swing.JButton btnCancelar;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
-    private org.edisoncor.gui.button.ButtonRound btnNuevoHorario;
+    private javax.swing.JButton btnNuevoHorario;
     private javax.swing.JButton btnRepCanchasPorLugaEnt;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
@@ -578,6 +590,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
     private javax.swing.JTabbedPane tphHorarios;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCancha;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdCategoria;
+    private javax.swing.JTextField txtIdHorario;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtIdProfesor;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCancha;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCategoria;
@@ -594,6 +607,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
         txtNombreCategoria.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtIdCancha.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtNombreCancha.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtIdHorario.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
     }
 
     private void habilitarCampos(boolean band){
@@ -720,30 +734,10 @@ public class jifHorario extends javax.swing.JInternalFrame {
 
     public void mostrarInformacionHorario(int filaSeleccionada) {
 
-        // Supongamos que tienes un modelo de tabla que almacena los datos.
-        Dia diaHorario = (Dia) tblHorarios.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
-        String horaInicio = (String)tblHorarios.getValueAt(filaSeleccionada, 2).toString();
-        String horaFin = (String)tblHorarios.getValueAt(filaSeleccionada, 3).toString();
-        String nombreProfesor = (String)tblHorarios.getValueAt(filaSeleccionada, 5).toString();
-        String apellidosProfesor = (String)tblHorarios.getValueAt(filaSeleccionada, 6).toString();
-        String nombreCategoria = (String)tblHorarios.getValueAt(filaSeleccionada, 8).toString();
-        String nombreCancha = (String)tblHorarios.getValueAt(filaSeleccionada, 10).toString();
-        Estado estado = (Estado)tblHorarios.getValueAt(filaSeleccionada, 11);
+        getDatosHorario(filaSeleccionada);
+        txtIdHorario.setText(tblHorarios.getValueAt(filaSeleccionada, 0).toString());
+        accionBotones(true, false, false, false, false);
 
-        // Crear un mapa con los datos a mostrar
-        Map<String, String> datos = new LinkedHashMap<String, String>(9);
-        datos.put("Dia: ", diaHorario.toString());
-        datos.put("Hora Inicio: ", horaInicio);
-        datos.put("Hora Fin: ", horaFin);
-        datos.put("Nombre Profesor: ", nombreProfesor);
-        datos.put("Apellidos Profesor: ", apellidosProfesor);
-        datos.put("Nombre Categoria: ", nombreCategoria);
-        datos.put("Nombre Cancha: ", nombreCancha);
-        datos.put("Estado: ", estado.toString());
-
-        // Llamar al método genérico para mostrar la información
-        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DE HORARIOS", datos, 18, 20);
     }
 
     public void eliminarHorarioSeleccionado(int filaSeleccionada) {
@@ -789,41 +783,46 @@ public class jifHorario extends javax.swing.JInternalFrame {
             // Capturar la ID de la fila seleccionada
             idSeleccionada = Integer.parseInt(tblHorarios.getValueAt(row, 0).toString()); // Supone que la ID está en la primera columna
 
-            // Obtener los datos de la fila seleccionada
-            Dia diaHorario = (Dia) tblHorarios.getValueAt(row, 1); // Ajusta el índice de columna según tu tabla
-            String horaInicio = (String)tblHorarios.getValueAt(row, 2).toString();
-            String horaFin = (String)tblHorarios.getValueAt(row, 3).toString();
-            String idProfesor = (String)tblHorarios.getValueAt(row, 4).toString();
-            String nombreProfesor = (String)tblHorarios.getValueAt(row, 5).toString();
-            String apellidosProfesor = (String)tblHorarios.getValueAt(row, 6).toString();
-            String idCategoria = (String)tblHorarios.getValueAt(row, 7).toString();
-            String nombreCategoria = (String)tblHorarios.getValueAt(row, 8).toString();
-            String idCancha = (String)tblHorarios.getValueAt(row, 9).toString();
-            String nombreCancha = (String)tblHorarios.getValueAt(row, 10).toString();
-            Estado estado = (Estado)tblHorarios.getValueAt(row, 11);
+            getDatosHorario(row);
 
-            // Asignar los datos a los JTextField en el segundo panel
-            jcbDiasDeLaSemana.setSelectedItem(diaHorario);
-            jsHoraInicio.setValue(Utils.getTime(horaInicio));
-            jsHoraFin.setValue(Utils.getTime(horaFin));
-            txtIdProfesor.setText(idProfesor);
-            txtNombreProfesor.setText(nombreProfesor+" "+apellidosProfesor);
-            txtIdCategoria.setText(idCategoria);
-            txtNombreCategoria.setText(nombreCategoria);
-            txtIdCancha.setText(idCancha);
-            txtNombreCancha.setText(nombreCancha);
-
-            // Seleccionar el estado en el JComboBox
-            jcbEstado.setSelectedItem(estado);
-
-            // Cambiar al segundo panel donde están los JTextField
-            tphHorarios.setSelectedIndex(1);
             btnGuardar.setText("Modificar");
             indicador = 1;
             accionBotones(true, true, true, true, true);
             habilitarCampos(true);
-        } else {
-            //colocar alguna alerta
         }
+    }
+
+    private void getDatosHorario(int filaSeleccionada){
+
+        limpiarCampos();
+        // Cambiar al segundo panel donde están los JTextField
+        tphHorarios.setSelectedIndex(1);
+
+        // Obtener los datos de la fila seleccionada
+        Dia diaHorario = (Dia) tblHorarios.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
+        String horaInicio = (String)tblHorarios.getValueAt(filaSeleccionada, 2).toString();
+        String horaFin = (String)tblHorarios.getValueAt(filaSeleccionada, 3).toString();
+        String idProfesor = (String)tblHorarios.getValueAt(filaSeleccionada, 4).toString();
+        String nombreProfesor = (String)tblHorarios.getValueAt(filaSeleccionada, 5).toString();
+        String apellidosProfesor = (String)tblHorarios.getValueAt(filaSeleccionada, 6).toString();
+        String idCategoria = (String)tblHorarios.getValueAt(filaSeleccionada, 7).toString();
+        String nombreCategoria = (String)tblHorarios.getValueAt(filaSeleccionada, 8).toString();
+        String idCancha = (String)tblHorarios.getValueAt(filaSeleccionada, 9).toString();
+        String nombreCancha = (String)tblHorarios.getValueAt(filaSeleccionada, 10).toString();
+        Estado estado = (Estado)tblHorarios.getValueAt(filaSeleccionada, 11);
+
+        // Asignar los datos a los JTextField en el segundo panel
+        jcbDiasDeLaSemana.setSelectedItem(diaHorario);
+        jsHoraInicio.setValue(Utils.getTime(horaInicio));
+        jsHoraFin.setValue(Utils.getTime(horaFin));
+        txtIdProfesor.setText(idProfesor);
+        txtNombreProfesor.setText(nombreProfesor+" "+apellidosProfesor);
+        txtIdCategoria.setText(idCategoria);
+        txtNombreCategoria.setText(nombreCategoria);
+        txtIdCancha.setText(idCancha);
+        txtNombreCancha.setText(nombreCancha);
+
+        // Seleccionar el estado en el JComboBox
+        jcbEstado.setSelectedItem(estado);
     }
 }

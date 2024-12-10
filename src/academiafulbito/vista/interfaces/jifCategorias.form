@@ -317,7 +317,6 @@
                 </Constraint>
               </Constraints>
             </Component>
-
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -356,9 +355,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-
                   <AbsoluteConstraints x="880" y="50" width="190" height="80"/>
-
                 </Constraint>
               </Constraints>
             </Component>
@@ -379,6 +376,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="txtIdCategoria">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="txtIdCategoria.setVisible(false);"/>
+              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="380" y="230" width="90" height="40"/>
@@ -387,7 +387,6 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnImprimir">
               <Properties>
-
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Bookman Old Style" size="18" style="1"/>
                 </Property>
@@ -395,25 +394,18 @@
                   <Image iconType="3" name="/academiafulbito/vista/imagenes/reportes.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="REPORTE"/>
-
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                     <LineBorder/>
                   </Border>
                 </Property>
-
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
-
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImprimirActionPerformed"/>
               </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="txtIdCategoria.setVisible(false);"/>
-              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-
                   <AbsoluteConstraints x="880" y="230" width="190" height="80"/>
                 </Constraint>
               </Constraints>
@@ -440,7 +432,6 @@
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="880" y="140" width="190" height="80"/>
-
                 </Constraint>
               </Constraints>
             </Component>
