@@ -14,6 +14,7 @@ import academiafulbito.vista.interfaces.jifHorario;
 import academiafulbito.vista.interfaces.jifLugarEntrenamiento;
 import academiafulbito.vista.interfaces.jifMatricula;
 import academiafulbito.vista.interfaces.jifPadres;
+import academiafulbito.vista.interfaces.jifPagos;
 import academiafulbito.vista.interfaces.jifProfesores;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -80,6 +81,12 @@ public class VentanaManager {
                 jfPrincipal.menuMatricula = new jifMatricula(jdpVentanas);
             }
             ventana = jfPrincipal.menuMatricula;
+
+        } else if(opcion.equals(LiteralesTexto.LITERAL_PAGO_PAGOS)){
+            if (jfPrincipal.menuPagos == null || jfPrincipal.menuPagos.isClosed()) {
+                jfPrincipal.menuPagos = new jifPagos(jdpVentanas);
+            }
+            ventana = jfPrincipal.menuPagos;
 
         }
 

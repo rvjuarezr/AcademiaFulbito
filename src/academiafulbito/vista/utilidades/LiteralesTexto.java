@@ -65,6 +65,7 @@ public class LiteralesTexto {
     public static final String LITERAL_CONTROL_HORARIOS = "HORARIOS";
     public static final String LITERAL_CONTROL_ALUMNOS = "ALUMNOS";
     public static final String LITERAL_CONTROL_MATRICULA = "MATRICULA";
+    public static final String LITERAL_PAGO_PAGOS = "PAGOS";
     public static final String LITERAL_DIRECCION = "Direccion";
     public static final String LITERAL_UBIGEO = "Ubigeo";
     public static final String LITERAL_DIA = "DIA";
