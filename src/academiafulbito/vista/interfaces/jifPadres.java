@@ -15,13 +15,20 @@ import academiafulbito.modelo.entidades.Padre;
 import academiafulbito.modelo.enums.Estado;
 import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
+import academiafulbito.vista.utilidades.ImageFilter;
+import academiafulbito.vista.utilidades.Imagen;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.awt.Image;
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -53,6 +60,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
     private int totalPaginas;
+    private File fileFoto;
 
     /** Creates new form jifPadress */
     public jifPadres(JDesktopPane jdpModAF) {
@@ -60,7 +68,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         jdp = jdpModAF;
         Utils.cargarComboEstado(jcbEstado);
 
-        accionBotones(false, false);
+        accionBotones(false, false, false);
         padreFacade = new PadreFacade();
         listarPadres(paginaActual, tamanioPagina);
     }
@@ -93,13 +101,16 @@ public class jifPadres extends javax.swing.JInternalFrame {
         txtDni = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         btnImprimir = new javax.swing.JButton();
         txtIdPadre = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        lblFoto = new javax.swing.JLabel();
+        btnFoto = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
         setTitle("MANTENIMIENTO PADRES");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphPadres.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphPadres.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -170,13 +181,13 @@ public class jifPadres extends javax.swing.JInternalFrame {
 
         txtNombre.setEditable(false);
         txtNombre.setDescripcion("Nombre*");
-        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNombreKeyTyped(evt);
             }
         });
-        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 760, 40));
 
         txtApellido.setEditable(false);
         txtApellido.setDescripcion("Apellidos*");
@@ -186,7 +197,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 txtApellidoKeyTyped(evt);
             }
         });
-        jPanel2.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 720, 40));
+        jPanel2.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 760, 40));
 
         txtTelefono.setEditable(false);
         txtTelefono.setDescripcion("Telefono*");
@@ -196,7 +207,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 txtTelefonoKeyTyped(evt);
             }
         });
-        jPanel2.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 720, 40));
+        jPanel2.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 760, 40));
 
         btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
         btnGuardar.setBorder(null);
@@ -239,7 +250,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 txtDniKeyTyped(evt);
             }
         });
-        jPanel2.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, 720, 40));
+        jPanel2.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, 760, 40));
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
         btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -252,9 +263,26 @@ public class jifPadres extends javax.swing.JInternalFrame {
         jPanel2.add(txtIdPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 110, 30));
         txtIdPadre.setVisible(false);
 
+        jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel3.add(lblFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 6, 170, 200));
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 20, 180, 210));
+
+        btnFoto.setText("Foto");
+        btnFoto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnFoto.setContentAreaFilled(false);
+        btnFoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFotoActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 240, 120, 20));
+
         tphPadres.addTab("REGISTRO", jPanel2);
 
-        getContentPane().add(tphPadres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, 420));
+        getContentPane().add(tphPadres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, 420));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -265,7 +293,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
         tphPadres.setSelectedIndex(1);
         limpiarCampos();
         habilitarCampos(true);
-        accionBotones(true, true);
+        accionBotones(true, true, true);
     }//GEN-LAST:event_btnNuevoPadreActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -291,7 +319,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
                     listarPadres(paginaActual, tamanioPagina);
                     limpiarCampos();
                     habilitarCampos(false);
-                    accionBotones(false, false);
+                    accionBotones(false, false, false);
                     btnGuardar.setText("Añadir");
                     indicador = 0;
                     tphPadres.setSelectedIndex(0);
@@ -388,9 +416,28 @@ public class jifPadres extends javax.swing.JInternalFrame {
         Reportes.imprimirReporte(parametros, "rp_padre.jasper");
     }//GEN-LAST:event_btnImprimirActionPerformed
 
+    private void btnFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFotoActionPerformed
+        // TODO add your handling code here:
+        JFileChooser selectorArchivo = new JFileChooser();
+        selectorArchivo.addChoosableFileFilter(new ImageFilter());
+        int seleccion=selectorArchivo.showOpenDialog(lblFoto);
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            try {
+                fileFoto = selectorArchivo.getSelectedFile();
+                ImageIcon fot=new ImageIcon(fileFoto.getAbsolutePath());
+                Icon icono=new ImageIcon(fot.getImage().getScaledInstance(lblFoto.getWidth(),lblFoto.getHeight()
+                        , Image.SCALE_DEFAULT));
+                lblFoto.setIcon(icono);
+            } catch (Exception ex) {
+                Utils.mensajeInformacion("Error al guardar imagen\n" + ex.getMessage() + ex.getLocalizedMessage());
+            }
+        }
+}//GEN-LAST:event_btnFotoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnFoto;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
     private javax.swing.JButton btnImprimir;
     private org.edisoncor.gui.button.ButtonRound btnNuevoPadre;
@@ -398,8 +445,10 @@ public class jifPadres extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
     private javax.swing.JScrollPane jspPadres;
+    private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblPadres;
     private javax.swing.JTabbedPane tphPadres;
@@ -464,6 +513,18 @@ public class jifPadres extends javax.swing.JInternalFrame {
         padre.setEstado((Estado) jcbEstado.getSelectedItem());
         padre.setDniPadre(txtDni.getText());
 
+        if (fileFoto != null) {
+           try {
+               byte[] byteFoto;
+               byteFoto = Imagen.convertirFotoJPG(fileFoto, 170, 200);//guardarFoto
+               if (byteFoto != null) {
+                   padre.setFoto(byteFoto);
+               }
+           } catch (Exception ex) {
+               Utils.mensajeInformacion( "Error al cargar foto\n"+ex.getMessage());
+           }
+        }
+
         return padre;
 
     }
@@ -488,9 +549,10 @@ public class jifPadres extends javax.swing.JInternalFrame {
         txtDni.setEditable(band);
     }
 
-    private void accionBotones(boolean d, boolean e) {
+    private void accionBotones(boolean d, boolean e, boolean g) {
         btnCancelar.setEnabled(d);
         btnGuardar.setEnabled(e);
+        btnFoto.setEnabled(g);
     }
 
     public void cargarDatosEnFormulario(int row) {
@@ -518,7 +580,7 @@ public class jifPadres extends javax.swing.JInternalFrame {
             tphPadres.setSelectedIndex(1);
             btnGuardar.setText("Modificar");
             indicador = 1;
-            accionBotones(true, true);
+            accionBotones(true, true, true);
             habilitarCampos(true);
         } else {
             //colocar alguna alerta
@@ -582,34 +644,36 @@ public class jifPadres extends javax.swing.JInternalFrame {
 
     public void mostrarInformacionPadre(int filaSeleccionada) {
 
-        tphPadres.setSelectedIndex(1);
-        txtIdPadre.setText(tblPadres.getValueAt(filaSeleccionada, 0).toString());
+        int idPadre = Integer.parseInt(tblPadres.getValueAt(filaSeleccionada, 0).toString());
+        try{
+            Padre unPadre = padreFacade.findPadreById(idPadre);
+            if(unPadre != null){
+                tphPadres.setSelectedIndex(1);
 
-        txtNombre.setText(tblPadres.getValueAt(filaSeleccionada, 1).toString());
-        txtApellido.setText(tblPadres.getValueAt(filaSeleccionada, 2).toString());
-        txtTelefono.setText(tblPadres.getValueAt(filaSeleccionada, 3).toString());
-        txtDni.setText(tblPadres.getValueAt(filaSeleccionada, 5).toString());
-        /* // Supongamos que tienes un modelo de tabla que almacena los datos.
-        String nombrePadre = (String) tblPadres.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
-        String apellidoPadre = (String) tblPadres.getValueAt(filaSeleccionada, 2).toString();
-        String telefono = (String) tblPadres.getValueAt(filaSeleccionada, 3).toString();
-        Estado estado = (Estado)tblPadres.getValueAt(filaSeleccionada, 4);
-        String dni = (String) tblPadres.getValueAt(filaSeleccionada, 5).toString();
+                txtIdPadre.setText(""+unPadre.getIdPadre());
 
-        // Crear un mapa con los datos a mostrar
-        //Map<String, String> datos = new HashMap<String, String>(5);
-        Map<String, String> datos = new LinkedHashMap<String, String>(5);
-        datos.put("Nombre del Padre :", nombrePadre);
-        datos.put("Apellido del Padre :",apellidoPadre );
-        datos.put("Telefono del Padre :", telefono);
-        datos.put("DNI del Padre :", dni);
-        datos.put("Estado:", estado.toString());
+                txtNombre.setText(unPadre.getNombrePadre());
+                txtApellido.setText(unPadre.getApellidoPadre());
+                txtTelefono.setText(unPadre.getTelefono());
+                txtDni.setText(unPadre.getDniPadre());
 
-        // Llamar al método genérico para mostrar la información
-        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar","INFORMACIÓN DEL PADRE", datos, 18, 20);*/
+                if( unPadre.getFoto() != null){
+                    Image image = Imagen.abrirImagen(unPadre.getFoto());
+                    Utils.cargarImagenEnLabel(image, lblFoto);
+                } else {
+                    ImageIcon imageIcon = new ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/noDisponible.png"));
+                    Utils.cargarImagenEnLabel(imageIcon.getImage(), lblFoto);
+                }
+
+                accionBotones(true, false, false);
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+
     }
-     private boolean validarDatosCategoria(){
+
+    private boolean validarDatosCategoria(){
         if(!validarCampo(txtNombre.getText(), LiteralesTexto.ERROR_NOMBRE_CAMPO_VACIO)){
             return false;
         }
