@@ -60,8 +60,9 @@ public class jfPrincipal extends javax.swing.JFrame {
     public static jifAlumnos menuAlumnos;
     public static jifLugarEntrenamiento menuLugarEntrenamiento;
     public static jifMatricula menuMatricula;
+    public static jifPagos menuPagos;
 
-    private JPopupMenu pmMaestras, pmControl;
+    private JPopupMenu pmMaestras, pmControl, pmPagos;
     private JPopupMenu subMenuActual = null; // Para mantener el submenú visible
 
     private JPanel jpCabecera, jpMenuVertical;
@@ -253,6 +254,8 @@ public class jfPrincipal extends javax.swing.JFrame {
         setupSubMenus(new String[]{"CATEGORIAS", "LUGAR E.", "CAMPEONATO", "PADRES", "PROFESORES"}, pmMaestras);
         pmControl = new JPopupMenu();
         setupSubMenus(new String[]{"HORARIOS", "CANCHA", "ALUMNOS", "MATRICULA"}, pmControl);
+        pmPagos = new JPopupMenu();
+        setupSubMenus(new String[]{"PAGOS"}, pmPagos);
 
         // Añadir funcionalidad a los botones
         btnMaestras.addActionListener(new ActionListener() {
@@ -268,6 +271,14 @@ public class jfPrincipal extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {                
                 // Mostrar submenú y ocultar el actual si está visible
                 showMenu(btnControl, pmControl);
+            }
+        });
+
+        btnPagos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Mostrar submenú y ocultar el actual si está visible
+                showMenu(btnPagos, pmPagos);
             }
         });
 
