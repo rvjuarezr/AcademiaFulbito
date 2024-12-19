@@ -12,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 /**
  *
@@ -36,6 +37,9 @@ public class Padre {
     private Estado estado;
     @Column(name = "dni", nullable = false, length = 12)
     private String dniPadre;
+    @Lob
+    @Column(name = "foto")
+    private byte[] foto;
 
     public Padre() {
     }
@@ -96,5 +100,12 @@ public class Padre {
         this.dniPadre = dniPadre;
     }
 
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
     
 }

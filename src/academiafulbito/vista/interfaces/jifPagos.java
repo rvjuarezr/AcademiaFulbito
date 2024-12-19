@@ -141,6 +141,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
         jLabel5.setText("PRECIO");
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 10, 140, 20));
+        jLabel5.setText("CONCEPTO DE PAGO");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 310, 20));
 
         txtTotalPago.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         txtTotalPago.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -155,6 +157,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
         txtConceptoPago.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(txtConceptoPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 700, 50));
+        jPanel2.add(txtConceptoPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 890, 50));
 
         btnAgregarConcepto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/agregar.png"))); // NOI18N
         btnAgregarConcepto.setBorderPainted(false);
@@ -304,8 +307,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnAgregarConceptoActionPerformed
 
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton btnAgregarConcepto;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarConcepto;
