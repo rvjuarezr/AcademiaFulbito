@@ -12,7 +12,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
@@ -36,9 +35,6 @@ public class Profesor {
     @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
     @Column(name = "estado")
     private Estado estado;
-    @Lob
-    @Column(name = "foto")
-    private byte[] foto;
 
     public Profesor() {
     }
@@ -88,14 +84,6 @@ public class Profesor {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
-    }
-
-    public byte[] getFoto() {
-        return foto;
-    }
-
-    public void setFoto(byte[] foto) {
-        this.foto = foto;
     }
 
 

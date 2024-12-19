@@ -15,21 +15,13 @@ import academiafulbito.modelo.entidades.Profesor;
 import academiafulbito.modelo.enums.Estado;
 import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
-import academiafulbito.vista.utilidades.ImageFilter;
-import academiafulbito.vista.utilidades.Imagen;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
-import java.awt.Image;
-import java.io.File;
-import java.text.ParseException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -59,14 +51,13 @@ public class jifProfesores extends javax.swing.JInternalFrame {
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
     private int totalPaginas;
-    private File fileFoto;
 
     /** Creates new form jifProfesores */
     public jifProfesores(JDesktopPane jdpModAF) {
         initComponents();
         jdp = jdpModAF;
         Utils.cargarComboEstado(jcbEstado);
-        accionBotones(false, false,false,false);
+        accionBotones(false, false);
         profesorFacade = new ProfesorFacade();
         listarProfesores(paginaActual, tamanioPagina);
     }
@@ -98,8 +89,6 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
         btnImprimir = new javax.swing.JButton();
         txtIdProfesor = new javax.swing.JTextField();
-        lblFoto = new javax.swing.JLabel();
-        btnFoto = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(135, 135, 246));
         setClosable(true);
@@ -183,7 +172,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 txtNombreKeyTyped(evt);
             }
         });
-        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 630, 40));
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
 
         txtApellido.setEditable(false);
         txtApellido.setDescripcion("Apellidos*");
@@ -193,7 +182,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 txtApellidoKeyTyped(evt);
             }
         });
-        jPanel2.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 630, 40));
+        jPanel2.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
 
         txtTelefono.setEditable(false);
         txtTelefono.setDescripcion("Telefono*");
@@ -203,7 +192,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 txtTelefonoKeyTyped(evt);
             }
         });
-        jPanel2.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 630, 40));
+        jPanel2.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
 
         btnGuardar.setBackground(new java.awt.Color(156, 156, 247));
         btnGuardar.setBorder(null);
@@ -216,7 +205,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 170, 70));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 310, 170, 70));
 
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -232,11 +221,11 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 310, 220, 70));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 310, 220, 70));
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 220, 40));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/reportes.png"))); // NOI18N
         btnImprimir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -245,20 +234,9 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 btnImprimirActionPerformed(evt);
             }
         });
-        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 300, -1, -1));
-        jPanel2.add(txtIdProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 90, 30));
+        jPanel2.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 300, -1, -1));
+        jPanel2.add(txtIdProfesor, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 250, 90, 30));
         txtIdProfesor.setVisible(false);
-
-        lblFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel2.add(lblFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 40, 170, 200));
-
-        btnFoto.setText("FOTO");
-        btnFoto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFotoActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 260, 90, 40));
 
         tphProfesores.addTab("REGISTRO", jPanel2);
 
@@ -273,7 +251,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         tphProfesores.setSelectedIndex(1);
         limpiarCampos();
         habilitarCampos(true);
-        accionBotones(true, true,false,true);
+        accionBotones(true, true);
     }//GEN-LAST:event_btnNuevoProfesorActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -299,7 +277,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                     listarProfesores(paginaActual, tamanioPagina);
                     limpiarCampos();
                     habilitarCampos(false);
-                    accionBotones(false, false,false,false);
+                    accionBotones(false, false);
                     btnGuardar.setText("Añadir");
                     indicador = 0;
                     tphProfesores.setSelectedIndex(0);
@@ -387,28 +365,9 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         Reportes.imprimirReporte(parametros, "rp_profesor.jasper");
     }//GEN-LAST:event_btnImprimirActionPerformed
 
-    private void btnFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFotoActionPerformed
-        // TODO add your handling code here:
-        JFileChooser selectorArchivo = new JFileChooser();
-        selectorArchivo.addChoosableFileFilter(new ImageFilter());
-        int seleccion = selectorArchivo.showOpenDialog(lblFoto);
-        if (seleccion == JFileChooser.APPROVE_OPTION) {
-            try {
-                fileFoto = selectorArchivo.getSelectedFile();
-                ImageIcon fot = new ImageIcon(fileFoto.getAbsolutePath());
-                Icon icono=new ImageIcon(fot.getImage().getScaledInstance(lblFoto.getWidth(),lblFoto.getHeight()
-                        , Image.SCALE_DEFAULT));
-                lblFoto.setIcon(icono);
-            } catch (Exception ex) {
-                Utils.mensajeInformacion("Error al guardar imagen\n" + ex.getMessage() + ex.getLocalizedMessage());
-            }
-        }
-    }//GEN-LAST:event_btnFotoActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnFoto;
     private org.edisoncor.gui.button.ButtonRound btnGuardar;
     private javax.swing.JButton btnImprimir;
     private org.edisoncor.gui.button.ButtonRound btnNuevoProfesor;
@@ -418,7 +377,6 @@ public class jifProfesores extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
     private javax.swing.JScrollPane jspProfesores;
-    private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblProfesores;
     private javax.swing.JTabbedPane tphProfesores;
@@ -480,18 +438,6 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         profesor.setTelefono(txtTelefono.getText());
         profesor.setEstado((Estado) jcbEstado.getSelectedItem());
 
-        if (fileFoto != null) {
-           try {
-               byte[] byteFoto;
-               byteFoto = Imagen.convertirFotoJPG(fileFoto, 170, 200);//guardarFoto
-               if (byteFoto != null) {
-                   profesor.setFoto(byteFoto);
-               }
-           } catch (Exception ex) {
-               Utils.mensajeInformacion( "Error al cargar foto\n"+ex.getMessage());
-           }
-       }
-
         return profesor;
     }
 
@@ -513,11 +459,9 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         }
     }
 
-    private void accionBotones(boolean d, boolean e, boolean f, boolean g) {
+    private void accionBotones(boolean d, boolean e) {
         btnCancelar.setEnabled(d);
         btnGuardar.setEnabled(e);
-        btnImprimir.setEnabled(f);
-        btnFoto.setEnabled(g);
     }
 
     public void cargarDatosEnFormulario(int row) {
@@ -543,7 +487,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
             tphProfesores.setSelectedIndex(1);
             btnGuardar.setText("Modificar");
             indicador = 1;
-            accionBotones(true, true,true,true);
+            accionBotones(true, true);
             habilitarCampos(true);
         } else {
             //colocar alguna alerta
@@ -607,29 +551,12 @@ public class jifProfesores extends javax.swing.JInternalFrame {
 
     public void mostrarInformacionProfesor(int filaSeleccionada) {
 
-        int idProfesor = Integer.parseInt(tblProfesores.getValueAt(filaSeleccionada, 0).toString());
-        try {
-            Profesor unProfesor = profesorFacade.findProfesorById(idProfesor);
-            if (unProfesor != null) {
-                tphProfesores.setSelectedIndex(1);
-                txtIdProfesor.setText(tblProfesores.getValueAt(filaSeleccionada, 0).toString());
-                txtNombre.setText(tblProfesores.getValueAt(filaSeleccionada, 1).toString());
-                txtApellido.setText(tblProfesores.getValueAt(filaSeleccionada, 2).toString());
-                txtTelefono.setText(tblProfesores.getValueAt(filaSeleccionada, 3).toString());
-                if (unProfesor.getFoto() != null) {
-                    Image image = Imagen.abrirImagen(unProfesor.getFoto());
-                    Utils.cargarImagenEnLabel(image, lblFoto);
-                } else {
-                    ImageIcon imageIcon = new ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/noDisponible.png"));
-                    Utils.cargarImagenEnLabel(imageIcon.getImage(), lblFoto);
-                }
+        tphProfesores.setSelectedIndex(1);
+        txtIdProfesor.setText(tblProfesores.getValueAt(filaSeleccionada, 0).toString());
 
-                accionBotones(true, false, true, false);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-       
+        txtNombre.setText(tblProfesores.getValueAt(filaSeleccionada, 1).toString());
+        txtApellido.setText(tblProfesores.getValueAt(filaSeleccionada, 2).toString());
+        txtTelefono.setText(tblProfesores.getValueAt(filaSeleccionada, 3).toString());
         /*// Supongamos que tienes un modelo de tabla que almacena los datos.
         String nombreProfesor = (String) tblProfesores.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
         String apellidoProfesor = (String) tblProfesores.getValueAt(filaSeleccionada, 2).toString();
