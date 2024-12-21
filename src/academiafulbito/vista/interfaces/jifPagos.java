@@ -78,6 +78,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
         txtCodConceptoPago = new javax.swing.JTextField();
         btnPagar = new javax.swing.JButton();
         txtMontoAcumulado = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        txtPrecio = new javax.swing.JTextField();
         btnVerPagos = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
 
@@ -137,8 +139,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel5.setText("CONCEPTO DE PAGO");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 310, 20));
+        jLabel5.setText("PRECIO");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 10, 180, 20));
 
         txtTotalPago.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         txtTotalPago.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -152,11 +154,16 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jPanel2.add(btnBuscarConcepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 60, 50));
 
         txtConceptoPago.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(txtConceptoPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 890, 50));
+        jPanel2.add(txtConceptoPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 710, 50));
 
         btnAgregarConcepto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/agregar.png"))); // NOI18N
         btnAgregarConcepto.setBorderPainted(false);
         btnAgregarConcepto.setContentAreaFilled(false);
+        btnAgregarConcepto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarConceptoActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnAgregarConcepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 30, 60, 50));
 
         btnQuitarConcepto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/quitar.png"))); // NOI18N
@@ -261,6 +268,10 @@ public class jifPagos extends javax.swing.JInternalFrame {
         txtMontoAcumulado.setText("0.00");
         jPanel2.add(txtMontoAcumulado, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 330, 210, 40));
 
+        jLabel15.setText("CONCEPTO DE PAGO");
+        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 310, 20));
+        jPanel2.add(txtPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 180, 50));
+
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 1190, 410));
 
         btnVerPagos.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
@@ -287,6 +298,13 @@ public class jifPagos extends javax.swing.JInternalFrame {
         
 }//GEN-LAST:event_btnVerPagosActionPerformed
 
+    private void btnAgregarConceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarConceptoActionPerformed
+        // TODO add your handling code here:
+        if(validarConceptoAgregado()){
+
+        }
+    }//GEN-LAST:event_btnAgregarConceptoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarConcepto;
@@ -301,6 +319,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -331,6 +350,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtPagoEfectivo;
     private javax.swing.JTextField txtPagoPlin;
     private javax.swing.JTextField txtPagoYape;
+    private javax.swing.JTextField txtPrecio;
     private javax.swing.JTextField txtTotalPago;
     // End of variables declaration//GEN-END:variables
 
