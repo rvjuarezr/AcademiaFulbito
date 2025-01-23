@@ -142,4 +142,18 @@ public class PadreFacade implements EntityFacade<Padre> {
             em.close();
         }
     }
+
+    public Padre findPadreByDni(String dniPadre) {
+        EntityManager em = getEntityManager();
+        String sql;
+        List<Padre> lista;
+        Padre padre;
+        padre = null;
+        sql = "SELECT a.* FROM padre a WHERE a.dni='" + dniPadre + "'";
+        lista = em.createNativeQuery(sql, Padre.class).getResultList();
+        if (lista.size() > 0) {
+            padre = lista.get(0);
+        }
+        return padre;
+    }
 }

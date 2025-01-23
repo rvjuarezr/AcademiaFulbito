@@ -146,4 +146,19 @@ public class AlumnoFacade implements EntityFacade<Alumno>{
         }
         return alumno;
     }
+
+    public Alumno findAlumnoByIdPadre(int idPadre) {
+        EntityManager em = getEntityManager();
+        String sql;
+        List<Alumno>lista;
+        Alumno alumno;
+        alumno=null;
+        sql="SELECT a.* FROM alumno a WHERE a.ID_padre='"+idPadre+"'";
+        lista=em.createNativeQuery(sql,Alumno.class).getResultList();
+        if(lista.size()>0){
+            alumno=lista.get(0);
+        }
+        return alumno;
+    }
+
 }
