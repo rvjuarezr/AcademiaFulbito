@@ -87,5 +87,11 @@ public class LiteralesTexto {
     public static final String LITERAL_SEXO = "SEXO";
     public static final String LITERAL_NACIONALIDAD = "NACIONALIDAD";
     public static final String ERROR_NACIONALIDAD_CAMPO_VACIO = "Debe de escribir una nacionalidad valida!";
+    public static final String LITERAL_CONTROL_PRODUCTOSERVICIO = "PRODSERVICIO";
+    public static final String LITERAL_NOMBRE_PRODUCTO = "nombre_producto";
+    public static final String LITERAL_DESCRIPCION= "descripcion";
+    public static final String LITERAL_PRECIO= "precio";
+    public static final String LITERAL_STOCK= "stock";
+    public static final String LITERAL_ID_CATEGORIAPROD= "ID_CategoriaProd";
 
 }

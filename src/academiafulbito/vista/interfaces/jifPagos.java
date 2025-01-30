@@ -11,6 +11,7 @@
 
 package academiafulbito.vista.interfaces;
 
+import academiafulbito.modelo.entidades.ProductoServicio;
 import academiafulbito.vista.utilidades.Utils;
 import javax.swing.JDesktopPane;
 
@@ -21,12 +22,14 @@ import javax.swing.JDesktopPane;
 public class jifPagos extends javax.swing.JInternalFrame {
 
     /** Creates new form jifPagos */
-    JDesktopPane jDesktopPane;
+    JDesktopPane jdp;
+    public static ProductoServicio productoServicio;
 
     public jifPagos(JDesktopPane jdpModAF) {
         initComponents();
-        jDesktopPane = jdpModAF;
+        jdp = jdpModAF;
     }
+    jifProductoServicios menuProductoServicios;
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -151,9 +154,14 @@ public class jifPagos extends javax.swing.JInternalFrame {
         btnBuscarConcepto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         btnBuscarConcepto.setBorderPainted(false);
         btnBuscarConcepto.setContentAreaFilled(false);
+        btnBuscarConcepto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarConceptoActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnBuscarConcepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 60, 50));
 
-        txtConceptoPago.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtConceptoPago.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         jPanel2.add(txtConceptoPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 710, 50));
 
         btnAgregarConcepto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/agregar.png"))); // NOI18N
@@ -252,7 +260,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jLabel11.setText("TOTAL A PAGAR");
         jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 330, 140, 40));
 
-        txtCodConceptoPago.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtCodConceptoPago.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         jPanel2.add(txtCodConceptoPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 90, 50));
 
         btnPagar.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
@@ -270,6 +278,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
         jLabel15.setText("CONCEPTO DE PAGO");
         jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 310, 20));
+
+        txtPrecio.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         jPanel2.add(txtPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 180, 50));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 1190, 410));
@@ -305,6 +315,16 @@ public class jifPagos extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnAgregarConceptoActionPerformed
 
+    private void btnBuscarConceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarConceptoActionPerformed
+        // TODO add your handling code here:
+         if(jfPrincipal.menuProductoServicios == null || jfPrincipal.menuProductoServicios.isClosed()){
+            jfPrincipal.menuProductoServicios = new jifProductoServicios(jdp);
+            Utils.visualizarInternalFrame(jfPrincipal.menuProductoServicios, jdp);
+        }
+        jfPrincipal.menuProductoServicios.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de padres
+        jfPrincipal.menuProductoServicios.toFront();
+    }//GEN-LAST:event_btnBuscarConceptoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarConcepto;
@@ -339,8 +359,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblFotoAlumno;
     private javax.swing.JTable tblItemsConceptos;
     private javax.swing.JTextField txtApellidosAlumno;
-    private javax.swing.JTextField txtCodConceptoPago;
-    private javax.swing.JTextField txtConceptoPago;
+    public static javax.swing.JTextField txtCodConceptoPago;
+    public static javax.swing.JTextField txtConceptoPago;
     private javax.swing.JTextField txtCorrelativo;
     private javax.swing.JTextField txtDatoBusqueda;
     private javax.swing.JTextField txtDniPadre;
@@ -350,7 +370,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtPagoEfectivo;
     private javax.swing.JTextField txtPagoPlin;
     private javax.swing.JTextField txtPagoYape;
-    private javax.swing.JTextField txtPrecio;
+    public static javax.swing.JTextField txtPrecio;
     private javax.swing.JTextField txtTotalPago;
     // End of variables declaration//GEN-END:variables
 
