@@ -5,9 +5,12 @@
 
 package academiafulbito.modelo.entidades;
 
+import academiafulbito.modelo.enums.Estado;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,13 +20,12 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Ronald J
+ * @author Walter Jair
  */
 
 @Entity
 @Table(name = "producto_servicio", catalog = "bdacademiafulbito", schema = "")
 public class ProductoServicio {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_producto")
@@ -44,17 +46,21 @@ public class ProductoServicio {
     @ManyToOne
     @JoinColumn(name = "ID_CategoriaProd", referencedColumnName = "ID_CategoriaProd", nullable = false)
     private CategoriaProducto categoriaProducto;
+    @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
+    @Column(name = "estado")
+    private Estado estado;
 
     public ProductoServicio() {
     }
 
-    public ProductoServicio(int idProducto, String nombreProducto, String descripcion, BigDecimal precio, int stock, CategoriaProducto categoriaProducto) {
+    public ProductoServicio(int idProducto, String nombreProducto, String descripcion, BigDecimal precio, int stock, CategoriaProducto categoriaProducto, Estado estado) {
         this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
         this.precio = precio;
         this.stock = stock;
         this.categoriaProducto = categoriaProducto;
+        this.estado = estado;
     }
 
     public CategoriaProducto getCategoriaProducto() {
@@ -103,6 +109,14 @@ public class ProductoServicio {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
 
