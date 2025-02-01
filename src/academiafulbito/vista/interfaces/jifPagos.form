@@ -53,9 +53,8 @@
               <Font name="Bookman Old Style" size="18" style="1"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="2">
+              <StringArray count="1">
                 <StringItem index="0" value="DNI ALUMNO"/>
-                <StringItem index="1" value="DNI PADRE"/>
               </StringArray>
             </Property>
           </Properties>

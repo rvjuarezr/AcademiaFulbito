@@ -6,7 +6,6 @@ package academiafulbito.controlador.beans;
 
 import academiafulbito.modelo.entidades.Alumno;
 import academiafulbito.modelo.enums.Estado;
-import academiafulbito.modelo.enums.Sexo;
 import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
 import javax.persistence.EntityManager;
