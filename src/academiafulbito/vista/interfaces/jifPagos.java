@@ -15,8 +15,12 @@ import academiafulbito.controlador.beans.AlumnoFacade;
 import academiafulbito.controlador.beans.PadreFacade;
 import academiafulbito.modelo.entidades.Alumno;
 import academiafulbito.modelo.entidades.Padre;
+import academiafulbito.vista.utilidades.Imagen;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import java.awt.Image;
+import java.io.File;
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 
 /**
@@ -29,6 +33,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
     JDesktopPane jDesktopPane;
     private PadreFacade padreFacade;
     private AlumnoFacade alumnoFacade;
+    private File fileFoto;
+
     public jifPagos(JDesktopPane jdpModAF) {
         initComponents();
         jDesktopPane = jdpModAF;
@@ -99,7 +105,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jcbTipoConsulta.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
-        jcbTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DNI ALUMNO", "DNI PADRE" }));
+        jcbTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DNI ALUMNO", " " }));
         jcbTipoConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbTipoConsultaActionPerformed(evt);
@@ -107,7 +113,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         });
         jPanel4.add(jcbTipoConsulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 19, 150, 50));
 
-        txtDatoBusqueda.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtDatoBusqueda.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtDatoBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtDatoBusquedaKeyTyped(evt);
@@ -138,24 +144,24 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jLabel1.setText("APELLIDOS");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 120, 30));
 
-        txtApellidosAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtApellidosAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         getContentPane().add(txtApellidosAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, 820, 30));
 
         jLabel2.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
         jLabel2.setText("NOMBRES");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 120, 30));
 
-        txtNombresAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtNombresAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         getContentPane().add(txtNombresAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 820, 30));
 
         jLabel3.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
         jLabel3.setText("APODERADO");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 120, 30));
 
-        txtNombresApellidosPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtNombresApellidosPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         getContentPane().add(txtNombresApellidosPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 170, 570, 30));
 
-        txtDniPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtDniPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         getContentPane().add(txtDniPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 170, 180, 30));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -406,18 +412,32 @@ public class jifPagos extends javax.swing.JInternalFrame {
         txtNombresAlumno.setText(alumno.getNombreAlumno());
         txtNombresApellidosPadre.setText(padre.getApellidoPadre() + " " + padre.getNombrePadre());
         txtDniPadre.setText(padre.getDniPadre());
-
+        try {
+            if (alumno.getFoto() != null) {
+                Image image = Imagen.abrirImagen(alumno.getFoto());
+                Utils.cargarImagenEnLabel(image, lblFotoAlumno);
+            } else {
+                ImageIcon imageIcon = new ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/noDisponible.png"));
+                Utils.cargarImagenEnLabel(imageIcon.getImage(), lblFotoAlumno);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
     
-    private void mostrarDatosPadre(String dni){
-        Padre padre = padreFacade.findPadreByDni(dni);
-        if (padre!= null ){
-            Alumno alumno = alumnoFacade.findAlumnoByIdPadre(padre.getIdPadre());
-            if (alumno != null){
-                mostrarDatosAlumno(alumno, padre);
+    private void mostrarDatosPadre(String dni) {
+        try {
+            Padre padre = padreFacade.findPadreByDni(dni);
+            if (padre != null) {
+                Alumno alumno = alumnoFacade.findAlumnoByIdPadre(padre.getIdPadre());
+                if (alumno != null) {
+                    mostrarDatosAlumno(alumno, padre);
+                }
             }
-        }
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void mostrarDatosAlumno(String dni){
