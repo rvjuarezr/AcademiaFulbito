@@ -11,6 +11,7 @@
 
 package academiafulbito.vista.interfaces;
 
+import academiafulbito.modelo.entidades.ProductoServicio;
 import academiafulbito.controlador.beans.AlumnoFacade;
 import academiafulbito.controlador.beans.PadreFacade;
 import academiafulbito.modelo.entidades.Alumno;
@@ -19,7 +20,6 @@ import academiafulbito.vista.utilidades.Imagen;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
 import java.awt.Image;
-import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 
@@ -30,17 +30,20 @@ import javax.swing.JDesktopPane;
 public class jifPagos extends javax.swing.JInternalFrame {
 
     /** Creates new form jifPagos */
-    JDesktopPane jDesktopPane;
+    
+    public static ProductoServicio productoServicio;
+    JDesktopPane jdp;
     private PadreFacade padreFacade;
     private AlumnoFacade alumnoFacade;
-    private File fileFoto;
-
+    jifProductoServicios menuProductoServicios;
+    
     public jifPagos(JDesktopPane jdpModAF) {
         initComponents();
-        jDesktopPane = jdpModAF;
+        jdp = jdpModAF;
         padreFacade = new PadreFacade();
         alumnoFacade = new AlumnoFacade();
     }
+    
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -105,7 +108,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jcbTipoConsulta.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
-        jcbTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DNI ALUMNO", " " }));
+        jcbTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DNI ALUMNO" }));
         jcbTipoConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbTipoConsultaActionPerformed(evt);
@@ -180,6 +183,11 @@ public class jifPagos extends javax.swing.JInternalFrame {
         btnBuscarConcepto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         btnBuscarConcepto.setBorderPainted(false);
         btnBuscarConcepto.setContentAreaFilled(false);
+        btnBuscarConcepto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarConceptoActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnBuscarConcepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 60, 50));
 
         txtConceptoPago.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
@@ -299,6 +307,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
         jLabel15.setText("CONCEPTO DE PAGO");
         jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 310, 20));
+
+        txtPrecio.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(txtPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 180, 50));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 1190, 410));
@@ -333,6 +343,16 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
         }
     }//GEN-LAST:event_btnAgregarConceptoActionPerformed
+
+    private void btnBuscarConceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarConceptoActionPerformed
+        // TODO add your handling code here:
+         if(jfPrincipal.menuProductoServicios == null || jfPrincipal.menuProductoServicios.isClosed()){
+            jfPrincipal.menuProductoServicios = new jifProductoServicios(jdp);
+            Utils.visualizarInternalFrame(jfPrincipal.menuProductoServicios, jdp);
+        }
+        jfPrincipal.menuProductoServicios.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de padres
+        jfPrincipal.menuProductoServicios.toFront();
+    }//GEN-LAST:event_btnBuscarConceptoActionPerformed
 
     private void txtDatoBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDatoBusquedaKeyTyped
         char c = evt.getKeyChar();
@@ -384,8 +404,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblFotoAlumno;
     private javax.swing.JTable tblItemsConceptos;
     private javax.swing.JTextField txtApellidosAlumno;
-    private javax.swing.JTextField txtCodConceptoPago;
-    private javax.swing.JTextField txtConceptoPago;
+    public static javax.swing.JTextField txtCodConceptoPago;
+    public static javax.swing.JTextField txtConceptoPago;
     private javax.swing.JTextField txtCorrelativo;
     private javax.swing.JTextField txtDatoBusqueda;
     private javax.swing.JTextField txtDniPadre;
@@ -395,7 +415,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtPagoEfectivo;
     private javax.swing.JTextField txtPagoPlin;
     private javax.swing.JTextField txtPagoYape;
-    private javax.swing.JTextField txtPrecio;
+    public static javax.swing.JTextField txtPrecio;
     private javax.swing.JTextField txtTotalPago;
     // End of variables declaration//GEN-END:variables
 

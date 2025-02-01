@@ -14,6 +14,7 @@ import academiafulbito.vista.interfaces.jifLugarEntrenamiento;
 import academiafulbito.vista.interfaces.jifMatricula;
 import academiafulbito.vista.interfaces.jifPadres;
 import academiafulbito.vista.interfaces.jifProfesores;
+import academiafulbito.vista.interfaces.jifProductoServicios;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -115,6 +116,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if (jfPrincipal.menuCanchas instanceof jifCanchas) {
             jfPrincipal.menuCanchas.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
         }
+        if (jfPrincipal.menuProductoServicios instanceof jifProductoServicios) {
+            jfPrincipal.menuProductoServicios.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
+        }
 
     }
     private void eliminarFilaSeleccionada() throws ParseException {
@@ -141,6 +145,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         }
         if (jfPrincipal.menuCanchas instanceof jifCanchas) {
             jfPrincipal.menuCanchas.eliminarCanchaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
+        }
+        if (jfPrincipal.menuProductoServicios instanceof jifProductoServicios) {
+            jfPrincipal.menuProductoServicios.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
         }
 
     }
@@ -173,6 +180,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
 
         if (jfPrincipal.menuMatricula instanceof jifMatricula) {
             jfPrincipal.menuMatricula.mostrarInformacionMatricula(selectedRow); // Llama al método en el JInternalFrame
+        }
+        if (jfPrincipal.menuProductoServicios instanceof jifProductoServicios) {
+            jfPrincipal.menuProductoServicios.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
         }
     }
 }
