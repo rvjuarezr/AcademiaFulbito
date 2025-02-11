@@ -478,7 +478,7 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         try {
-            if (validarDatosCategoria()) {
+            if (validarDatosCategoria() && validarDniDuplicadoAlumno()) {
                 String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
                 if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
                     Alumno alumno;
@@ -848,6 +848,17 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
         }
 
     }    
+
+    private boolean validarDniDuplicadoAlumno(){
+        String dniAlumno=txtDni.getText();
+        Alumno alumno=alumnoFacade.findAlumnoByDni(dniAlumno);
+        if(alumno!=null){
+            Utils.mensajeError(LiteralesTexto.LITERAL_DNI_EXISTE);
+            return false;
+        }
+        return true;
+    }
+
 
      private boolean validarDatosCategoria() {
         if (!validarCampo(txtNombre.getText(), LiteralesTexto.ERROR_NOMBRE_CAMPO_VACIO)) {
