@@ -9,6 +9,7 @@ import academiafulbito.vista.interfaces.jfPrincipal;
 import academiafulbito.vista.interfaces.jifAlumnos;
 import academiafulbito.vista.interfaces.jifCampeonatos;
 import academiafulbito.vista.interfaces.jifCanchas;
+import academiafulbito.vista.interfaces.jifCategoriaProducto;
 import academiafulbito.vista.interfaces.jifCategorias;
 import academiafulbito.vista.interfaces.jifHorario;
 import academiafulbito.vista.interfaces.jifLugarEntrenamiento;
@@ -96,6 +97,14 @@ public class VentanaManager {
                 jfPrincipal.menuProductoServicios = new jifProductoServicios(jdpVentanas);
             }
             ventana = jfPrincipal.menuProductoServicios;
+
+        }
+
+           else if(opcion.equals(LiteralesTexto.LITERAL_MAESTRAS_CATPRODUCTOS)){
+            if (jfPrincipal.menuCategoriaProducto == null || jfPrincipal.menuCategoriaProducto.isClosed()) {
+                jfPrincipal.menuCategoriaProducto = new jifCategoriaProducto(jdpVentanas);
+            }
+            ventana = jfPrincipal.menuCategoriaProducto;
 
         }
 

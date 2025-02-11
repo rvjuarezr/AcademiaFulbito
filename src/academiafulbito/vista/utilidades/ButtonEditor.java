@@ -15,6 +15,7 @@ import academiafulbito.vista.interfaces.jifMatricula;
 import academiafulbito.vista.interfaces.jifPadres;
 import academiafulbito.vista.interfaces.jifProfesores;
 import academiafulbito.vista.interfaces.jifProductoServicios;
+import academiafulbito.vista.interfaces.jifCategoriaProducto;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,7 +59,11 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
             public void actionPerformed(ActionEvent e) {
                 if (label.equals(LiteralesTexto.LITERAL_EDITAR)) {
                     try {
-                        enviarFilaSeleccionada(); // Método para enviar la fila seleccionada
+                        try {
+                            enviarFilaSeleccionada(); // Método para enviar la fila seleccionada
+                        } catch (groovyjarjarcommonscli.ParseException ex) {
+                            Logger.getLogger(ButtonEditor.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     } catch (ParseException ex) {
                         Logger.getLogger(ButtonEditor.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -66,14 +71,22 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
 
                 if (label.equals(LiteralesTexto.LITERAL_ELIMINAR)) {
                     try {
-                        eliminarFilaSeleccionada();
+                        try {
+                            eliminarFilaSeleccionada();
+                        } catch (groovyjarjarcommonscli.ParseException ex) {
+                            Logger.getLogger(ButtonEditor.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     } catch (ParseException ex) {
                         Logger.getLogger(ButtonEditor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
 
                 if(label.equals(LiteralesTexto.LITERAL_VER)){
-                    mostrarFilaSeleccionada();
+                    try {
+                        mostrarFilaSeleccionada();
+                    } catch (groovyjarjarcommonscli.ParseException ex) {
+                        Logger.getLogger(ButtonEditor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 fireEditingStopped();// Indica que la edición de la celda terminó
             }
@@ -91,7 +104,7 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         return super.stopCellEditing();
     }
 
-    private void enviarFilaSeleccionada() throws ParseException {
+    private void enviarFilaSeleccionada() throws ParseException, groovyjarjarcommonscli.ParseException {
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
             jfPrincipal.menuCategorias.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
         }
@@ -119,9 +132,12 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         if (jfPrincipal.menuProductoServicios instanceof jifProductoServicios) {
             jfPrincipal.menuProductoServicios.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
         }
+         if (jfPrincipal.menuCategoriaProducto instanceof jifCategoriaProducto ) {
+            jfPrincipal.menuCategoriaProducto.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
+        }
 
     }
-    private void eliminarFilaSeleccionada() throws ParseException {
+    private void eliminarFilaSeleccionada() throws ParseException, groovyjarjarcommonscli.ParseException {
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
             jfPrincipal.menuCategorias.eliminarCategoriaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
         }
@@ -147,12 +163,15 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
             jfPrincipal.menuCanchas.eliminarCanchaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
         }
         if (jfPrincipal.menuProductoServicios instanceof jifProductoServicios) {
-            jfPrincipal.menuProductoServicios.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
+            jfPrincipal.menuProductoServicios.eliminarProductoServicioSeleccionada(selectedRow); // Llama al método en el JInternalFrame
+        }
+        if (jfPrincipal.menuCategoriaProducto instanceof jifCategoriaProducto) {
+            jfPrincipal.menuCategoriaProducto.eliminarCategoriaSeleccionada(selectedRow); // Llama al método en el JInternalFrame
         }
 
     }
 
-    private void mostrarFilaSeleccionada(){
+    private void mostrarFilaSeleccionada() throws groovyjarjarcommonscli.ParseException{
         if (jfPrincipal.menuCategorias instanceof jifCategorias) {
             jfPrincipal.menuCategorias.mostrarInformacionCategoria(selectedRow); // Llama al método en el JInternalFrame
         }
@@ -183,6 +202,9 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor 
         }
         if (jfPrincipal.menuProductoServicios instanceof jifProductoServicios) {
             jfPrincipal.menuProductoServicios.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
+        }
+        if (jfPrincipal.menuCategoriaProducto instanceof jifCategoriaProducto) {
+            jfPrincipal.menuCategoriaProducto.cargarDatosEnFormulario(selectedRow); // Llama al método en el JInternalFrame
         }
     }
 }

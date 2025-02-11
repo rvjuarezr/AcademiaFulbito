@@ -6,7 +6,7 @@
       <Color blue="cc" green="cc" red="cc" type="rgb"/>
     </Property>
     <Property name="closable" type="boolean" value="true"/>
-    <Property name="title" type="java.lang.String" value="MANTENIMIENTO PRODUCTO SERVICIO"/>
+    <Property name="title" type="java.lang.String" value="MANTENIMIENTO CATEGORIA PRODUCTO"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -21,14 +21,14 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,76,0,0,4,-112"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,70,0,0,4,-94"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
     <Property name="useNullLayout" type="boolean" value="false"/>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JTabbedPane" name="tphProductoServicio">
+    <Container class="javax.swing.JTabbedPane" name="tphCategoriaProducto">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Bookman Old Style" size="24" style="1"/>
@@ -60,7 +60,7 @@
             <Property name="useNullLayout" type="boolean" value="false"/>
           </Layout>
           <SubComponents>
-            <Container class="javax.swing.JScrollPane" name="jspProductoServicios">
+            <Container class="javax.swing.JScrollPane" name="jspCategorias">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -77,16 +77,19 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="30" y="140" width="1110" height="270"/>
+                  <AbsoluteConstraints x="20" y="130" width="1130" height="280"/>
                 </Constraint>
               </Constraints>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tblProductoServicio">
+                <Component class="javax.swing.JTable" name="tblCategoriaProducto">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="0" rowCount="0"/>
+                    </Property>
+                    <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                      <TableColumnModel selectionModel="0"/>
                     </Property>
                     <Property name="opaque" type="boolean" value="false"/>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
@@ -94,9 +97,12 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblProductoServicioMouseClicked"/>
-                    <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="tblProductoServicioMouseMoved"/>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblCategoriaProductoMouseClicked"/>
+                    <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="tblCategoriaProductoMouseMoved"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -110,7 +116,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="860" y="420" width="220" height="50"/>
+                  <AbsoluteConstraints x="870" y="420" width="220" height="50"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -132,7 +138,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="800" y="420" width="-1" height="50"/>
+                  <AbsoluteConstraints x="810" y="420" width="-1" height="50"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -154,11 +160,41 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="1080" y="420" width="-1" height="50"/>
+                  <AbsoluteConstraints x="1090" y="420" width="-1" height="50"/>
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JButton" name="btnNuevoProductoServicio">
+            <Component class="javax.swing.JButton" name="btnRepAlumnosPorCateg">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Bookman Old Style" size="18" style="1"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/academiafulbito/vista/imagenes/imprimir-pdf.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="&quot;&lt;html&gt;&lt;center&gt;ALUMNOS POR&lt;br&gt; CATEGORIA&lt;/center&gt;&lt;/html&gt;&quot;" type="code"/>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Visualiza reporte de alumnos por categoria"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                    <LineBorder roundedCorners="true"/>
+                  </Border>
+                </Property>
+                <Property name="contentAreaFilled" type="boolean" value="false"/>
+                <Property name="horizontalTextPosition" type="int" value="0"/>
+                <Property name="verticalTextPosition" type="int" value="3"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRepAlumnosPorCategActionPerformed"/>
+              </Events>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="810" y="0" width="170" height="120"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnNuevaCategoria">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Bookman Old Style" size="18" style="1"/>
@@ -167,7 +203,7 @@
                   <Image iconType="3" name="/academiafulbito/vista/imagenes/nuevo.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="&quot;&lt;html&gt;&lt;center&gt;NUEVO&lt;br&gt;PRODSERVICIO&lt;/center&gt;&lt;/html&gt;&quot;" type="code"/>
+                  <Connection code="&quot;&lt;html&gt;&lt;center&gt;NUEVA&lt;br&gt;CATEGORIA&lt;/center&gt;&lt;/html&gt;&quot;" type="code"/>
                 </Property>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -179,11 +215,11 @@
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNuevoProductoServicioActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNuevaCategoriaActionPerformed"/>
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="950" y="10" width="180" height="120"/>
+                  <AbsoluteConstraints x="990" y="0" width="160" height="120"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -207,6 +243,40 @@
             <Property name="useNullLayout" type="boolean" value="false"/>
           </Layout>
           <SubComponents>
+            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtNombre">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="descripcion" type="java.lang.String" value="Nombre*"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Bookman Old Style" size="18" style="1"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNombreKeyTyped"/>
+              </Events>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="70" y="60" width="720" height="40"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtDescripcion">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="descripcion" type="java.lang.String" value="Descripcion*"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Bookman Old Style" size="18" style="1"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDescripcionKeyTyped"/>
+              </Events>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="70" y="120" width="720" height="40"/>
+                </Constraint>
+              </Constraints>
+            </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -216,65 +286,11 @@
                   <Color blue="62" green="62" red="67" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="NUEVO PRODUCTO SERVICIO"/>
+                <Property name="text" type="java.lang.String" value="NUEVA CATEGORIA PRODUCTO"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="240" y="20" width="410" height="20"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtCategoriaProducto">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="descripcion" type="java.lang.String" value="Categoria Producto*"/>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Bookman Old Style" size="18" style="1"/>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCategoriaProductoKeyTyped"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
-              </AuxValues>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="230" y="310" width="450" height="50"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtIdCategoriaProducto">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="descripcion" type="java.lang.String" value="Id*"/>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Bookman Old Style" size="18" style="1"/>
-                </Property>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
-              </AuxValues>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="110" y="310" width="110" height="50"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnBucarCategoriaProducto">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/academiafulbito/vista/imagenes/lupa.png"/>
-                </Property>
-                <Property name="borderPainted" type="boolean" value="false"/>
-                <Property name="contentAreaFilled" type="boolean" value="false"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBucarCategoriaProductoActionPerformed"/>
-              </Events>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="690" y="300" width="80" height="60"/>
+                  <AbsoluteConstraints x="200" y="20" width="500" height="20"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -289,7 +305,7 @@
                 <Property name="text" type="java.lang.String" value="VOLVER"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                    <LineBorder/>
+                    <LineBorder roundedCorners="true"/>
                   </Border>
                 </Property>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
@@ -299,31 +315,17 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="820" y="50" width="190" height="70"/>
+                  <AbsoluteConstraints x="880" y="50" width="190" height="80"/>
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtNombreProducto">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="descripcion" type="java.lang.String" value="Nombre*"/>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Bookman Old Style" size="18" style="1"/>
-                </Property>
-              </Properties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="110" y="70" width="570" height="50"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="org.edisoncor.gui.textField.TextField" name="txtIdProductoServicio">
+            <Component class="javax.swing.JTextField" name="txtIdCategoria">
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="txtIdProductoServicio.setVisible(false);"/>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="txtIdCategoria.setVisible(false);"/>
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="20" y="10" width="50" height="-1"/>
+                  <AbsoluteConstraints x="380" y="230" width="90" height="40"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -348,7 +350,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="820" y="210" width="190" height="-1"/>
+                  <AbsoluteConstraints x="880" y="230" width="190" height="80"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -363,7 +365,7 @@
                 <Property name="text" type="java.lang.String" value="GUARDAR"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                    <LineBorder/>
+                    <LineBorder roundedCorners="true"/>
                   </Border>
                 </Property>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
@@ -373,49 +375,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="820" y="130" width="190" height="70"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtDescripcionProducto">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="descripcion" type="java.lang.String" value="Descripcion*"/>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Bookman Old Style" size="18" style="1"/>
-                </Property>
-              </Properties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="110" y="130" width="570" height="50"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtPrecio">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="descripcion" type="java.lang.String" value="Precio*"/>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Bookman Old Style" size="18" style="1"/>
-                </Property>
-              </Properties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="110" y="190" width="570" height="50"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="org.edisoncor.gui.textField.TextFieldRoundBackground" name="txtStock">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="descripcion" type="java.lang.String" value="Stock*"/>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Bookman Old Style" size="18" style="1"/>
-                </Property>
-              </Properties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="110" y="250" width="570" height="50"/>
+                  <AbsoluteConstraints x="880" y="140" width="190" height="80"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -429,12 +389,9 @@
                   <Font name="Bookman Old Style" size="18" style="1"/>
                 </Property>
               </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="jifProductoServicios_jcbEstado"/>
-              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="120" y="380" width="220" height="40"/>
+                  <AbsoluteConstraints x="70" y="190" width="220" height="40"/>
                 </Constraint>
               </Constraints>
             </Component>

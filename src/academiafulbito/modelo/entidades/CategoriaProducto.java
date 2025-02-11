@@ -5,8 +5,11 @@
 
 package academiafulbito.modelo.entidades;
 
+import academiafulbito.modelo.enums.Estado;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,13 +35,18 @@ public class CategoriaProducto {
     @Column(name = "descripcion", length = 255)
     private String descripcion;
 
+    @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
+    @Column(name = "estado")
+    private Estado estado;
+
     public CategoriaProducto() {
     }
 
-    public CategoriaProducto(int idCategoriaProd, String nombreCategoria, String descripcion) {
+    public CategoriaProducto(int idCategoriaProd, String nombreCategoria, String descripcion,Estado estado) {
         this.idCategoriaProd = idCategoriaProd;
         this.nombreCategoria = nombreCategoria;
         this.descripcion = descripcion;
+        this.estado = estado;
     }
 
     public String getDescripcion() {
@@ -63,6 +71,14 @@ public class CategoriaProducto {
 
     public void setNombreCategoria(String nombreCategoria) {
         this.nombreCategoria = nombreCategoria;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
 
