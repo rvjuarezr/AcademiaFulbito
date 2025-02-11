@@ -93,5 +93,7 @@ public class LiteralesTexto {
     public static final String LITERAL_PRECIO= "precio";
     public static final String LITERAL_STOCK= "stock";
     public static final String LITERAL_ID_CATEGORIAPROD= "ID_CategoriaProd";
+    public static final String LITERAL_MAESTRAS_CATPRODUCTOS = "CATPRODUCTOS";
+    public static final String LITERAL_NOMBRE_CATPRO= "nombre_categoria";
 
 }
