@@ -48,6 +48,8 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     private int paginaActual = 1;
     private int tamanioPagina = 10;//para el paginado de tabla
     private int totalPaginas;
+    public static int permiteSelFila=-1;
+    public static String dniAlumno;
     private MatriculaFacade matriculaFacade;
     private AlumnoFacade alumnosFacade;
     private HorarioFacade horarioFacade;
@@ -86,6 +88,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
     public jifMatricula(JDesktopPane jdpModAF) {
         initComponents();
         jDesktopPane = jdpModAF;
+        permiteSelFila=-1;
         Utils.cargarComboEstadoPago(jcbEstadoPago);
         Utils.cargarComboSexo(jcbSexo);
         accionBotones(false, false, false, false, false);
@@ -229,6 +232,11 @@ public class jifMatricula extends javax.swing.JInternalFrame {
             }
         ));
         tblMatriculas.setOpaque(false);
+        tblMatriculas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMatriculasMouseClicked(evt);
+            }
+        });
         jspMatricula.setViewportView(tblMatriculas);
 
         jpListado.add(jspMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 1180, 420));
@@ -455,7 +463,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
 
         jcbSexo.setBackground(new java.awt.Color(255, 255, 204));
         jcbSexo.setEnabled(false);
-        jcbSexo.setFont(new java.awt.Font("Bookman Old Style", 1, 14)); // NOI18N
+        jcbSexo.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
         jcbSexo.setOpaque(true);
         jPanel3.add(jcbSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 40, 180, 50));
 
@@ -464,7 +472,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtDniAlumno.setEditable(false);
         txtDniAlumno.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtDniAlumno.setDescripcion(" ");
-        txtDniAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtDniAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtDniAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtDniAlumnoKeyTyped(evt);
@@ -525,7 +533,7 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         txtTelefProfesor.setEditable(false);
         txtTelefProfesor.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtTelefProfesor.setDescripcion("TELEF. PROF.");
-        txtTelefProfesor.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtTelefProfesor.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtTelefProfesor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtTelefProfesorKeyTyped(evt);
@@ -907,6 +915,24 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDniAlumnoKeyTyped
 
+    private void tblMatriculasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMatriculasMouseClicked
+        // TODO add your handling code here:
+        switch(permiteSelFila){
+            case 0: //permite llamar desde la ventana pagos
+                int numeroFila=tblMatriculas.getSelectedRow();
+                if(numeroFila!=-1){
+                    jfPrincipal.menuPagos.txtIdMatricula.setText(tblMatriculas.getValueAt(numeroFila,0).toString());
+                    jfPrincipal.menuPagos.txtDetallesMatricula.setText(tblMatriculas.getValueAt(numeroFila,12).toString()+" , "+tblMatriculas.getValueAt(numeroFila,13).toString()+" - "+tblMatriculas.getValueAt(numeroFila,14).toString());
+                }
+                try {
+                    setClosed(true);
+                } catch(Exception ex){
+                    ex.printStackTrace();
+                }
+                break;
+        }
+    }//GEN-LAST:event_tblMatriculasMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
@@ -1058,10 +1084,15 @@ public class jifMatricula extends javax.swing.JInternalFrame {
         return matricula;
     }
 
-    private void listarMatriculas(int paginaActual, int tamanioPagina) {
+    public void listarMatriculas(int paginaActual, int tamanioPagina) {
         totalPaginas = horarioFacade.obtenerTotalPaginas(tamanioPagina);
-
-        List<Matricula> listaMatriculas = matriculaFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+        List<Matricula> listaMatriculas=null;
+        if(permiteSelFila==0){
+            listaMatriculas= matriculaFacade.getListadoMatriculasPorDni(dniAlumno);
+        }else{
+          listaMatriculas = matriculaFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+        }
+        //List<Matricula> listaMatriculas = matriculaFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
 
         // Actualizar el JLabel con la página actual
         lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);

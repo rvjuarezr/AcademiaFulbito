@@ -12,15 +12,19 @@
 package academiafulbito.vista.interfaces;
 
 import academiafulbito.controlador.beans.CanchaFacade;
+import academiafulbito.controlador.beans.CategoriaProductoFacade;
 import academiafulbito.controlador.beans.LugarEntrenamientoFacade;
 import academiafulbito.controlador.beans.ProductoServicioFacade;
 import academiafulbito.modelo.entidades.Cancha;
+import academiafulbito.modelo.entidades.CategoriaProducto;
 import academiafulbito.modelo.entidades.ProductoServicio;
 import academiafulbito.modelo.enums.Estado;
 import academiafulbito.vista.reportes.Reportes;
 import academiafulbito.vista.utilidades.DialogUtils;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
+import groovyjarjarcommonscli.ParseException;
+import java.awt.Cursor;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -37,15 +41,17 @@ import javax.swing.table.DefaultTableModel;
  */
 public class jifProductoServicios extends javax.swing.JInternalFrame {
 
-    JDesktopPane jDesktopPane;
+    JDesktopPane jdp;
 
     int indicador;//para saber si estamos en modo de edicion
     private int idSeleccionada; // Variable para almacenar la ID de la cancha seleccionada
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
     private int totalPaginas;
+    public char tipo;
 
     public static ProductoServicioFacade productoServicioFacade;
+    public static CategoriaProductoFacade categoriaProductoFacade;
     DefaultTableModel modelo;
     String[] nombreColumnas = {
         LiteralesTexto.LITERAL_ID,//0
@@ -54,7 +60,9 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_PRECIO,//3
         LiteralesTexto.LITERAL_STOCK,//4
         LiteralesTexto.LITERAL_ID_CATEGORIAPROD,//5
-        LiteralesTexto.LITERAL_ESTADO,//6
+        LiteralesTexto.LITERAL_NOMBRE_CATPRO,//6
+        LiteralesTexto.LITERAL_ESTADO,//7
+        LiteralesTexto.LITERAL_TIPO_PRODUCTO,//8
         LiteralesTexto.LITERAL_VER,
         LiteralesTexto.LITERAL_EDITAR,
         LiteralesTexto.LITERAL_ELIMINAR
@@ -63,11 +71,13 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
     /** Creates new form jifCanchas */
     public jifProductoServicios(JDesktopPane jdpModAF){
         initComponents();
-        jDesktopPane = jdpModAF;
-        //Utils.cargarComboEstado(jcbEstado);
+        jdp = jdpModAF;
+        permiteSelFila=-1;
+        Utils.cargarComboEstado(jcbEstado);
         accionBotones(false, false, false);
       
         productoServicioFacade = new ProductoServicioFacade();
+        categoriaProductoFacade = new CategoriaProductoFacade();
         listarProductoServicio(paginaActual, tamanioPagina);
     }
 
@@ -80,14 +90,15 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        bgTipoProducto = new javax.swing.ButtonGroup();
         tphProductoServicio = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jspCanchas = new javax.swing.JScrollPane();
+        jspProductoServicios = new javax.swing.JScrollPane();
         tblProductoServicio = new javax.swing.JTable();
         lblPaginaActual = new javax.swing.JLabel();
         btnAnterior = new org.edisoncor.gui.button.ButtonRound();
         btnSiguiente = new org.edisoncor.gui.button.ButtonRound();
-        btnNuevoHorario = new javax.swing.JButton();
+        btnNuevoProductoServicio = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtCategoriaProducto = new org.edisoncor.gui.textField.TextFieldRoundBackground();
@@ -101,20 +112,23 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         txtDescripcionProducto = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtPrecio = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtStock = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
+        rbMensualidades = new javax.swing.JRadioButton();
+        rbOtrosServicios = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
         setTitle("MANTENIMIENTO PRODUCTO SERVICIO");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphProductoServicio.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphProductoServicio.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jspCanchas.setBackground(new java.awt.Color(255, 255, 255));
-        jspCanchas.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jspCanchas.setOpaque(false);
+        jspProductoServicios.setBackground(new java.awt.Color(255, 255, 255));
+        jspProductoServicios.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jspProductoServicios.setOpaque(false);
 
         tblProductoServicio.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -130,9 +144,14 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
                 tblProductoServicioMouseClicked(evt);
             }
         });
-        jspCanchas.setViewportView(tblProductoServicio);
+        tblProductoServicio.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                tblProductoServicioMouseMoved(evt);
+            }
+        });
+        jspProductoServicios.setViewportView(tblProductoServicio);
 
-        jPanel1.add(jspCanchas, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 1110, 270));
+        jPanel1.add(jspProductoServicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 1110, 270));
 
         lblPaginaActual.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         lblPaginaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -161,19 +180,19 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         });
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 420, -1, 50));
 
-        btnNuevoHorario.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        btnNuevoHorario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
-        btnNuevoHorario.setText("<html><center>NUEVA<br>CANCHA</center></html>");
-        btnNuevoHorario.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        btnNuevoHorario.setContentAreaFilled(false);
-        btnNuevoHorario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnNuevoHorario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnNuevoHorario.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevoProductoServicio.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnNuevoProductoServicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
+        btnNuevoProductoServicio.setText("<html><center>NUEVO<br>PRODSERVICIO</center></html>");
+        btnNuevoProductoServicio.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnNuevoProductoServicio.setContentAreaFilled(false);
+        btnNuevoProductoServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNuevoProductoServicio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNuevoProductoServicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoHorarioActionPerformed(evt);
+                btnNuevoProductoServicioActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevoHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 10, 180, 120));
+        jPanel1.add(btnNuevoProductoServicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 10, 180, 120));
 
         tphProductoServicio.addTab("LISTADO", jPanel1);
 
@@ -269,6 +288,18 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         txtStock.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(txtStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 570, 50));
 
+        jcbEstado.setEnabled(false);
+        jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 380, 220, 40));
+
+        bgTipoProducto.add(rbMensualidades);
+        rbMensualidades.setText("MENSUALIDADES");
+        jPanel2.add(rbMensualidades, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 390, 120, -1));
+
+        bgTipoProducto.add(rbOtrosServicios);
+        rbOtrosServicios.setText("OTROS SERVICIOS");
+        jPanel2.add(rbOtrosServicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 390, -1, -1));
+
         tphProductoServicio.addTab("REGISTRO", jPanel2);
 
         getContentPane().add(tphProductoServicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 520));
@@ -297,7 +328,12 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
 }//GEN-LAST:event_txtCategoriaProductoKeyTyped
 
     private void btnBucarCategoriaProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBucarCategoriaProductoActionPerformed
-     
+      if(jfPrincipal.menuCategoriaProducto == null || jfPrincipal.menuCategoriaProducto.isClosed()){
+            jfPrincipal.menuCategoriaProducto = new jifCategoriaProducto(jdp);
+            Utils.visualizarInternalFrame(jfPrincipal.menuCategoriaProducto, jdp);
+        }
+        jfPrincipal.menuCategoriaProducto.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de padres
+        jfPrincipal.menuCategoriaProducto.toFront();
 }//GEN-LAST:event_btnBucarCategoriaProductoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -335,28 +371,78 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_btnImprimirActionPerformed
 
-    private void btnNuevoHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoHorarioActionPerformed
-       
-}//GEN-LAST:event_btnNuevoHorarioActionPerformed
+    private void btnNuevoProductoServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProductoServicioActionPerformed
+        indicador = 0;//para poder guardar
+        tphProductoServicio.setSelectedIndex(1);
+        limpiarCampos();
+        habilitarCampos(true);
+        accionBotones(true, true,false);
+}//GEN-LAST:event_btnNuevoProductoServicioActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-      
+        try {
+            if (validarDatosProductoServicio()) {
+                String cadenaMensaje = 0 == indicador ? LiteralesTexto.ESTA_SEGURO_GUARDAR_NUEVO_REGISTRO : LiteralesTexto.ESTA_SEGURO_MODIFICAR_REGISTRO;
+                if (Utils.mensajeConfirmacion(cadenaMensaje) == JOptionPane.YES_OPTION) {
+                    ProductoServicio productoServicio;
+                    switch (indicador) {
+                        case 0://registrar categoria
+                            productoServicio = new ProductoServicio();
+                            productoServicioFacade.guardarProductoServicio(getDatosProductoServicio(productoServicio));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_GUARDADO_CORRECTAMENTE);
+                            break;
+                        case 1://actualizar categoria
+                            productoServicio = productoServicioFacade.findProductoServicioById(idSeleccionada);
+                            productoServicioFacade.actualizarProductoServicio(getDatosProductoServicio(productoServicio));
+                            Utils.mensajeInformacion(LiteralesTexto.REGISTRO_ACTUALIZADO_CORRECTAMENTE);
+                            break;
+                    }
+
+                    listarProductoServicio(paginaActual, tamanioPagina);
+                    limpiarCampos();
+                    habilitarCampos(false);
+                    accionBotones(false, false, false);
+                    btnGuardar.setText("Añadir");
+                    indicador = 0;
+                    tphProductoServicio.setSelectedIndex(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void tblProductoServicioMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductoServicioMouseMoved
+        // TODO add your handling code here:
+        int col = tblProductoServicio.columnAtPoint(evt.getPoint());
+        int row = tblProductoServicio.rowAtPoint(evt.getPoint());
+        if (col >= 0 && (tblProductoServicio.getColumnName(col).equals(LiteralesTexto.LITERAL_VER) ||
+                         tblProductoServicio.getColumnName(col).equals(LiteralesTexto.LITERAL_EDITAR) ||
+                         tblProductoServicio.getColumnName(col).equals(LiteralesTexto.LITERAL_ELIMINAR))) {
+            tblProductoServicio.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        } else {
+            tblProductoServicio.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+    }//GEN-LAST:event_tblProductoServicioMouseMoved
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup bgTipoProducto;
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBucarCategoriaProducto;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimir;
-    private javax.swing.JButton btnNuevoHorario;
+    private javax.swing.JButton btnNuevoProductoServicio;
     private org.edisoncor.gui.button.ButtonRound btnSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jspCanchas;
+    private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
+    private javax.swing.JScrollPane jspProductoServicios;
     private javax.swing.JLabel lblPaginaActual;
+    private javax.swing.JRadioButton rbMensualidades;
+    private javax.swing.JRadioButton rbOtrosServicios;
     private javax.swing.JTable tblProductoServicio;
     private javax.swing.JTabbedPane tphProductoServicio;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtCategoriaProducto;
@@ -377,11 +463,13 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         // Asignar el modelo a la tabla
         tblProductoServicio.setModel(modelo);
 
-        int[] anchoColumnas = {15,45,40, 25, 30, 50, 20, 15, 25, 25}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {15,45,40, 25, 30, 50, 20,20,20, 15, 25, 25}; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblProductoServicio, anchoColumnas);
         Utils.ocultarColumnas(tblProductoServicio, 0);//ocultar la primera columna
-        Utils.ocultarColumnas(tblProductoServicio, 5);//ocultar la primera columna
-        Utils.ocultarColumnas(tblProductoServicio, 6);//ocultar columna estado
+        Utils.ocultarColumnas(tblProductoServicio, 5);//ocultar el id
+        Utils.ocultarColumnas(tblProductoServicio, 6);//ocultar el nombre
+        Utils.ocultarColumnas(tblProductoServicio, 7);//ocultar columna estado
+        Utils.ocultarColumnas(tblProductoServicio, 8);//ocultar columna tipo producto
 
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblProductoServicio);
@@ -400,7 +488,9 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
                     productoServicio.getPrecio(),
                     productoServicio.getStock(),
                     productoServicio.getCategoriaProducto().getIdCategoriaProd(),
+                    productoServicio.getCategoriaProducto().getNombreCategoria(),
                     productoServicio.getEstado(),
+                    productoServicio.getTipo_producto(),
                     LiteralesTexto.LITERAL_VER,
                     LiteralesTexto.LITERAL_EDITAR,
                     LiteralesTexto.LITERAL_ELIMINAR
@@ -413,7 +503,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
             // Establece el modo de selección de filas para permitir solo una selección a la vez.
             tblProductoServicio.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-            Utils.configurarEstiloTabla(tblProductoServicio, jspCanchas);
+            Utils.configurarEstiloTabla(tblProductoServicio, jspProductoServicios);
             Utils.configurarBotonesAccion(tblProductoServicio);
         }
     }
@@ -424,10 +514,15 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         btnImprimir.setEnabled(f);
     }
 
-    private void listarProductoServicio(int paginaActual, int tamanioPagina) {
+    public void listarProductoServicio(int paginaActual, int tamanioPagina) {
         totalPaginas = productoServicioFacade.obtenerTotalPaginas(tamanioPagina);
-
-        List<ProductoServicio> listaProductoServicio = productoServicioFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+        List<ProductoServicio> listaProductoServicio=null;
+        if(permiteSelFila==0){
+            listaProductoServicio=productoServicioFacade.getListadoProductoServiciosPorTipo(tipo);
+        } else {
+            listaProductoServicio=productoServicioFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+        }
+        //List<ProductoServicio> listaProductoServicio = productoServicioFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
 
         // Actualizar el JLabel con la página actual
         lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
@@ -451,13 +546,74 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
 
     private void habilitarCampos(boolean band) {
         txtNombreProducto.setEditable(band);
+        txtDescripcionProducto.setEditable(band);
+        txtPrecio.setEditable(band);
+        txtStock.setEditable(band);
         txtIdCategoriaProducto.setEditable(band);
         txtCategoriaProducto.setEditable(band);
+        //txtTipoProducto.setEditable(band);
+        if (indicador == 0) {
+            jcbEstado.setSelectedIndex(0);
+            jcbEstado.setEnabled(!band);
+        } else {
+            jcbEstado.setEnabled(band);
+        }
         
     }
 
 
-    public void cargarDatosEnFormulario(int row) {
+    public void cargarDatosEnFormulario(int row) throws ParseException {
+       if (row != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblProductoServicio.getValueAt(row, 0).toString()); // Supone que la ID está en la primera columna
+
+            // Obtener los datos de la fila seleccionada
+            String nombre = (String) tblProductoServicio.getValueAt(row, 1);
+            String descripcion = (String) tblProductoServicio.getValueAt(row, 2);
+            double precio = Double.parseDouble(tblProductoServicio.getValueAt(row, 3).toString()); // Cambiar a Double
+            int stock = Integer.parseInt(tblProductoServicio.getValueAt(row, 4).toString());
+            int idCategoria= Integer.parseInt(tblProductoServicio.getValueAt(row, 5).toString());//5
+            String nombreCategoria=(String) tblProductoServicio.getValueAt(row, 6);//6
+            Estado estado = (Estado) tblProductoServicio.getValueAt(row, 7);
+            Character tipo_producto = (Character) tblProductoServicio.getValueAt(row, 8);
+
+
+            // Asignar los datos a los JTextField en el segundo panel
+            txtNombreProducto.setText(nombre);//11
+            txtDescripcionProducto.setText(descripcion);//2
+            txtPrecio.setText(String.valueOf(precio));//3
+            txtStock.setText(String.valueOf(stock));//4
+            txtIdCategoriaProducto.setText(""+idCategoria);//5
+            txtCategoriaProducto.setText(nombreCategoria);//6
+            //txtTipoProducto.setText(tipo_producto.toString());//8
+
+            // Seleccionar el estado en el JComboBox
+            jcbEstado.setSelectedItem(estado);//7
+            
+            //para el radiobutton
+           if (tipo_producto != null) {  // Asegurarse de que tipo_producto no sea null
+               if (tipo_producto == '0') {
+                   rbMensualidades.setSelected(true);  // Seleccionar rbMensualidades si tipo_producto es '0'
+                   rbOtrosServicios.setSelected(false);  // Asegurarse de que el otro no esté seleccionado
+               } else if (tipo_producto == '1') {
+                   rbOtrosServicios.setSelected(true);  // Seleccionar rbOtrosServicios si tipo_producto es '1'
+                   rbMensualidades.setSelected(false);  // Asegurarse de que el otro no esté seleccionado
+               } else {
+                   // Si tipo_producto tiene un valor inesperado, puedes hacer algo adicional si es necesario
+                   rbMensualidades.setSelected(false);
+                   rbOtrosServicios.setSelected(false);
+               }
+           }
+
+            // Cambiar al segundo panel donde están los JTextField
+            tphProductoServicio.setSelectedIndex(1);
+            btnGuardar.setText("Modificar");
+            indicador = 1;
+            accionBotones(true, true, true);
+            habilitarCampos(true);
+        } else {
+            //colocar alguna alerta
+        }
 
     }
 
@@ -465,21 +621,92 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
 
         productoServicio.setNombreProducto(txtNombreProducto.getText());
         productoServicio.setDescripcion(txtDescripcionProducto.getText());
-        
         double precioDouble = Double.parseDouble(txtPrecio.getText());
         BigDecimal precio = BigDecimal.valueOf(precioDouble);
         productoServicio.setPrecio(precio);
-
         int stock = Integer.parseInt(txtStock.getText());
         productoServicio.setStock(stock);
-
-     
-
-
-
+        productoServicio.setCategoriaProducto(categoriaProductoFacade.findCategoriaProductoById(Integer.parseInt(txtIdCategoriaProducto.getText())));
+        productoServicio.setEstado((Estado) jcbEstado.getSelectedItem());
+        //productoServicio.setTipo_producto(txtTipoProducto.getText().charAt(0));
+        if (rbMensualidades.isSelected()) {
+            productoServicio.setTipo_producto('0');  
+            tipo = '0'; 
+        } else if (rbOtrosServicios.isSelected()) {
+            productoServicio.setTipo_producto('1'); 
+            tipo = '1';  
+        }
         return productoServicio;
 
     }
 
 
+    private boolean validarDatosProductoServicio(){
+        if(!validarCampo(txtNombreProducto.getText(), LiteralesTexto.ERROR_NOMBRE_CAMPO_VACIO)){
+            return false;
+        }
+
+        if (!validarCampo(txtDescripcionProducto.getText(), LiteralesTexto.ERROR_NOMBRE_CAMPO_VACIO)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validarCampo(String valor, String mensajeError) {
+        if (!Utils.validarCadena(valor)) {
+            Utils.mensajeError(mensajeError);
+            return false;
+        }
+        return true;
+    }
+
+    private void getDatosProductoServicio(int filaSeleccionada){
+        // Cambiar al segundo panel donde están los JTextField
+        tphProductoServicio.setSelectedIndex(1);
+
+        txtNombreProducto.setText(tblProductoServicio.getValueAt(filaSeleccionada, 1).toString());
+        txtDescripcionProducto.setText(tblProductoServicio.getValueAt(filaSeleccionada, 2).toString());
+        txtPrecio.setText(tblProductoServicio.getValueAt(filaSeleccionada, 3).toString());
+        txtStock.setText(tblProductoServicio.getValueAt(filaSeleccionada, 4).toString());
+        //txtTipoProducto.setText(tblProductoServicio.getValueAt(filaSeleccionada, 8).toString());
+        
+    }
+
+    public void eliminarProductoServicioSeleccionada(int filaSeleccionada) {
+        if (filaSeleccionada != -1) {
+            // Capturar la ID de la fila seleccionada
+            idSeleccionada = Integer.parseInt(tblProductoServicio.getValueAt(filaSeleccionada, 0).toString()); // Supone que la ID está en la primera columna
+            if (Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO) == JOptionPane.YES_OPTION) {
+                ProductoServicio productoServicioAEliminar = productoServicioFacade.findProductoServicioById(idSeleccionada);
+                if(productoServicioAEliminar != null){
+                    try {
+                        // Llamar al método para eliminar
+                        productoServicioFacade.eliminarProductoServicio(productoServicioAEliminar);
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_ELIMINADO_CORRECTAMENTE);
+
+                        // Actualizar la tabla después de eliminar
+                        totalPaginas = categoriaProductoFacade.obtenerTotalPaginas(tamanioPagina);
+
+                        // Verificar si la página actual es mayor que el total de páginas después de la eliminación
+                        if (paginaActual > totalPaginas) {
+                            paginaActual = totalPaginas; // Ajustar la página actual a la última disponible
+                        }
+
+                        // Actualizar la tabla después de eliminar
+                        listarProductoServicio(paginaActual, tamanioPagina); // Volver a listar las categorías después de la eliminación
+
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, LiteralesTexto.ERROR_AL_ELIMINAR_EL_REGISTRO+ " : " + e.getMessage(), LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, LiteralesTexto.REGISTRO_NO_ENCONTRADO_EN_LA_BBDD, LiteralesTexto.LITERAL_ERROR, JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, LiteralesTexto.POR_FAVOR_SELECCIONE_UNA_REGISTRO_PARA_ELIMINAR);
+        }
+    }
 }

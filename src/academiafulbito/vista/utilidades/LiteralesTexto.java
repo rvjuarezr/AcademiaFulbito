@@ -95,5 +95,10 @@ public class LiteralesTexto {
     public static final String LITERAL_ID_CATEGORIAPROD= "ID_CategoriaProd";
     public static final String LITERAL_DESCRIPCION_CAT= "Descripcion";
     public static final String ERROR_DESCRIPCION_CAMPO_VACIO= "Debe escribir una Descripcion";
+    public static final String LITERAL_DNI_EXISTE= "DNI YA Existe";
+    public static final String LITERAL_MAESTRAS_CATPRODUCTOS = "CATPRODUCTOS";
+    public static final String LITERAL_NOMBRE_CATPRO= "nombre_categoria";
+    public static final String LITERAL_ELIMINAR_REGISTRO= "Debes de elegir un registro para eliminar!";
+    public static final String LITERAL_TIPO_PRODUCTO= "tipo_producto";
 
 }

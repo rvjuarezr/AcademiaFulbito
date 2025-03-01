@@ -349,5 +349,16 @@ public class Utils extends DefaultTableCellRenderer{
         label.setIcon(icon);
         label.repaint();
     }
+
+    public static boolean validarDatoRegistroTabla(JTable tabla, int numeroColumna, String datoConsulta) {
+        boolean respuesta = false;
+        for (int i = 0; i < tabla.getRowCount(); i++) {
+            if (tabla.getValueAt(i, numeroColumna).toString().equals(datoConsulta)) {
+                respuesta = true;
+                break;
+            }
+        }
+        return respuesta;
+    }
     
 }

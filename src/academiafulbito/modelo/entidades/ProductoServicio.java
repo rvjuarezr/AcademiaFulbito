@@ -50,10 +50,13 @@ public class ProductoServicio {
     @Column(name = "estado")
     private Estado estado;
 
+    @Column(name = "tipo_producto", length = 1)
+    private char tipo_producto;
+
     public ProductoServicio() {
     }
 
-    public ProductoServicio(int idProducto, String nombreProducto, String descripcion, BigDecimal precio, int stock, CategoriaProducto categoriaProducto, Estado estado) {
+    public ProductoServicio(int idProducto, String nombreProducto, String descripcion, BigDecimal precio, int stock, CategoriaProducto categoriaProducto, Estado estado,char tipo_producto) {
         this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
@@ -61,6 +64,7 @@ public class ProductoServicio {
         this.stock = stock;
         this.categoriaProducto = categoriaProducto;
         this.estado = estado;
+        this.tipo_producto=tipo_producto;
     }
 
     public CategoriaProducto getCategoriaProducto() {
@@ -118,6 +122,16 @@ public class ProductoServicio {
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
+
+    public char getTipo_producto() {
+        return tipo_producto;
+    }
+
+    public void setTipo_producto(char tipo_producto) {
+        this.tipo_producto = tipo_producto;
+    }
+
+
 
 
 }
