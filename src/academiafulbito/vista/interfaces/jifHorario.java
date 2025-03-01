@@ -199,9 +199,9 @@ public class jifHorario extends javax.swing.JInternalFrame {
         });
         jpListado.add(btnRepCanchasPorLugaEnt, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, 150, 120));
 
-        btnNuevoHorario.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnNuevoHorario.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         btnNuevoHorario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
-        btnNuevoHorario.setText("<html><center>NUEVO<br>CAMPEONATO</center></html>");
+        btnNuevoHorario.setText("<html><center>NUEVO<br>HORARIO</center></html>");
         btnNuevoHorario.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         btnNuevoHorario.setContentAreaFilled(false);
         btnNuevoHorario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -335,7 +335,7 @@ public class jifHorario extends javax.swing.JInternalFrame {
         });
         jPanel2.add(txtNombreCancha, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 400, 450, 50));
 
-        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/volver.png"))); // NOI18N
         btnCancelar.setText("VOLVER");
         btnCancelar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));

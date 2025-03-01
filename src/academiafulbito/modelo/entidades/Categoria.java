@@ -35,15 +35,18 @@ public class Categoria {
     @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
     @Column(name = "estado")
     private Estado estado;
+    @Column(name = "Descripcion", nullable = false, length = 20)
+    private String descripcion;
 
     public Categoria() {
     }
 
-    public Categoria(String nombre, int edadMin, int edadMax, Estado estado) {
+    public Categoria(String nombre, int edadMin, int edadMax, Estado estado, String descripcion) {
         this.nombre = nombre;
         this.edadMin = edadMin;
         this.edadMax = edadMax;
         this.estado = estado;
+        this.descripcion = descripcion;
     }
 
     // Getters y Setters
@@ -85,6 +88,14 @@ public class Categoria {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
     
 }
