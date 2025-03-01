@@ -15,6 +15,10 @@
     <class>academiafulbito.modelo.entidades.CategoriaProducto</class>
     <class>academiafulbito.modelo.entidades.ProductoServicio</class>
     <class>academiafulbito.modelo.entidades.Serie</class>
+    <class>academiafulbito.modelo.entidades.TiposComprobante</class>
+    <class>academiafulbito.modelo.entidades.ControlCorrelativo</class>
+    <class>academiafulbito.modelo.entidades.Pago</class>
+    <class>academiafulbito.modelo.entidades.DetallePago</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/bdacademiafulbito"/>
       <property name="javax.persistence.jdbc.password" value="${db.password}"/>

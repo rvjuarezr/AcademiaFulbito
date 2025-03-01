@@ -14,18 +14,24 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.modelo.entidades.ProductoServicio;
 import academiafulbito.controlador.beans.AlumnoFacade;
 import academiafulbito.controlador.beans.PadreFacade;
+import academiafulbito.controlador.beans.TiposComprobanteFacade;
 import academiafulbito.modelo.entidades.Alumno;
 import academiafulbito.modelo.entidades.Padre;
+import academiafulbito.modelo.entidades.TiposComprobante;
 import academiafulbito.vista.utilidades.Imagen;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
 import java.awt.Image;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -40,18 +46,35 @@ public class jifPagos extends javax.swing.JInternalFrame {
     JDesktopPane jdp;
     private PadreFacade padreFacade;
     private AlumnoFacade alumnoFacade;
-    jifProductoServicios menuProductoServicios;
     private BigDecimal totalAPagar = BigDecimal.ZERO;
     private int paginaActual = 1;
     private int tamanioPagina = 10;
     public char tipo='1';
+    private TiposComprobanteFacade tiposComprobanteFacade;
+    jifProductoServicios menuProductoServicios;    
+    DefaultTableModel tableModel;
+    private DecimalFormat decimalFormat = new DecimalFormat("#.00");
     
     public jifPagos(JDesktopPane jdpModAF) {
         initComponents();
         jdp = jdpModAF;
         padreFacade = new PadreFacade();
         alumnoFacade = new AlumnoFacade();
+        tiposComprobanteFacade = new TiposComprobanteFacade();
         jpMatricula.setVisible(false);
+        tableModel = (DefaultTableModel) tblItemsConceptos.getModel();
+        tableModel.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int filaActualizada = e.getFirstRow();
+                int columnaAfectada = e.getColumn();
+                if(columnaAfectada == 3 || columnaAfectada == 4){
+                    actualizarColumnaTotal(filaActualizada);
+                }
+                actualizarTotalAPagar();
+            }
+        });
+        cargarInformacionEnCombos();
     }
     
 
@@ -86,11 +109,9 @@ public class jifPagos extends javax.swing.JInternalFrame {
         btnQuitarConcepto = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jdchFechaPago = new com.toedter.calendar.JDateChooser();
-        jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jcbTipoCpbte = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
-        txtCorrelativo = new javax.swing.JTextField();
         txtPagoEfectivo = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txtPagoYape = new javax.swing.JTextField();
@@ -99,6 +120,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jLabel14 = new javax.swing.JLabel();
         txtTotalPago = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jcbSerie = new javax.swing.JComboBox();
         jspTblItemsConceptos = new javax.swing.JScrollPane();
         tblItemsConceptos = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
@@ -234,23 +257,13 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel1.add(jdchFechaPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 160, 30));
 
-        jLabel6.setText("CORRELATIVO");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 130, 20));
-
         jLabel8.setText("FECHA DEL PAGO");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 20));
 
-        jcbTipoCpbte.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(jcbTipoCpbte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 140, 30));
 
         jLabel9.setText("TIPO CPBTE.");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 130, 20));
-
-        txtCorrelativo.setBackground(new java.awt.Color(204, 255, 255));
-        txtCorrelativo.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtCorrelativo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtCorrelativo.setText("000-000");
-        jPanel1.add(txtCorrelativo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 150, 30));
 
         txtPagoEfectivo.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtPagoEfectivo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -288,6 +301,11 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jLabel11.setText("TOTAL A PAGAR");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 140, 30));
 
+        jLabel18.setText("SERIE");
+        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 130, 20));
+
+        jPanel1.add(jcbSerie, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 150, 30));
+
         jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 90, 310, 240));
 
         tblItemsConceptos.setModel(new javax.swing.table.DefaultTableModel(
@@ -297,7 +315,15 @@ public class jifPagos extends javax.swing.JInternalFrame {
             new String [] {
                 "ID.PROD", "ID.CAT.PROD", "NOMBRE PRODUCTO", "PRECIO", "CANT", "TOTAL"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jspTblItemsConceptos.setViewportView(tblItemsConceptos);
 
         jPanel2.add(jspTblItemsConceptos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 850, 240));
@@ -410,41 +436,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         //para la segunda condicion se busca el codConcepto dentro de la tabla de agregados, haber si ya existe tal codigo
         if (validarConceptoAgregado()/* && !Utils.validarDatoRegistroTabla(tblItemsConceptos, 1, txtCodConceptoPago.getText())*/) {
-            DefaultTableModel tableModel = (DefaultTableModel) tblItemsConceptos.getModel();
-
-            if (productoServicio != null) {
-                Object item[] = {
-                    "" + productoServicio.getIdProducto(),
-                    "" + productoServicio.getCategoriaProducto().getIdCategoriaProd(),
-                    productoServicio.getNombreProducto(),
-                    productoServicio.getPrecio(),
-                    "1",
-                    productoServicio.getPrecio()
-                };
-                tableModel.addRow(item);
-
-                //actualizar el total
-                totalAPagar = totalAPagar.add(productoServicio.getPrecio());
-                actualizarTotalAPagar();
-                activarBotonProcesoPago();
-            }
-            int[] anchoColumnas = {
-                15,// idProd
-                15, //idCatPro
-                120, //prod
-                20, //precio
-                20, //cantidad
-                20 // total
-            }; // Anchos específicos para cada columna
-            Utils.setAnchoColumnas(tblItemsConceptos, anchoColumnas);
-            Utils.ocultarColumnas(tblItemsConceptos, 0);
-            Utils.ocultarColumnas(tblItemsConceptos, 1);
-            // Establece un renderizador personalizado para las celdas de la tabla.
-            tblItemsConceptos.setDefaultRenderer(Object.class, new Utils(14));
-
-            // Establece el modo de selección de filas para permitir solo una selección a la vez.
-            tblItemsConceptos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            limpiarCamposProductosServ();
+            agregarProductoAPagar();
         } else {
             Utils.mensajeError("ERROR!!, PARA AGREGAR EL CONCEPTO DE PAGO.");
         }
@@ -487,26 +479,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
     private void btnQuitarConceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarConceptoActionPerformed
         // TODO add your handling code here:
-        int nroFila=tblItemsConceptos.getSelectedRow();
-        if(nroFila != -1){
-            int retorno=Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO);
-            switch(retorno){
-                case JOptionPane.YES_OPTION:{
-                    DefaultTableModel modelo=(DefaultTableModel)tblItemsConceptos.getModel();
-                    BigDecimal filaPrecioEliminar = (BigDecimal)modelo.getValueAt(nroFila, 5);
-                    modelo.removeRow(nroFila);
-
-                    //actualizar el total
-                    totalAPagar = totalAPagar.subtract(filaPrecioEliminar);
-                    actualizarTotalAPagar();
-                    activarBotonProcesoPago();
-                }
-                break;
-                case JOptionPane.NO_OPTION:{}break;
-            }
-        } else if(nroFila == -1){
-            Utils.mensajeError(LiteralesTexto.LITERAL_ELIMINAR_REGISTRO);
-        }
+        quitarProductoSeleccionado();
     }//GEN-LAST:event_btnQuitarConceptoActionPerformed
 
     private void rbPagarOtrosServiciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPagarOtrosServiciosActionPerformed
@@ -556,11 +529,11 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -568,6 +541,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JComboBox jcbSerie;
     private javax.swing.JComboBox jcbTipoConsulta;
     private javax.swing.JComboBox jcbTipoCpbte;
     private com.toedter.calendar.JDateChooser jdchFechaPago;
@@ -580,7 +554,6 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtApellidosAlumno;
     public static javax.swing.JTextField txtCodConceptoPago;
     public static javax.swing.JTextField txtConceptoPago;
-    private javax.swing.JTextField txtCorrelativo;
     private javax.swing.JTextField txtDatoBusqueda;
     public static javax.swing.JTextField txtDetallesMatricula;
     private javax.swing.JTextField txtDniAlumno;
@@ -683,6 +656,112 @@ public class jifPagos extends javax.swing.JInternalFrame {
     }
 
     private void actualizarTotalAPagar(){
-        txtTotalPago.setText(totalAPagar.toString());
+        BigDecimal totalAPagar = BigDecimal.ZERO;
+        for(int i=0; i< tableModel.getRowCount();i++){
+            totalAPagar = totalAPagar.add(new BigDecimal(tableModel.getValueAt(i, 5).toString()));
+        }
+        txtTotalPago.setText(totalAPagar.setScale(2,RoundingMode.HALF_UP).toString());
+    }
+
+    private void agregarProductoAPagar(){
+        if (productoServicio != null) {
+
+            //calcular total
+            BigDecimal itemPrecio = productoServicio.getPrecio();
+            BigDecimal itemCantidad = BigDecimal.ONE.setScale(2,RoundingMode.HALF_UP);   
+            BigDecimal itemTotal = itemPrecio.multiply(itemCantidad).setScale(2,RoundingMode.HALF_UP);
+
+            Object item[] = {
+                "" + productoServicio.getIdProducto(),
+                "" + productoServicio.getCategoriaProducto().getIdCategoriaProd(),
+                productoServicio.getNombreProducto(),
+                itemPrecio.setScale(2,RoundingMode.HALF_UP),
+                itemCantidad,
+                itemTotal
+            };
+            tableModel.addRow(item);
+
+            //actualizar el total
+            actualizarTotalAPagar();
+            activarBotonProcesoPago();
+        }
+        int[] anchoColumnas = {
+            15,// idProd
+            15, //idCatPro
+            120, //prod
+            20, //precio
+            20, //cantidad
+            20 // total
+        }; // Anchos específicos para cada columna
+        Utils.setAnchoColumnas(tblItemsConceptos, anchoColumnas);
+        Utils.ocultarColumnas(tblItemsConceptos, 0);
+        Utils.ocultarColumnas(tblItemsConceptos, 1);
+        // Establece un renderizador personalizado para las celdas de la tabla.
+        tblItemsConceptos.setDefaultRenderer(Object.class, new Utils(14));
+
+        // Establece el modo de selección de filas para permitir solo una selección a la vez.
+        tblItemsConceptos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        limpiarCamposProductosServ();
+    }
+
+    private void actualizarColumnaTotal(int filaSeleccionada) {
+        //obtener precio y cantidad
+        BigDecimal precioActualizado = new BigDecimal(tableModel.getValueAt(filaSeleccionada, 3).toString());
+        BigDecimal cantidadActualizada = new BigDecimal(tableModel.getValueAt(filaSeleccionada, 4).toString());
+
+        if (precioActualizado.compareTo(BigDecimal.ZERO) <= 0) {
+            Utils.mensajeError("El precio debe ser mayor que 0");
+            return;
+        }
+
+        if (cantidadActualizada.compareTo(BigDecimal.ZERO) <= 0) {
+            Utils.mensajeError("La Cantidad debe ser mayor que 0");
+            return;
+        }
+
+        //recalcular el total
+        BigDecimal totalCalculado = precioActualizado.multiply(cantidadActualizada).setScale(2, RoundingMode.HALF_UP);
+        tableModel.setValueAt(totalCalculado, filaSeleccionada, 5);
+    }
+
+    private void quitarProductoSeleccionado() {
+        int nroFila = tblItemsConceptos.getSelectedRow();
+        if (nroFila != -1) {
+            int retorno = Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO);
+            switch (retorno) {
+                case JOptionPane.YES_OPTION: {
+                    tableModel.removeRow(nroFila);
+
+                    //actualizar el total
+                    actualizarTotalAPagar();
+                    activarBotonProcesoPago();
+                }
+                break;
+                case JOptionPane.NO_OPTION: {
+                }
+                break;
+            }
+        } else if (nroFila == -1) {
+            Utils.mensajeError(LiteralesTexto.LITERAL_ELIMINAR_REGISTRO);
+        }
+    }
+
+    private void cargarInformacionEnCombos(){
+        cargarComboTipoComprobante(tiposComprobanteFacade.obtenerTiposComprobante());
+    }
+
+    private void cargarComboTipoComprobante(List<TiposComprobante> lista){
+        jcbTipoCpbte.removeAllItems();
+
+        if (lista == null || lista.isEmpty()) {
+            jcbTipoCpbte.addItem("No hay tipos disponibles");
+            jcbTipoCpbte.setEnabled(false);
+            return;
+        }
+        jcbTipoCpbte.setEnabled(true);
+        for(TiposComprobante tipos : lista){
+            jcbTipoCpbte.addItem(tipos);
+        }
+        jcbTipoCpbte.setSelectedIndex(0);
     }
 }

@@ -54,6 +54,10 @@ public class Pago {
     @JoinColumn(name = "ID_usuario", referencedColumnName = "ID_usuario")
     private Usuario usuario;
 
+    @ManyToOne
+    @JoinColumn(name = "ID_tipos_comprobante", referencedColumnName = "ID_tipos_comprobante")
+    private TiposComprobante tiposComprobante;
+
     public Pago() {
     }
 
@@ -112,6 +116,14 @@ public class Pago {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public TiposComprobante getTiposComprobante() {
+        return tiposComprobante;
+    }
+
+    public void setTiposComprobante(TiposComprobante tiposComprobante) {
+        this.tiposComprobante = tiposComprobante;
     }
 
 }
