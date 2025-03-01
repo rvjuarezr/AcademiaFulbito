@@ -121,4 +121,18 @@ public class MatriculaFacade implements EntityFacade<Matricula>{
         }
     }
 
+    public List<Matricula> getListadoMatriculasPorDni(String dni) {
+        EntityManager em = getEntityManager();
+        List<Matricula> matriculas = null;
+        try {
+            // Construimos la consulta con el JOIN y el WHERE dinámico
+            String queryStr = "SELECT x.* FROM Matricula x "
+                    + "INNER JOIN Alumno y ON x.ID_alumno = y.ID_alumno "
+                    + "WHERE y.dni = '" + dni + "'";
+            matriculas = em.createNativeQuery(queryStr, Matricula.class).getResultList();
+        } finally {
+            em.close();
+        }
+        return matriculas;
+    }
 }

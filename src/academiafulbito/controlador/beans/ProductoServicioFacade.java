@@ -142,4 +142,34 @@ public class ProductoServicioFacade implements EntityFacade<ProductoServicio>{
         }
     }
 
+     /*  public List<ProductoServicio> getListadoProductoServiciosPorTipo() {
+        EntityManager em = getEntityManager();
+        List<ProductoServicio> productoServicios = null;
+        try {
+            // Construimos la consulta con el JOIN y el WHERE dinámico
+            String queryStr = "SELECT * FROM producto_servicio "
+                    + "WHERE tipo_producto = '1'";
+            productoServicios = em.createNativeQuery(queryStr, ProductoServicio.class).getResultList();
+        } finally {
+            em.close();
+        }
+        return productoServicios;
+    }
+*/
+       
+             public List<ProductoServicio> getListadoProductoServiciosPorTipo(char tipo) {
+        EntityManager em = getEntityManager();
+        List<ProductoServicio> productoServicios = null;
+        try {
+            // Construimos la consulta con el JOIN y el WHERE dinámico
+            String queryStr = "SELECT x.* FROM producto_servicio x "
+                    + "WHERE x.tipo_producto = '" + tipo + "'";
+            productoServicios = em.createNativeQuery(queryStr, ProductoServicio.class).getResultList();
+        } finally {
+            em.close();
+        }
+        return productoServicios;
+    }
+       
+
 }

@@ -48,6 +48,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
     private int totalPaginas;
+    public char tipo;
 
     public static ProductoServicioFacade productoServicioFacade;
     public static CategoriaProductoFacade categoriaProductoFacade;
@@ -61,6 +62,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_ID_CATEGORIAPROD,//5
         LiteralesTexto.LITERAL_NOMBRE_CATPRO,//6
         LiteralesTexto.LITERAL_ESTADO,//7
+        LiteralesTexto.LITERAL_TIPO_PRODUCTO,//8
         LiteralesTexto.LITERAL_VER,
         LiteralesTexto.LITERAL_EDITAR,
         LiteralesTexto.LITERAL_ELIMINAR
@@ -70,6 +72,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
     public jifProductoServicios(JDesktopPane jdpModAF){
         initComponents();
         jdp = jdpModAF;
+        permiteSelFila=-1;
         Utils.cargarComboEstado(jcbEstado);
         accionBotones(false, false, false);
       
@@ -87,6 +90,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        bgTipoProducto = new javax.swing.ButtonGroup();
         tphProductoServicio = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jspProductoServicios = new javax.swing.JScrollPane();
@@ -109,13 +113,15 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         txtPrecio = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtStock = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
+        rbMensualidades = new javax.swing.JRadioButton();
+        rbOtrosServicios = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
         setTitle("MANTENIMIENTO PRODUCTO SERVICIO");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphProductoServicio.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphProductoServicio.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -174,7 +180,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         });
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 420, -1, 50));
 
-        btnNuevoProductoServicio.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnNuevoProductoServicio.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnNuevoProductoServicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
         btnNuevoProductoServicio.setText("<html><center>NUEVO<br>PRODSERVICIO</center></html>");
         btnNuevoProductoServicio.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -284,7 +290,15 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 380, 220, 40));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 380, 220, 40));
+
+        bgTipoProducto.add(rbMensualidades);
+        rbMensualidades.setText("MENSUALIDADES");
+        jPanel2.add(rbMensualidades, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 390, 120, -1));
+
+        bgTipoProducto.add(rbOtrosServicios);
+        rbOtrosServicios.setText("OTROS SERVICIOS");
+        jPanel2.add(rbOtrosServicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 390, -1, -1));
 
         tphProductoServicio.addTab("REGISTRO", jPanel2);
 
@@ -413,6 +427,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup bgTipoProducto;
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBucarCategoriaProducto;
     private javax.swing.JButton btnCancelar;
@@ -426,6 +441,8 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
     private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
     private javax.swing.JScrollPane jspProductoServicios;
     private javax.swing.JLabel lblPaginaActual;
+    private javax.swing.JRadioButton rbMensualidades;
+    private javax.swing.JRadioButton rbOtrosServicios;
     private javax.swing.JTable tblProductoServicio;
     private javax.swing.JTabbedPane tphProductoServicio;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtCategoriaProducto;
@@ -446,12 +463,13 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         // Asignar el modelo a la tabla
         tblProductoServicio.setModel(modelo);
 
-        int[] anchoColumnas = {15,45,40, 25, 30, 50, 20,20, 15, 25, 25}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {15,45,40, 25, 30, 50, 20,20,20, 15, 25, 25}; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblProductoServicio, anchoColumnas);
         Utils.ocultarColumnas(tblProductoServicio, 0);//ocultar la primera columna
         Utils.ocultarColumnas(tblProductoServicio, 5);//ocultar el id
         Utils.ocultarColumnas(tblProductoServicio, 6);//ocultar el nombre
         Utils.ocultarColumnas(tblProductoServicio, 7);//ocultar columna estado
+        Utils.ocultarColumnas(tblProductoServicio, 8);//ocultar columna tipo producto
 
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblProductoServicio);
@@ -472,6 +490,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
                     productoServicio.getCategoriaProducto().getIdCategoriaProd(),
                     productoServicio.getCategoriaProducto().getNombreCategoria(),
                     productoServicio.getEstado(),
+                    productoServicio.getTipo_producto(),
                     LiteralesTexto.LITERAL_VER,
                     LiteralesTexto.LITERAL_EDITAR,
                     LiteralesTexto.LITERAL_ELIMINAR
@@ -495,10 +514,15 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         btnImprimir.setEnabled(f);
     }
 
-    private void listarProductoServicio(int paginaActual, int tamanioPagina) {
+    public void listarProductoServicio(int paginaActual, int tamanioPagina) {
         totalPaginas = productoServicioFacade.obtenerTotalPaginas(tamanioPagina);
-
-        List<ProductoServicio> listaProductoServicio = productoServicioFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+        List<ProductoServicio> listaProductoServicio=null;
+        if(permiteSelFila==0){
+            listaProductoServicio=productoServicioFacade.getListadoProductoServiciosPorTipo(tipo);
+        } else {
+            listaProductoServicio=productoServicioFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
+        }
+        //List<ProductoServicio> listaProductoServicio = productoServicioFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
 
         // Actualizar el JLabel con la página actual
         lblPaginaActual.setText("Página " + paginaActual + " de " + totalPaginas);
@@ -527,6 +551,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         txtStock.setEditable(band);
         txtIdCategoriaProducto.setEditable(band);
         txtCategoriaProducto.setEditable(band);
+        //txtTipoProducto.setEditable(band);
         if (indicador == 0) {
             jcbEstado.setSelectedIndex(0);
             jcbEstado.setEnabled(!band);
@@ -550,6 +575,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
             int idCategoria= Integer.parseInt(tblProductoServicio.getValueAt(row, 5).toString());//5
             String nombreCategoria=(String) tblProductoServicio.getValueAt(row, 6);//6
             Estado estado = (Estado) tblProductoServicio.getValueAt(row, 7);
+            Character tipo_producto = (Character) tblProductoServicio.getValueAt(row, 8);
 
 
             // Asignar los datos a los JTextField en el segundo panel
@@ -559,10 +585,25 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
             txtStock.setText(String.valueOf(stock));//4
             txtIdCategoriaProducto.setText(""+idCategoria);//5
             txtCategoriaProducto.setText(nombreCategoria);//6
-
+            //txtTipoProducto.setText(tipo_producto.toString());//8
 
             // Seleccionar el estado en el JComboBox
             jcbEstado.setSelectedItem(estado);//7
+            
+            //para el radiobutton
+           if (tipo_producto != null) {  // Asegurarse de que tipo_producto no sea null
+               if (tipo_producto == '0') {
+                   rbMensualidades.setSelected(true);  // Seleccionar rbMensualidades si tipo_producto es '0'
+                   rbOtrosServicios.setSelected(false);  // Asegurarse de que el otro no esté seleccionado
+               } else if (tipo_producto == '1') {
+                   rbOtrosServicios.setSelected(true);  // Seleccionar rbOtrosServicios si tipo_producto es '1'
+                   rbMensualidades.setSelected(false);  // Asegurarse de que el otro no esté seleccionado
+               } else {
+                   // Si tipo_producto tiene un valor inesperado, puedes hacer algo adicional si es necesario
+                   rbMensualidades.setSelected(false);
+                   rbOtrosServicios.setSelected(false);
+               }
+           }
 
             // Cambiar al segundo panel donde están los JTextField
             tphProductoServicio.setSelectedIndex(1);
@@ -587,6 +628,14 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         productoServicio.setStock(stock);
         productoServicio.setCategoriaProducto(categoriaProductoFacade.findCategoriaProductoById(Integer.parseInt(txtIdCategoriaProducto.getText())));
         productoServicio.setEstado((Estado) jcbEstado.getSelectedItem());
+        //productoServicio.setTipo_producto(txtTipoProducto.getText().charAt(0));
+        if (rbMensualidades.isSelected()) {
+            productoServicio.setTipo_producto('0');  
+            tipo = '0'; 
+        } else if (rbOtrosServicios.isSelected()) {
+            productoServicio.setTipo_producto('1'); 
+            tipo = '1';  
+        }
         return productoServicio;
 
     }
@@ -620,6 +669,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         txtDescripcionProducto.setText(tblProductoServicio.getValueAt(filaSeleccionada, 2).toString());
         txtPrecio.setText(tblProductoServicio.getValueAt(filaSeleccionada, 3).toString());
         txtStock.setText(tblProductoServicio.getValueAt(filaSeleccionada, 4).toString());
+        //txtTipoProducto.setText(tblProductoServicio.getValueAt(filaSeleccionada, 8).toString());
         
     }
 

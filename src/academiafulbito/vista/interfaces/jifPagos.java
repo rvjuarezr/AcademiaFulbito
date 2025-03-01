@@ -42,6 +42,9 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private AlumnoFacade alumnoFacade;
     jifProductoServicios menuProductoServicios;
     private BigDecimal totalAPagar = BigDecimal.ZERO;
+    private int paginaActual = 1;
+    private int tamanioPagina = 10;
+    public char tipo='1';
     
     public jifPagos(JDesktopPane jdpModAF) {
         initComponents();
@@ -166,7 +169,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         txtApellidosAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         getContentPane().add(txtApellidosAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, 820, 30));
 
-        jLabel2.setFont(new java.awt.Font("Bookman Old Style", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
         jLabel2.setText("NOMBRES");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 120, 30));
 
@@ -178,11 +181,11 @@ public class jifPagos extends javax.swing.JInternalFrame {
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 120, 30));
 
         txtNombresApellidosPadre.setBackground(new java.awt.Color(255, 255, 153));
-        txtNombresApellidosPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtNombresApellidosPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         getContentPane().add(txtNombresApellidosPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 170, 570, 30));
 
         txtDniPadre.setBackground(new java.awt.Color(255, 255, 153));
-        txtDniPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        txtDniPadre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         getContentPane().add(txtDniPadre, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 170, 180, 30));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -327,7 +330,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         getContentPane().add(btnVerPagos, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 20, 190, 70));
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 153));
-        jLabel10.setFont(new java.awt.Font("Bookman Old Style", 1, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
         jLabel10.setText("     DNI");
         jLabel10.setOpaque(true);
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 170, 70, 30));
@@ -349,6 +352,11 @@ public class jifPagos extends javax.swing.JInternalFrame {
         btnBuscarMatricula.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/buscar.png"))); // NOI18N
         btnBuscarMatricula.setBorderPainted(false);
         btnBuscarMatricula.setContentAreaFilled(false);
+        btnBuscarMatricula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarMatriculaActionPerformed(evt);
+            }
+        });
         jpMatricula.add(btnBuscarMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, -1, 60));
 
         txtDetallesMatricula.setEditable(false);
@@ -363,7 +371,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         getContentPane().add(jpMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 210, 1020, 60));
 
         bgOpcionesPago.add(rbPagarMatricula);
-        rbPagarMatricula.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        rbPagarMatricula.setFont(new java.awt.Font("Tahoma", 1, 14));
         rbPagarMatricula.setText("PAGAR MATRICULA");
         rbPagarMatricula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -373,7 +381,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         getContentPane().add(rbPagarMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 170, -1));
 
         bgOpcionesPago.add(rbPagarOtrosServicios);
-        rbPagarOtrosServicios.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        rbPagarOtrosServicios.setFont(new java.awt.Font("Tahoma", 1, 14));
         rbPagarOtrosServicios.setSelected(true);
         rbPagarOtrosServicios.setText("OTROS SERVICIOS");
         rbPagarOtrosServicios.addActionListener(new java.awt.event.ActionListener() {
@@ -383,9 +391,11 @@ public class jifPagos extends javax.swing.JInternalFrame {
         });
         getContentPane().add(rbPagarOtrosServicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 170, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel4.setText("    DNI :");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 140, 70, 30));
+
+        txtDniAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         getContentPane().add(txtDniAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 140, 180, 30));
 
         pack();
@@ -442,12 +452,21 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
     private void btnBuscarConceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarConceptoActionPerformed
         // TODO add your handling code here:
-         if(jfPrincipal.menuProductoServicios == null || jfPrincipal.menuProductoServicios.isClosed()){
-            jfPrincipal.menuProductoServicios = new jifProductoServicios(jdp);
-            Utils.visualizarInternalFrame(jfPrincipal.menuProductoServicios, jdp);
+        if (Utils.validarCadena(txtDniAlumno.getText())) {
+            if (jfPrincipal.menuProductoServicios == null || jfPrincipal.menuProductoServicios.isClosed()) {
+                jfPrincipal.menuProductoServicios = new jifProductoServicios(jdp);
+                Utils.visualizarInternalFrame(jfPrincipal.menuProductoServicios, jdp);
+            }
+            jfPrincipal.menuProductoServicios.permiteSelFila = 0;
+            //String texto = rbPagarOtrosServicios.getText();
+            //int tipo = Integer.parseInt(texto);
+            jfPrincipal.menuProductoServicios.tipo = tipo;
+            jfPrincipal.menuProductoServicios.listarProductoServicio(paginaActual, tamanioPagina);
+            jfPrincipal.menuProductoServicios.toFront();
+        } else {
+            Utils.mensajeError("ERROR!!, DEBES BUSCAR EL ALUMNO PRIMERO");
         }
-        jfPrincipal.menuProductoServicios.permiteSelFila=0;//este valor permite seleccionar con un clic en la fila de la tabla de padres
-        jfPrincipal.menuProductoServicios.toFront();
+
     }//GEN-LAST:event_btnBuscarConceptoActionPerformed
 
     private void txtDatoBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDatoBusquedaKeyTyped
@@ -493,12 +512,30 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private void rbPagarOtrosServiciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPagarOtrosServiciosActionPerformed
         // TODO add your handling code here:
         jpMatricula.setVisible(false);
+        tipo='1';//otros servicios
+        limpiarCamposProductosServ1();
     }//GEN-LAST:event_rbPagarOtrosServiciosActionPerformed
 
     private void rbPagarMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPagarMatriculaActionPerformed
         // TODO add your handling code here:
         jpMatricula.setVisible(true);
+        tipo='0';//mensualidad
+        limpiarCamposProductosServ();
     }//GEN-LAST:event_rbPagarMatriculaActionPerformed
+
+    private void btnBuscarMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarMatriculaActionPerformed
+        // TODO add your handling code here:
+        if (rbPagarMatricula.isSelected() && Utils.validarCadena(txtDniAlumno.getText())){
+            if(jfPrincipal.menuMatricula==null || jfPrincipal.menuMatricula.isClosed()){
+                jfPrincipal.menuMatricula=new jifMatricula(jdp);
+                Utils.visualizarInternalFrame(jfPrincipal.menuMatricula, jdp);
+            }
+            jfPrincipal.menuMatricula.permiteSelFila=0;
+            jfPrincipal.menuMatricula.dniAlumno=txtDniAlumno.getText();
+            jfPrincipal.menuMatricula.listarMatriculas(paginaActual, tamanioPagina);
+            jfPrincipal.menuMatricula.toFront();
+        }
+    }//GEN-LAST:event_btnBuscarMatriculaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -545,10 +582,10 @@ public class jifPagos extends javax.swing.JInternalFrame {
     public static javax.swing.JTextField txtConceptoPago;
     private javax.swing.JTextField txtCorrelativo;
     private javax.swing.JTextField txtDatoBusqueda;
-    private javax.swing.JTextField txtDetallesMatricula;
+    public static javax.swing.JTextField txtDetallesMatricula;
     private javax.swing.JTextField txtDniAlumno;
     private javax.swing.JTextField txtDniPadre;
-    private javax.swing.JTextField txtIdMatricula;
+    public static javax.swing.JTextField txtIdMatricula;
     private javax.swing.JTextField txtNombresAlumno;
     private javax.swing.JTextField txtNombresApellidosPadre;
     private javax.swing.JTextField txtPagoEfectivo;
@@ -569,6 +606,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private void mostrarDatosAlumno(Alumno alumno, Padre padre) {
         txtApellidosAlumno.setText(alumno.getApellidoAlumno());
         txtNombresAlumno.setText(alumno.getNombreAlumno());
+        txtDniAlumno.setText(alumno.getDniAlumno());
         txtNombresApellidosPadre.setText(padre.getApellidoPadre() + " " + padre.getNombrePadre());
         txtDniPadre.setText(padre.getDniPadre());
         try {
@@ -626,6 +664,12 @@ public class jifPagos extends javax.swing.JInternalFrame {
         txtCodConceptoPago.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtConceptoPago.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtPrecio.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+    }
+
+    private void limpiarCamposProductosServ1(){
+        txtIdMatricula.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtDetallesMatricula.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+
     }
 
     private void activarBotonProcesoPago(){
