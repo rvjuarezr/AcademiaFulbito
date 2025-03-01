@@ -41,6 +41,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         LiteralesTexto.LITERAL_EDAD_MIN,
         LiteralesTexto.LITERAL_EDAD_MAX,
         LiteralesTexto.LITERAL_ESTADO,
+        LiteralesTexto.LITERAL_DESCRIPCION_CAT,
         LiteralesTexto.LITERAL_VER,
         LiteralesTexto.LITERAL_EDITAR,
         LiteralesTexto.LITERAL_ELIMINAR
@@ -79,7 +80,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         btnRepAlumnosPorCateg = new javax.swing.JButton();
         btnNuevaCategoria = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        txtNombre = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        txtDescripcion = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtEdadMin = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtEdadMax = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jLabel1 = new javax.swing.JLabel();
@@ -88,13 +89,14 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         txtIdCategoria = new javax.swing.JTextField();
         btnImprimir = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
+        txtNombreCategoria = new org.edisoncor.gui.textField.TextFieldRoundBackground();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
         setTitle("MANTENIMIENTO CATEGORIAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -168,7 +170,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         });
         jPanel1.add(btnRepAlumnosPorCateg, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 0, 170, 120));
 
-        btnNuevaCategoria.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        btnNuevaCategoria.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         btnNuevaCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
         btnNuevaCategoria.setText("<html><center>NUEVA<br>CATEGORIA</center></html>");
         btnNuevaCategoria.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -187,15 +189,15 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        txtNombre.setEditable(false);
-        txtNombre.setDescripcion("Nombre*");
-        txtNombre.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtDescripcion.setEditable(false);
+        txtDescripcion.setDescripcion("Descripcion*");
+        txtDescripcion.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtDescripcion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNombreKeyTyped(evt);
+                txtDescripcionKeyTyped(evt);
             }
         });
-        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
+        jPanel2.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
 
         txtEdadMin.setEditable(false);
         txtEdadMin.setDescripcion("Edad Mínima*");
@@ -205,7 +207,8 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 txtEdadMinKeyTyped(evt);
             }
         });
-        jPanel2.add(txtEdadMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 720, 40));
+        jPanel2.add(txtEdadMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
+        txtEdadMin.setVisible(false);
 
         txtEdadMax.setEditable(false);
         txtEdadMax.setDescripcion("Edad Máxima*");
@@ -215,7 +218,8 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                 txtEdadMaxKeyTyped(evt);
             }
         });
-        jPanel2.add(txtEdadMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 720, 40));
+        jPanel2.add(txtEdadMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 720, 40));
+        txtEdadMax.setVisible(false);
 
         jLabel1.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
         jLabel1.setForeground(new java.awt.Color(103, 98, 98));
@@ -237,8 +241,8 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
         jcbEstado.setEnabled(false);
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 220, 40));
-        jPanel2.add(txtIdCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, 90, 40));
+        jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 220, 40));
+        jPanel2.add(txtIdCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 290, 90, 40));
         txtIdCategoria.setVisible(false);
 
         btnImprimir.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
@@ -264,6 +268,16 @@ public class jifCategorias extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 140, 190, 80));
+
+        txtNombreCategoria.setEditable(false);
+        txtNombreCategoria.setDescripcion("Nombre*");
+        txtNombreCategoria.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtNombreCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreCategoriaKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtNombreCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
 
         tphCategorias.addTab("REGISTRO", jPanel2);
 
@@ -317,11 +331,11 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtEdadMaxKeyTyped
 
-    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+    private void txtDescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
         evt.setKeyChar(Character.toUpperCase(c)); // Convertir a mayúsculas
-    }//GEN-LAST:event_txtNombreKeyTyped
+    }//GEN-LAST:event_txtDescripcionKeyTyped
 
     private void tblCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoriasMouseClicked
         // TODO add your handling code here:
@@ -419,6 +433,10 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tblCategoriasMouseMoved
 
+    private void txtNombreCategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreCategoriaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreCategoriaKeyTyped
+
 
 
 
@@ -438,10 +456,11 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblPaginaActual;
     private javax.swing.JTable tblCategorias;
     private javax.swing.JTabbedPane tphCategorias;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtDescripcion;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtEdadMax;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtEdadMin;
     private javax.swing.JTextField txtIdCategoria;
-    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombre;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtNombreCategoria;
     // End of variables declaration//GEN-END:variables
 
     private void listarCategorias(List<Categoria> listaCategorias){
@@ -453,10 +472,12 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         // Asignar el modelo a la tabla
         tblCategorias.setModel(modelo);
 
-        int[] anchoColumnas = {15, 60, 20, 20, 20, 15, 25, 25}; // Anchos específicos para cada columna
+        int[] anchoColumnas = {15, 40, 20, 20, 20, 20, 15, 25, 25}; // Anchos específicos para cada columna
         Utils.setAnchoColumnas(tblCategorias, anchoColumnas);
         Utils.ocultarColumnas(tblCategorias, 0);//ocultar la primera columna
         Utils.ocultarColumnas(tblCategorias, 4);//ocultar columna estado
+        Utils.ocultarColumnas(tblCategorias, 3);//ocultar columna estado
+        Utils.ocultarColumnas(tblCategorias, 2);//ocultar columna estado
         
         // limpia los datos existentes en la tabla.
         Utils.limpiarModeloTabla(modelo, tblCategorias);
@@ -473,6 +494,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
                     categoria.getEdadMin(),
                     categoria.getEdadMax(),
                     categoria.getEstado(),
+                    categoria.getDescripcion(),
                     LiteralesTexto.LITERAL_VER,
                     LiteralesTexto.LITERAL_EDITAR,
                     LiteralesTexto.LITERAL_ELIMINAR
@@ -488,22 +510,26 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     }
 
     private Categoria getDatosCategoria(Categoria categoria){
-        categoria.setNombre(txtNombre.getText());
-        categoria.setEdadMax(Integer.parseInt(txtEdadMax.getText()));
-        categoria.setEdadMin(Integer.parseInt(txtEdadMin.getText()));
+        categoria.setNombre(txtNombreCategoria.getText());
+        categoria.setEdadMax(0);
+        categoria.setEdadMin(0);
         categoria.setEstado((Estado)jcbEstado.getSelectedItem());
+        categoria.setEstado((Estado)jcbEstado.getSelectedItem());
+        categoria.setDescripcion(txtDescripcion.getText());
 
         return categoria;
     }
 
     private void limpiarCampos() {
-        txtNombre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombreCategoria.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtEdadMin.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtEdadMax.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtDescripcion.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
     }
 
     private void habilitarCampos(boolean band){
-        txtNombre.setEditable(band);
+        txtNombreCategoria.setEditable(band);
+        txtDescripcion.setEditable(band);
         txtEdadMin.setEditable(band);
         txtEdadMax.setEditable(band);
         if(indicador == 0){
@@ -604,17 +630,10 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     }
 
     private boolean validarDatosCategoria(){
-        if(!validarCampo(txtNombre.getText(), LiteralesTexto.ERROR_NOMBRE_CAMPO_VACIO)){
+        if(!validarCampo(txtNombreCategoria.getText(), LiteralesTexto.ERROR_NOMBRE_CAMPO_VACIO)){
             return false;
         }
 
-        if (!validarCampo(txtEdadMin.getText(), LiteralesTexto.ERROR_VALOR_EDAD_VACIA)) {
-            return false;
-        }
-
-        if (!validarCampo(txtEdadMax.getText(), LiteralesTexto.ERROR_VALOR_EDAD_VACIA)) {
-            return false;
-        }
         return true;
     }
 
@@ -629,8 +648,8 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     private void getDatosCategorias(int filaSeleccionada){
         // Cambiar al segundo panel donde están los JTextField
         tphCategorias.setSelectedIndex(1);
-
-        txtNombre.setText(tblCategorias.getValueAt(filaSeleccionada, 1).toString());
+        txtNombreCategoria.setText(tblCategorias.getValueAt(filaSeleccionada, 1).toString());
+        txtDescripcion.setText(tblCategorias.getValueAt(filaSeleccionada, 5).toString());
         txtEdadMin.setText(tblCategorias.getValueAt(filaSeleccionada, 2).toString());
         txtEdadMax.setText(tblCategorias.getValueAt(filaSeleccionada, 3).toString());
     }
