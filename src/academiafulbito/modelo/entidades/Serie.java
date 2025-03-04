@@ -29,12 +29,12 @@ public class Serie {
     private String codigo_serie;
     @ManyToOne
     @JoinColumn(name = "ID_tipos_comprobante")
-    private TiposComprobantes tipoComprobantes;
+    private TiposComprobante tipoComprobantes;
 
     public Serie() {
     }
 
-    public Serie(String codigo_serie, TiposComprobantes tipoComprobantes) {
+    public Serie(String codigo_serie, TiposComprobante tipoComprobantes) {
         this.codigo_serie = codigo_serie;
         this.tipoComprobantes = tipoComprobantes;
     }
@@ -55,11 +55,11 @@ public class Serie {
         this.idSerie = idSerie;
     }
 
-    public TiposComprobantes getTipo_comprobantes() {
+    public TiposComprobante getTipo_comprobantes() {
         return tipoComprobantes;
     }
 
-    public void setTipoCcomprobantes(TiposComprobantes tipoComprobantes) {
+    public void setTipoCcomprobantes(TiposComprobante tipoComprobantes) {
         this.tipoComprobantes = tipoComprobantes;
     }
 

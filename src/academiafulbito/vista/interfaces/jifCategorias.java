@@ -96,7 +96,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         setTitle("MANTENIMIENTO CATEGORIAS");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+        tphCategorias.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -170,7 +170,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         });
         jPanel1.add(btnRepAlumnosPorCateg, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 0, 170, 120));
 
-        btnNuevaCategoria.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        btnNuevaCategoria.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnNuevaCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/nuevo.png"))); // NOI18N
         btnNuevaCategoria.setText("<html><center>NUEVA<br>CATEGORIA</center></html>");
         btnNuevaCategoria.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -272,11 +272,6 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         txtNombreCategoria.setEditable(false);
         txtNombreCategoria.setDescripcion("Nombre*");
         txtNombreCategoria.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtNombreCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNombreCategoriaKeyTyped(evt);
-            }
-        });
         jPanel2.add(txtNombreCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 720, 40));
 
         tphCategorias.addTab("REGISTRO", jPanel2);
@@ -432,10 +427,6 @@ public class jifCategorias extends javax.swing.JInternalFrame {
             tblCategorias.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }//GEN-LAST:event_tblCategoriasMouseMoved
-
-    private void txtNombreCategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreCategoriaKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreCategoriaKeyTyped
 
 
 

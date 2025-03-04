@@ -75,7 +75,7 @@ public class ControlCorrelativo {
     public String toString() {
         return "ControlCorrelativo{" +
                 "idControlCorrelativo=" + idControlCorrelativo +
-                ", serie=" + (serie != null ? serie.getCodigoSerie() : "N/A") +
+                ", serie=" + (serie != null ? serie.getCodigo_serie() : "N/A") +
                 ", ultimoCorrelativo=" + ultimoCorrelativo +
                 '}';
     }

@@ -46,29 +46,15 @@ public class TiposComprobante {
     @OneToMany(mappedBy = "tiposComprobante", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pago> pagos;
 
-    //@OneToOne(mappedBy = "tipoComprobante")en TiposComprobante indica que la relación ya está mapeada en ControlCorrelativo.
-    //CascadeType.ALL Si eliminas un TiposComprobante, también se eliminará su correlativo automáticamente.
-    @OneToOne(mappedBy = "tiposComprobante", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private ControlCorrelativo controlCorrelativo;
-
     public TiposComprobante() {
     }
 
-    public TiposComprobante(int idTiposComprobante, String tiposCpbte, String descripcion, Estado estado, List<Pago> pagos, ControlCorrelativo controlCorrelativo) {
+    public TiposComprobante(int idTiposComprobante, String tiposCpbte, String descripcion, Estado estado, List<Pago> pagos) {
         this.idTiposComprobante = idTiposComprobante;
         this.tiposCpbte = tiposCpbte;
         this.descripcion = descripcion;
         this.estado = estado;
         this.pagos = pagos;
-        this.controlCorrelativo = controlCorrelativo;
-    }
-
-    public ControlCorrelativo getControlCorrelativo() {
-        return controlCorrelativo;
-    }
-
-    public void setControlCorrelativo(ControlCorrelativo controlCorrelativo) {
-        this.controlCorrelativo = controlCorrelativo;
     }
 
     public String getDescripcion() {
