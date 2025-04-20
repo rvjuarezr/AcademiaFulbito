@@ -14,11 +14,9 @@ package academiafulbito.vista.interfaces;
 import academiafulbito.modelo.entidades.ProductoServicio;
 import academiafulbito.controlador.beans.AlumnoFacade;
 import academiafulbito.controlador.beans.PadreFacade;
-import academiafulbito.controlador.beans.SerieFacade;
 import academiafulbito.controlador.beans.TiposComprobanteFacade;
 import academiafulbito.modelo.entidades.Alumno;
 import academiafulbito.modelo.entidades.Padre;
-import academiafulbito.modelo.entidades.Serie;
 import academiafulbito.modelo.entidades.TiposComprobante;
 import academiafulbito.vista.utilidades.Imagen;
 import academiafulbito.vista.utilidades.LiteralesTexto;
@@ -53,7 +51,6 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private int tamanioPagina = 10;
     public char tipo='1';
     private TiposComprobanteFacade tiposComprobanteFacade;
-    private SerieFacade serieFacade ;
     jifProductoServicios menuProductoServicios;    
     DefaultTableModel tableModel;
     private DecimalFormat decimalFormat = new DecimalFormat("#.00");
@@ -64,7 +61,6 @@ public class jifPagos extends javax.swing.JInternalFrame {
         padreFacade = new PadreFacade();
         alumnoFacade = new AlumnoFacade();
         tiposComprobanteFacade = new TiposComprobanteFacade();
-        serieFacade=new SerieFacade();
         jpMatricula.setVisible(false);
         tableModel = (DefaultTableModel) tblItemsConceptos.getModel();
         tableModel.addTableModelListener(new TableModelListener() {
@@ -264,11 +260,6 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jLabel8.setText("FECHA DEL PAGO");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 20));
 
-        jcbTipoCpbte.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbTipoCpbteActionPerformed(evt);
-            }
-        });
         jPanel1.add(jcbTipoCpbte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 140, 30));
 
         jLabel9.setText("TIPO CPBTE.");
@@ -313,11 +304,6 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jLabel18.setText("SERIE");
         jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 130, 20));
 
-        jcbSerie.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbSerieActionPerformed(evt);
-            }
-        });
         jPanel1.add(jcbSerie, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 150, 30));
 
         jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 90, 310, 240));
@@ -523,27 +509,6 @@ public class jifPagos extends javax.swing.JInternalFrame {
             jfPrincipal.menuMatricula.toFront();
         }
     }//GEN-LAST:event_btnBuscarMatriculaActionPerformed
-
-    private void jcbTipoCpbteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbTipoCpbteActionPerformed
-        TiposComprobante tipoSeleccionado = (TiposComprobante) jcbTipoCpbte.getSelectedItem();
-
-    // Verificar que tipoSeleccionado no sea null
-    if (tipoSeleccionado != null) {
-        // Obtener el ID del tipo de comprobante seleccionado
-        int idTipoComprobante = tipoSeleccionado.getIdTiposComprobante();  // Asumiendo que tienes un método getId() en TiposComprobante
-
-        // Obtener las series correspondientes al tipo seleccionado
-        List<Serie> seriesRelacionadas = serieFacade.obtenerTiposSeries(idTipoComprobante);
-
-        // Actualizar el combo de series con los valores obtenidos
-        cargarComboSerie(seriesRelacionadas);
-    }
-    }//GEN-LAST:event_jcbTipoCpbteActionPerformed
-
-    private void jcbSerieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbSerieActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jcbSerieActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -781,22 +746,11 @@ public class jifPagos extends javax.swing.JInternalFrame {
         }
     }
 
-    private void cargarInformacionEnCombos() {
+    private void cargarInformacionEnCombos(){
         cargarComboTipoComprobante(tiposComprobanteFacade.obtenerTiposComprobante());
-
-        // Cargar las series para el primer tipo de comprobante
-        TiposComprobante primerTipo = (TiposComprobante) jcbTipoCpbte.getItemAt(0);
-        if (primerTipo != null) {
-            List<Serie> seriesRelacionadas = serieFacade.obtenerTiposSeries(primerTipo.getIdTiposComprobante());
-            cargarComboSerie(seriesRelacionadas);
-        }
-
-        // Habilitar el combo de serie
-        jcbSerie.setEnabled(true);
-
     }
 
-    private void cargarComboTipoComprobante(List<TiposComprobante> lista) {
+    private void cargarComboTipoComprobante(List<TiposComprobante> lista){
         jcbTipoCpbte.removeAllItems();
 
         if (lista == null || lista.isEmpty()) {
@@ -805,25 +759,9 @@ public class jifPagos extends javax.swing.JInternalFrame {
             return;
         }
         jcbTipoCpbte.setEnabled(true);
-        for (TiposComprobante tipos : lista) {
+        for(TiposComprobante tipos : lista){
             jcbTipoCpbte.addItem(tipos);
         }
         jcbTipoCpbte.setSelectedIndex(0);
-
-    }
-
-    private void cargarComboSerie(List<Serie> lista) {
-        jcbSerie.removeAllItems();
-
-        if (lista == null || lista.isEmpty()) {
-            jcbSerie.addItem("No hay tipos disponibles");
-            jcbSerie.setEnabled(false); // Deshabilitar si no hay elementos
-        } else {
-            for (Serie serie : lista) {
-                jcbSerie.addItem(serie);
-            }
-            jcbSerie.setSelectedIndex(0);
-            jcbSerie.setEnabled(true); // Habilitar el combo
-        }
     }
 }

@@ -561,7 +561,6 @@ public class jifLugarEntrenamiento extends javax.swing.JInternalFrame {
         txtNombre.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 1).toString());
         txtDireccion.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 2).toString());
         txtUbigeo.setText(tblLugarEntrenamientos.getValueAt(filaSeleccionada, 3).toString());
-        jcbEstado.setSelectedItem((Estado) tblLugarEntrenamientos.getValueAt(filaSeleccionada, 4));
 
         accionBotones(true, false, true);
 

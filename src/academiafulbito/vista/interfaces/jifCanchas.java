@@ -489,7 +489,6 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         cancha.setEstado((Estado) jcbEstado.getSelectedItem());
         cancha.setId_lugar(lugarEFacade.findLugarEntrenamientoById(Integer.parseInt(txtIdLugarE.getText())));
         cancha.setNombre(txtNombreCancha.getText());
-        
 
         return cancha;
     }
@@ -500,7 +499,6 @@ public class jifCanchas extends javax.swing.JInternalFrame {
         txtNombreCancha.setText(tblCancha.getValueAt(filaSeleccionada, 1).toString());
         txtIdLugarE.setText(tblCancha.getValueAt(filaSeleccionada, 2).toString());
         txtNombreLugarE.setText(tblCancha.getValueAt(filaSeleccionada, 3).toString());
-        jcbEstado.setSelectedItem((Estado) tblCancha.getValueAt(filaSeleccionada, 4));
         accionBotones(true, false, true);
     }
     public void eliminarCanchaSeleccionada(int filaSeleccionada) {
@@ -568,5 +566,6 @@ public class jifCanchas extends javax.swing.JInternalFrame {
             //colocar alguna alerta
         }
     }
+
 
 }

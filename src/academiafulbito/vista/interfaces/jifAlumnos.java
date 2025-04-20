@@ -832,7 +832,6 @@ public class jifAlumnos extends javax.swing.JInternalFrame {
 
                 jdcFechaNacimiento.setDate(unAlumno.getFechaNacimiento());
                 jcbSexo.setSelectedItem(unAlumno.getSexo());
-                jcbEstado.setSelectedItem((Estado) tblAlumnos.getValueAt(filaSeleccionada, 9));
 
                 if( unAlumno.getFoto() != null){
                     Image image = Imagen.abrirImagen(unAlumno.getFoto());

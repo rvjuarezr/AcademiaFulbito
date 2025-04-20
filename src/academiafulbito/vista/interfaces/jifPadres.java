@@ -656,7 +656,6 @@ public class jifPadres extends javax.swing.JInternalFrame {
                 txtApellido.setText(unPadre.getApellidoPadre());
                 txtTelefono.setText(unPadre.getTelefono());
                 txtDni.setText(unPadre.getDniPadre());
-                jcbEstado.setSelectedItem((Estado) tblPadres.getValueAt(filaSeleccionada, 4));
 
                 if( unPadre.getFoto() != null){
                     Image image = Imagen.abrirImagen(unPadre.getFoto());
@@ -700,5 +699,4 @@ public class jifPadres extends javax.swing.JInternalFrame {
         }
         return true;
     }
-
 }
