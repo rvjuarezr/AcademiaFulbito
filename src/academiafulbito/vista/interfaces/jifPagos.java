@@ -13,10 +13,12 @@ package academiafulbito.vista.interfaces;
 
 import academiafulbito.modelo.entidades.ProductoServicio;
 import academiafulbito.controlador.beans.AlumnoFacade;
+import academiafulbito.controlador.beans.CategoriaProductoFacade;
 import academiafulbito.controlador.beans.PadreFacade;
 import academiafulbito.controlador.beans.SerieFacade;
 import academiafulbito.controlador.beans.TiposComprobanteFacade;
 import academiafulbito.modelo.entidades.Alumno;
+import academiafulbito.modelo.entidades.CategoriaProducto;
 import academiafulbito.modelo.entidades.Padre;
 import academiafulbito.modelo.entidades.Serie;
 import academiafulbito.modelo.entidades.TiposComprobante;
@@ -24,6 +26,7 @@ import academiafulbito.vista.utilidades.Imagen;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -50,10 +53,10 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private AlumnoFacade alumnoFacade;
     private BigDecimal totalAPagar = BigDecimal.ZERO;
     private int paginaActual = 1;
-    private int tamanioPagina = 10;
-    public char tipo='1';
+    private int tamanioPagina = 5;
     private TiposComprobanteFacade tiposComprobanteFacade;
     private SerieFacade serieFacade ;
+    private CategoriaProductoFacade categoriaProductoFacade;
     jifProductoServicios menuProductoServicios;    
     DefaultTableModel tableModel;
     private DecimalFormat decimalFormat = new DecimalFormat("#.00");
@@ -65,6 +68,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         alumnoFacade = new AlumnoFacade();
         tiposComprobanteFacade = new TiposComprobanteFacade();
         serieFacade=new SerieFacade();
+        categoriaProductoFacade = new CategoriaProductoFacade();
         jpMatricula.setVisible(false);
         tableModel = (DefaultTableModel) tblItemsConceptos.getModel();
         tableModel.addTableModelListener(new TableModelListener() {
@@ -91,7 +95,6 @@ public class jifPagos extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        bgOpcionesPago = new javax.swing.ButtonGroup();
         jPanel4 = new javax.swing.JPanel();
         jcbTipoConsulta = new javax.swing.JComboBox();
         txtDatoBusqueda = new javax.swing.JTextField();
@@ -139,12 +142,12 @@ public class jifPagos extends javax.swing.JInternalFrame {
         txtIdMatricula = new javax.swing.JTextField();
         btnBuscarMatricula = new javax.swing.JButton();
         txtDetallesMatricula = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        rbPagarMatricula = new javax.swing.JRadioButton();
-        rbPagarOtrosServicios = new javax.swing.JRadioButton();
+        jLabel19 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtDniAlumno = new javax.swing.JTextField();
+        jcbCategoriaProducto = new javax.swing.JComboBox();
+        jLabel15 = new javax.swing.JLabel();
 
         setClosable(true);
         setTitle("PAGOS DIVERSOS");
@@ -381,6 +384,11 @@ public class jifPagos extends javax.swing.JInternalFrame {
         btnPagar.setText("PAGAR");
         btnPagar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         btnPagar.setContentAreaFilled(false);
+        btnPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 20, 250, 70));
 
         jpMatricula.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -402,34 +410,13 @@ public class jifPagos extends javax.swing.JInternalFrame {
         txtDetallesMatricula.setEditable(false);
         jpMatricula.add(txtDetallesMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 850, 30));
 
-        jLabel15.setText("ID MATRICULA");
-        jpMatricula.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 100, 20));
-
         jLabel17.setText("DETALLES DE LA MATRICULA DEL ALUMNO");
         jpMatricula.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 310, 20));
 
+        jLabel19.setText("ID MATRICULA");
+        jpMatricula.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 100, 20));
+
         getContentPane().add(jpMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 210, 1020, 60));
-
-        bgOpcionesPago.add(rbPagarMatricula);
-        rbPagarMatricula.setFont(new java.awt.Font("Tahoma", 1, 14));
-        rbPagarMatricula.setText("PAGAR MATRICULA");
-        rbPagarMatricula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbPagarMatriculaActionPerformed(evt);
-            }
-        });
-        getContentPane().add(rbPagarMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 170, -1));
-
-        bgOpcionesPago.add(rbPagarOtrosServicios);
-        rbPagarOtrosServicios.setFont(new java.awt.Font("Tahoma", 1, 14));
-        rbPagarOtrosServicios.setSelected(true);
-        rbPagarOtrosServicios.setText("OTROS SERVICIOS");
-        rbPagarOtrosServicios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbPagarOtrosServiciosActionPerformed(evt);
-            }
-        });
-        getContentPane().add(rbPagarOtrosServicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 170, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel4.setText("    DNI :");
@@ -437,6 +424,18 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
         txtDniAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         getContentPane().add(txtDniAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 140, 180, 30));
+
+        jcbCategoriaProducto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "TECNOLOGIA", "MODA", "ZAPATERIA", "BEBIDAS", "MENSUALIDAD", "SNACK", "FASTFOOD" }));
+        jcbCategoriaProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbCategoriaProductoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jcbCategoriaProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 160, 30));
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel15.setText("CATEGORIA PRODUCTO");
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 160, 20));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -448,11 +447,9 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
     private void btnAgregarConceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarConceptoActionPerformed
         // TODO add your handling code here:
-        //para la segunda condicion se busca el codConcepto dentro de la tabla de agregados, haber si ya existe tal codigo
-        if (validarConceptoAgregado()/* && !Utils.validarDatoRegistroTabla(tblItemsConceptos, 1, txtCodConceptoPago.getText())*/) {
+        //para la segunda condicion se busca el codConcepto dentro de la tabla de agregados, haber si ya existe el producto
+        if (validarConceptoAgregado() && !Utils.validarDatoRegistroTabla(tblItemsConceptos, 0, txtCodConceptoPago.getText(), txtConceptoPago.getText())) {
             agregarProductoAPagar();
-        } else {
-            Utils.mensajeError("ERROR!!, PARA AGREGAR EL CONCEPTO DE PAGO.");
         }
     }//GEN-LAST:event_btnAgregarConceptoActionPerformed
 
@@ -464,9 +461,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
                 Utils.visualizarInternalFrame(jfPrincipal.menuProductoServicios, jdp);
             }
             jfPrincipal.menuProductoServicios.permiteSelFila = 0;
-            //String texto = rbPagarOtrosServicios.getText();
-            //int tipo = Integer.parseInt(texto);
-            jfPrincipal.menuProductoServicios.tipo = tipo;
+            jfPrincipal.menuProductoServicios.idCategoriaProducto = obtenerIDCategoriaSeleccionada();
             jfPrincipal.menuProductoServicios.listarProductoServicio(paginaActual, tamanioPagina);
             jfPrincipal.menuProductoServicios.toFront();
         } else {
@@ -496,23 +491,9 @@ public class jifPagos extends javax.swing.JInternalFrame {
         quitarProductoSeleccionado();
     }//GEN-LAST:event_btnQuitarConceptoActionPerformed
 
-    private void rbPagarOtrosServiciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPagarOtrosServiciosActionPerformed
-        // TODO add your handling code here:
-        jpMatricula.setVisible(false);
-        tipo='1';//otros servicios
-        limpiarCamposProductosServ1();
-    }//GEN-LAST:event_rbPagarOtrosServiciosActionPerformed
-
-    private void rbPagarMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPagarMatriculaActionPerformed
-        // TODO add your handling code here:
-        jpMatricula.setVisible(true);
-        tipo='0';//mensualidad
-        limpiarCamposProductosServ();
-    }//GEN-LAST:event_rbPagarMatriculaActionPerformed
-
     private void btnBuscarMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarMatriculaActionPerformed
         // TODO add your handling code here:
-        if (rbPagarMatricula.isSelected() && Utils.validarCadena(txtDniAlumno.getText())){
+        if (/*rbPagarMatricula.isSelected() &&*/ Utils.validarCadena(txtDniAlumno.getText())){
             if(jfPrincipal.menuMatricula==null || jfPrincipal.menuMatricula.isClosed()){
                 jfPrincipal.menuMatricula=new jifMatricula(jdp);
                 Utils.visualizarInternalFrame(jfPrincipal.menuMatricula, jdp);
@@ -545,9 +526,18 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jcbSerieActionPerformed
 
+    private void jcbCategoriaProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaProductoActionPerformed
+        // TODO add your handling code here:
+        cargarPanelMatricula();
+    }//GEN-LAST:event_jcbCategoriaProductoActionPerformed
+
+    private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPagarActionPerformed
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup bgOpcionesPago;
     private javax.swing.JButton btnAgregarConcepto;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarConcepto;
@@ -565,6 +555,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -576,6 +567,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JComboBox jcbCategoriaProducto;
     private javax.swing.JComboBox jcbSerie;
     private javax.swing.JComboBox jcbTipoConsulta;
     private javax.swing.JComboBox jcbTipoCpbte;
@@ -583,8 +575,6 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jpMatricula;
     private javax.swing.JScrollPane jspTblItemsConceptos;
     private javax.swing.JLabel lblFotoAlumno;
-    private javax.swing.JRadioButton rbPagarMatricula;
-    private javax.swing.JRadioButton rbPagarOtrosServicios;
     private javax.swing.JTable tblItemsConceptos;
     private javax.swing.JTextField txtApellidosAlumno;
     public static javax.swing.JTextField txtCodConceptoPago;
@@ -783,16 +773,22 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
     private void cargarInformacionEnCombos() {
         cargarComboTipoComprobante(tiposComprobanteFacade.obtenerTiposComprobante());
+        
+        // 1. Guarda el ActionListener actual
+        ActionListener[] listeners = jcbCategoriaProducto.getActionListeners();
 
-        // Cargar las series para el primer tipo de comprobante
-        TiposComprobante primerTipo = (TiposComprobante) jcbTipoCpbte.getItemAt(0);
-        if (primerTipo != null) {
-            List<Serie> seriesRelacionadas = serieFacade.obtenerTiposSeries(primerTipo.getIdTiposComprobante());
-            cargarComboSerie(seriesRelacionadas);
+        // 2. Remueve todos los ActionListeners para evitar que se dispare el evento
+        for (ActionListener listener : listeners) {
+            jcbCategoriaProducto.removeActionListener(listener);
         }
 
-        // Habilitar el combo de serie
-        jcbSerie.setEnabled(true);
+        // 3. Carga los datos en el JComboBox
+        cargarComboCategoriaProducto(categoriaProductoFacade.getListadoCategoriaProducto());
+
+        // 4. Vuelve a agregar los ActionListeners
+        for (ActionListener listener : listeners) {
+            jcbCategoriaProducto.addActionListener(listener);
+        }
 
     }
 
@@ -825,5 +821,44 @@ public class jifPagos extends javax.swing.JInternalFrame {
             jcbSerie.setSelectedIndex(0);
             jcbSerie.setEnabled(true); // Habilitar el combo
         }
+    }
+
+    private  void cargarComboCategoriaProducto(List<CategoriaProducto> lista){
+        jcbCategoriaProducto.removeAllItems();
+
+        if (lista == null || lista.isEmpty()) {
+            jcbCategoriaProducto.addItem("No hay CATEGORIAS");
+            jcbCategoriaProducto.setEnabled(false);
+            return;
+        }
+        jcbCategoriaProducto.setEnabled(true);
+        for(CategoriaProducto categorias : lista){
+            jcbCategoriaProducto.addItem(categorias);
+        }
+        jcbCategoriaProducto.setSelectedIndex(0);
+        cargarPanelMatricula();
+    }
+
+    private void cargarPanelMatricula(){
+        String categoriaProducto = jcbCategoriaProducto.getSelectedItem().toString();
+        if(categoriaProducto.equalsIgnoreCase(LiteralesTexto.LITERAL_MENSUALIDAD)){
+            jpMatricula.setVisible(true);
+        } else{
+            jpMatricula.setVisible(false);
+            limpiarCamposProductosServ1();
+        }
+        limpiarCamposProductosServ();
+        if (tblItemsConceptos.getRowCount() > 0) {
+            Utils.mensajeInformacion("SE QUITARÁN LOS PRODUCTOS, YA AGREGADOS!!");
+            tableModel.setRowCount(0);
+        }
+    }
+
+    public int obtenerIDCategoriaSeleccionada() {
+        Object selectedItem = jcbCategoriaProducto.getSelectedItem();
+        if (selectedItem instanceof CategoriaProducto) {
+            return ((CategoriaProducto) selectedItem).getIdCategoriaProd();
+        }
+        return -1; // En caso de que no haya una selección válida
     }
 }

@@ -120,7 +120,7 @@ public class ProductoServicioFacade implements EntityFacade<ProductoServicio>{
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            productoServicio.setEstado(Estado.INACTIVO);
+            productoServicio.setEstado(Estado.ANULADO);
             em.merge(productoServicio);
 
             
@@ -141,35 +141,31 @@ public class ProductoServicioFacade implements EntityFacade<ProductoServicio>{
             em.close();
         }
     }
-
-     /*  public List<ProductoServicio> getListadoProductoServiciosPorTipo() {
+       
+    public List<ProductoServicio> getListadoProductoServiciosPorIdCategoriaProducto(int idCategoriaProducto, int paginaActual, int tamanioPagina) {
         EntityManager em = getEntityManager();
-        List<ProductoServicio> productoServicios = null;
         try {
-            // Construimos la consulta con el JOIN y el WHERE dinámico
-            String queryStr = "SELECT * FROM producto_servicio "
-                    + "WHERE tipo_producto = '1'";
-            productoServicios = em.createNativeQuery(queryStr, ProductoServicio.class).getResultList();
+            return em.createQuery("SELECT x FROM ProductoServicio x WHERE x.categoriaProducto.idCategoriaProd = :idCategoriaProducto AND x.estado = :estado", ProductoServicio.class)
+                   .setParameter("idCategoriaProducto", idCategoriaProducto)
+                   .setParameter("estado", Estado.ACTIVO)
+                   .setFirstResult((paginaActual - 1) * tamanioPagina)
+                   .setMaxResults(tamanioPagina)
+                   .getResultList();
         } finally {
             em.close();
         }
-        return productoServicios;
     }
-*/
        
-             public List<ProductoServicio> getListadoProductoServiciosPorTipo(char tipo) {
-        EntityManager em = getEntityManager();
-        List<ProductoServicio> productoServicios = null;
+    public int obtenerTotalPaginas(int tamanioPagina, int idCategoriaProducto) {
+           EntityManager em = getEntityManager();
         try {
-            // Construimos la consulta con el JOIN y el WHERE dinámico
-            String queryStr = "SELECT x.* FROM producto_servicio x "
-                    + "WHERE x.tipo_producto = '" + tipo + "'";
-            productoServicios = em.createNativeQuery(queryStr, ProductoServicio.class).getResultList();
+            long totalProductoServicio = em.createQuery("SELECT COUNT(p) FROM ProductoServicio p WHERE p.categoriaProducto.idCategoriaProd = :idCategoriaProducto AND p.estado = :estado", Long.class)
+                    .setParameter("idCategoriaProducto", idCategoriaProducto)
+                    .setParameter("estado", Estado.ACTIVO)
+                    .getSingleResult();
+            return (int) Math.ceil((double) totalProductoServicio / tamanioPagina);
         } finally {
             em.close();
         }
-        return productoServicios;
     }
-       
-
 }

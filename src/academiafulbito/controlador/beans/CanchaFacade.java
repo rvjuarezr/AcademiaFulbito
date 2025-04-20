@@ -116,7 +116,7 @@ public class CanchaFacade implements EntityFacade<Cancha>{
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            cancha.setEstado(Estado.INACTIVO);
+            cancha.setEstado(Estado.ANULADO);
             em.merge(cancha);
 
 

@@ -7,9 +7,9 @@ package academiafulbito.modelo.enums;
 
 /**
  *
- * @author SISTEMAS3
+ * @author Ronald J
  */
-public enum Estado {
-ACTIVO,
-ANULADO
+public enum TipoPago {
+CONTADO,
+CREDITO
 }

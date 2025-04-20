@@ -46,6 +46,7 @@ public class ProductoServicio {
     @ManyToOne
     @JoinColumn(name = "ID_CategoriaProd", referencedColumnName = "ID_CategoriaProd", nullable = false)
     private CategoriaProducto categoriaProducto;
+
     @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
     @Column(name = "estado")
     private Estado estado;

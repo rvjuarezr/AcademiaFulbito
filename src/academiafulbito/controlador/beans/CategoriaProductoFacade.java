@@ -34,15 +34,13 @@ public class CategoriaProductoFacade implements EntityFacade<CategoriaProducto>{
     // Método para listar las categorías
     public List<CategoriaProducto> getListadoCategoriaProducto() {
         EntityManager em = getEntityManager();
-        List<CategoriaProducto> categoriaProducto = null;
         try {
-            categoriaProducto = em.createQuery("SELECT c FROM CategoriaProducto c", CategoriaProducto.class).getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
+            return em.createQuery("SELECT c FROM CategoriaProducto c where c.estado = :estado", CategoriaProducto.class)
+                    .setParameter("estado", Estado.ACTIVO)
+                    .getResultList();
         } finally {
             em.close(); // Siempre cerrar el EntityManager al final
         }
-        return categoriaProducto;
     }
 
     // Método para guardar una categoría
@@ -117,7 +115,7 @@ public class CategoriaProductoFacade implements EntityFacade<CategoriaProducto>{
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            categoriaProducto.setEstado(Estado.INACTIVO);
+            categoriaProducto.setEstado(Estado.ANULADO);
             em.merge(categoriaProducto);
 
             
