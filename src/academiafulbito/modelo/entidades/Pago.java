@@ -6,6 +6,7 @@
 package academiafulbito.modelo.entidades;
 
 import academiafulbito.modelo.enums.EstadoPago;
+import academiafulbito.modelo.enums.TipoPago;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
@@ -54,20 +55,116 @@ public class Pago {
     @JoinColumn(name = "ID_usuario", referencedColumnName = "ID_usuario")
     private Usuario usuario;
 
+    @Column(name = "correlativo", length = 8, nullable = false)
+    private String correlativo;
+
     @ManyToOne
     @JoinColumn(name = "ID_tipos_comprobante", referencedColumnName = "ID_tipos_comprobante")
     private TiposComprobante tiposComprobante;
 
+    @Column(name = "serie_documento", length = 4, nullable = false)
+    private String serieDocumento;
+
+    @Column(name = "doc_identidad", length = 20, nullable = false)
+    private String docIdentidad;
+
+    @Column(name = "razon_social", length = 120)
+    private String razonSocial;
+
+    @Column(name = "tipo_documento", length = 1, nullable = false)
+    private String tipoDocumento;
+
+    @Column(name = "operacion_gravada", nullable = false, precision = 10, scale = 2)
+    private BigDecimal operacionGravada;
+
+    @Column(name = "monto_igv", nullable = false, precision = 10, scale = 2)
+    private BigDecimal montoIgv;
+
+    @Column(name = "operacion_inafecta", nullable = false, precision = 10, scale = 2)
+    private BigDecimal operacionInafecta;
+
+    @Column(name = "operacion_exonerada", nullable = false, precision = 10, scale = 2)
+    private BigDecimal operacionExonerada;
+
+    @Column(name = "operacion_gratuita", nullable = false, precision = 10, scale = 2)
+    private BigDecimal operacionGratuita;
+
+    @Column(name = "descuento", nullable = false, precision = 10, scale = 2)
+    private BigDecimal descuento;
+
+    @Column(name = "motivo_anulado", length = 255)
+    private String motivoAnulado;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_pago", nullable = false)
+    private TipoPago tipoPago;
+
+    @Column(name = "fecha_hora", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaHora;
+
+    @Column(name = "hora_registro", nullable = false)
+    @Temporal(TemporalType.TIME)
+    private Date horaRegistro;
+
+    @Column(name = "moneda", length = 3, nullable = false)
+    private String moneda;
+
+    @Column(name = "tipo_cambio", precision = 10, scale = 3)
+    private BigDecimal tipoCambio;
+
     public Pago() {
     }
 
-    public Pago(int idPago, Matricula matricula, Date fechaPago, BigDecimal monto, EstadoPago estadoPago, Usuario usuario) {
+    public Pago(int idPago, Matricula matricula, Date fechaPago, BigDecimal monto, EstadoPago estadoPago, Usuario usuario, String correlativo, TiposComprobante tiposComprobante, String serieDocumento, String docIdentidad, String razonSocial, String tipoDocumento, BigDecimal operacionGravada, BigDecimal montoIgv, BigDecimal operacionInafecta, BigDecimal operacionExonerada, BigDecimal operacionGratuita, BigDecimal descuento, String motivoAnulado, TipoPago tipoPago, Date fechaHora, Date horaRegistro, String moneda, BigDecimal tipoCambio) {
         this.idPago = idPago;
         this.matricula = matricula;
         this.fechaPago = fechaPago;
         this.monto = monto;
         this.estadoPago = estadoPago;
         this.usuario = usuario;
+        this.correlativo = correlativo;
+        this.tiposComprobante = tiposComprobante;
+        this.serieDocumento = serieDocumento;
+        this.docIdentidad = docIdentidad;
+        this.razonSocial = razonSocial;
+        this.tipoDocumento = tipoDocumento;
+        this.operacionGravada = operacionGravada;
+        this.montoIgv = montoIgv;
+        this.operacionInafecta = operacionInafecta;
+        this.operacionExonerada = operacionExonerada;
+        this.operacionGratuita = operacionGratuita;
+        this.descuento = descuento;
+        this.motivoAnulado = motivoAnulado;
+        this.tipoPago = tipoPago;
+        this.fechaHora = fechaHora;
+        this.horaRegistro = horaRegistro;
+        this.moneda = moneda;
+        this.tipoCambio = tipoCambio;
+    }
+
+    public String getCorrelativo() {
+        return correlativo;
+    }
+
+    public void setCorrelativo(String correlativo) {
+        this.correlativo = correlativo;
+    }
+
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
+    }
+
+    public String getDocIdentidad() {
+        return docIdentidad;
+    }
+
+    public void setDocIdentidad(String docIdentidad) {
+        this.docIdentidad = docIdentidad;
     }
 
     public EstadoPago getEstadoPago() {
@@ -78,12 +175,28 @@ public class Pago {
         this.estadoPago = estadoPago;
     }
 
+    public Date getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(Date fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
     public Date getFechaPago() {
         return fechaPago;
     }
 
     public void setFechaPago(Date fechaPago) {
         this.fechaPago = fechaPago;
+    }
+
+    public Date getHoraRegistro() {
+        return horaRegistro;
+    }
+
+    public void setHoraRegistro(Date horaRegistro) {
+        this.horaRegistro = horaRegistro;
     }
 
     public int getIdPago() {
@@ -102,6 +215,14 @@ public class Pago {
         this.matricula = matricula;
     }
 
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
     public BigDecimal getMonto() {
         return monto;
     }
@@ -110,12 +231,92 @@ public class Pago {
         this.monto = monto;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public BigDecimal getMontoIgv() {
+        return montoIgv;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setMontoIgv(BigDecimal montoIgv) {
+        this.montoIgv = montoIgv;
+    }
+
+    public String getMotivoAnulado() {
+        return motivoAnulado;
+    }
+
+    public void setMotivoAnulado(String motivoAnulado) {
+        this.motivoAnulado = motivoAnulado;
+    }
+
+    public BigDecimal getOperacionExonerada() {
+        return operacionExonerada;
+    }
+
+    public void setOperacionExonerada(BigDecimal operacionExonerada) {
+        this.operacionExonerada = operacionExonerada;
+    }
+
+    public BigDecimal getOperacionGratuita() {
+        return operacionGratuita;
+    }
+
+    public void setOperacionGratuita(BigDecimal operacionGratuita) {
+        this.operacionGratuita = operacionGratuita;
+    }
+
+    public BigDecimal getOperacionGravada() {
+        return operacionGravada;
+    }
+
+    public void setOperacionGravada(BigDecimal operacionGravada) {
+        this.operacionGravada = operacionGravada;
+    }
+
+    public BigDecimal getOperacionInafecta() {
+        return operacionInafecta;
+    }
+
+    public void setOperacionInafecta(BigDecimal operacionInafecta) {
+        this.operacionInafecta = operacionInafecta;
+    }
+
+    public String getRazonSocial() {
+        return razonSocial;
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+
+    public String getSerieDocumento() {
+        return serieDocumento;
+    }
+
+    public void setSerieDocumento(String serieDocumento) {
+        this.serieDocumento = serieDocumento;
+    }
+
+    public BigDecimal getTipoCambio() {
+        return tipoCambio;
+    }
+
+    public void setTipoCambio(BigDecimal tipoCambio) {
+        this.tipoCambio = tipoCambio;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    public TipoPago getTipoPago() {
+        return tipoPago;
+    }
+
+    public void setTipoPago(TipoPago tipoPago) {
+        this.tipoPago = tipoPago;
     }
 
     public TiposComprobante getTiposComprobante() {
@@ -124,6 +325,14 @@ public class Pago {
 
     public void setTiposComprobante(TiposComprobante tiposComprobante) {
         this.tiposComprobante = tiposComprobante;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
 }

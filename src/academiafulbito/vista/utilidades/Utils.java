@@ -350,11 +350,12 @@ public class Utils extends DefaultTableCellRenderer{
         label.repaint();
     }
 
-    public static boolean validarDatoRegistroTabla(JTable tabla, int numeroColumna, String datoConsulta) {
+    public static boolean validarDatoRegistroTabla(JTable tabla, int numeroColumna, String datoConsulta, String descripcionProducto) {
         boolean respuesta = false;
         for (int i = 0; i < tabla.getRowCount(); i++) {
             if (tabla.getValueAt(i, numeroColumna).toString().equals(datoConsulta)) {
                 respuesta = true;
+                Utils.mensajeError("El Producto: "+descripcionProducto+", Ya está Agregado!!.");
                 break;
             }
         }

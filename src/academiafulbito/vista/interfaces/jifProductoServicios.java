@@ -48,7 +48,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
     private int paginaActual = 1;
     private int tamanioPagina = 5;//para el paginado de tabla
     private int totalPaginas;
-    public char tipo;
+    public int idCategoriaProducto;
 
     public static ProductoServicioFacade productoServicioFacade;
     public static CategoriaProductoFacade categoriaProductoFacade;
@@ -90,7 +90,6 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        bgTipoProducto = new javax.swing.ButtonGroup();
         tphProductoServicio = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jspProductoServicios = new javax.swing.JScrollPane();
@@ -113,15 +112,13 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         txtPrecio = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         txtStock = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         jcbEstado = new org.edisoncor.gui.comboBox.ComboBoxRound();
-        rbMensualidades = new javax.swing.JRadioButton();
-        rbOtrosServicios = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
         setTitle("MANTENIMIENTO PRODUCTO SERVICIO");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tphProductoServicio.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
+        tphProductoServicio.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -292,14 +289,6 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         jcbEstado.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jPanel2.add(jcbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 380, 220, 40));
 
-        bgTipoProducto.add(rbMensualidades);
-        rbMensualidades.setText("MENSUALIDADES");
-        jPanel2.add(rbMensualidades, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 390, 120, -1));
-
-        bgTipoProducto.add(rbOtrosServicios);
-        rbOtrosServicios.setText("OTROS SERVICIOS");
-        jPanel2.add(rbOtrosServicios, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 390, -1, -1));
-
         tphProductoServicio.addTab("REGISTRO", jPanel2);
 
         getContentPane().add(tphProductoServicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 520));
@@ -427,7 +416,6 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup bgTipoProducto;
     private org.edisoncor.gui.button.ButtonRound btnAnterior;
     private javax.swing.JButton btnBucarCategoriaProducto;
     private javax.swing.JButton btnCancelar;
@@ -441,8 +429,6 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
     private org.edisoncor.gui.comboBox.ComboBoxRound jcbEstado;
     private javax.swing.JScrollPane jspProductoServicios;
     private javax.swing.JLabel lblPaginaActual;
-    private javax.swing.JRadioButton rbMensualidades;
-    private javax.swing.JRadioButton rbOtrosServicios;
     private javax.swing.JTable tblProductoServicio;
     private javax.swing.JTabbedPane tphProductoServicio;
     public static org.edisoncor.gui.textField.TextFieldRoundBackground txtCategoriaProducto;
@@ -515,11 +501,13 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
     }
 
     public void listarProductoServicio(int paginaActual, int tamanioPagina) {
-        totalPaginas = productoServicioFacade.obtenerTotalPaginas(tamanioPagina);
+        
         List<ProductoServicio> listaProductoServicio=null;
         if(permiteSelFila==0){
-            listaProductoServicio=productoServicioFacade.getListadoProductoServiciosPorTipo(tipo);
+            totalPaginas = productoServicioFacade.obtenerTotalPaginas(tamanioPagina, idCategoriaProducto);
+            listaProductoServicio=productoServicioFacade.getListadoProductoServiciosPorIdCategoriaProducto(idCategoriaProducto, paginaActual, tamanioPagina);
         } else {
+            totalPaginas = productoServicioFacade.obtenerTotalPaginas(tamanioPagina);
             listaProductoServicio=productoServicioFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
         }
         //List<ProductoServicio> listaProductoServicio = productoServicioFacade.listarEntidadesPaginadas(paginaActual, tamanioPagina);
@@ -589,21 +577,6 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
 
             // Seleccionar el estado en el JComboBox
             jcbEstado.setSelectedItem(estado);//7
-            
-            //para el radiobutton
-           if (tipo_producto != null) {  // Asegurarse de que tipo_producto no sea null
-               if (tipo_producto == '0') {
-                   rbMensualidades.setSelected(true);  // Seleccionar rbMensualidades si tipo_producto es '0'
-                   rbOtrosServicios.setSelected(false);  // Asegurarse de que el otro no esté seleccionado
-               } else if (tipo_producto == '1') {
-                   rbOtrosServicios.setSelected(true);  // Seleccionar rbOtrosServicios si tipo_producto es '1'
-                   rbMensualidades.setSelected(false);  // Asegurarse de que el otro no esté seleccionado
-               } else {
-                   // Si tipo_producto tiene un valor inesperado, puedes hacer algo adicional si es necesario
-                   rbMensualidades.setSelected(false);
-                   rbOtrosServicios.setSelected(false);
-               }
-           }
 
             // Cambiar al segundo panel donde están los JTextField
             tphProductoServicio.setSelectedIndex(1);
@@ -628,14 +601,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
         productoServicio.setStock(stock);
         productoServicio.setCategoriaProducto(categoriaProductoFacade.findCategoriaProductoById(Integer.parseInt(txtIdCategoriaProducto.getText())));
         productoServicio.setEstado((Estado) jcbEstado.getSelectedItem());
-        //productoServicio.setTipo_producto(txtTipoProducto.getText().charAt(0));
-        if (rbMensualidades.isSelected()) {
-            productoServicio.setTipo_producto('0');  
-            tipo = '0'; 
-        } else if (rbOtrosServicios.isSelected()) {
-            productoServicio.setTipo_producto('1'); 
-            tipo = '1';  
-        }
+        
         return productoServicio;
 
     }

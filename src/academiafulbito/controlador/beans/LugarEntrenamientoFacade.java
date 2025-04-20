@@ -126,7 +126,7 @@ public class LugarEntrenamientoFacade implements EntityFacade<LugarEntrenamiento
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            lugarE.setEstado(Estado.INACTIVO);
+            lugarE.setEstado(Estado.ANULADO);
             em.merge(lugarE);
 
 

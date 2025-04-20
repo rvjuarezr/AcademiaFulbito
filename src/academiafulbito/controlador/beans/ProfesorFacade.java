@@ -114,7 +114,7 @@ public class ProfesorFacade implements EntityFacade<Profesor> {
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            profesor.setEstado(Estado.INACTIVO);
+            profesor.setEstado(Estado.ANULADO);
             em.merge(profesor);
 
 

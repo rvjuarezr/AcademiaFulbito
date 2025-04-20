@@ -121,7 +121,7 @@ public class PadreFacade implements EntityFacade<Padre> {
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            padre.setEstado(Estado.INACTIVO);
+            padre.setEstado(Estado.ANULADO);
             em.merge(padre);
 
 

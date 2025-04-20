@@ -81,5 +81,10 @@ public class CategoriaProducto {
         this.estado = estado;
     }
 
+    @Override
+    public String toString() {
+        return this.nombreCategoria;
+    }
+
 
 }

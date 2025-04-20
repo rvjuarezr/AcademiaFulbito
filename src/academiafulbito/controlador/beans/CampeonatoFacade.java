@@ -117,7 +117,7 @@ public class CampeonatoFacade implements EntityFacade<Campeonato>{
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            campeonato.setEstado(Estado.INACTIVO);
+            campeonato.setEstado(Estado.ANULADO);
             em.merge(campeonato);
 
 

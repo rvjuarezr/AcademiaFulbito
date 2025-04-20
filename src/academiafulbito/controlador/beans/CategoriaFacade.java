@@ -119,7 +119,7 @@ public class CategoriaFacade implements EntityFacade<Categoria>{
             em.getTransaction().begin();
 
             // Asegúrate de que la entidad esté gestionada
-            categoria.setEstado(Estado.INACTIVO);
+            categoria.setEstado(Estado.ANULADO);
             em.merge(categoria);
 
             
