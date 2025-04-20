@@ -643,5 +643,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         txtDescripcion.setText(tblCategorias.getValueAt(filaSeleccionada, 5).toString());
         txtEdadMin.setText(tblCategorias.getValueAt(filaSeleccionada, 2).toString());
         txtEdadMax.setText(tblCategorias.getValueAt(filaSeleccionada, 3).toString());
+        jcbEstado.setSelectedItem((Estado) tblCategorias.getValueAt(filaSeleccionada, 4));
+
     }
 }
