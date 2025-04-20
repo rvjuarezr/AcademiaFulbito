@@ -7,6 +7,7 @@ package academiafulbito.controlador.beans;
 
 import academiafulbito.modelo.entidades.Serie;
 import academiafulbito.modelo.entidades.Padre;
+import academiafulbito.modelo.enums.Estado;
 import academiafulbito.modelo.interfaces.EntityFacade;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -138,6 +139,16 @@ public class SerieFacade implements EntityFacade<Serie> {
                 em.getTransaction().rollback(); // Hacer rollback en caso de error
             }
             e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+         public List<Serie> obtenerTiposSeries(int tipos_comprobantes) {
+        EntityManager em = getEntityManager();
+
+        try {
+            return em.createQuery("SELECT s FROM Serie s WHERE s.tipoComprobantes.idTiposComprobante = :tipos_comprobantes",Serie.class
+                    ).setParameter("tipos_comprobantes", tipos_comprobantes).getResultList();
         } finally {
             em.close();
         }

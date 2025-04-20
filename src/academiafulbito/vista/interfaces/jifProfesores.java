@@ -616,6 +616,7 @@ public class jifProfesores extends javax.swing.JInternalFrame {
                 txtNombre.setText(tblProfesores.getValueAt(filaSeleccionada, 1).toString());
                 txtApellido.setText(tblProfesores.getValueAt(filaSeleccionada, 2).toString());
                 txtTelefono.setText(tblProfesores.getValueAt(filaSeleccionada, 3).toString());
+                jcbEstado.setSelectedItem((Estado) tblProfesores.getValueAt(filaSeleccionada, 4));
                 if (unProfesor.getFoto() != null) {
                     Image image = Imagen.abrirImagen(unProfesor.getFoto());
                     Utils.cargarImagenEnLabel(image, lblFoto);
@@ -629,25 +630,6 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-       
-        /*// Supongamos que tienes un modelo de tabla que almacena los datos.
-        String nombreProfesor = (String) tblProfesores.getValueAt(filaSeleccionada, 1); // Ajusta el índice de columna según tu tabla
-        String apellidoProfesor = (String) tblProfesores.getValueAt(filaSeleccionada, 2).toString();
-        String telefono = (String) tblProfesores.getValueAt(filaSeleccionada, 3).toString();
-        Estado estado = (Estado) tblProfesores.getValueAt(filaSeleccionada, 4);
-
-        // Crear un mapa con los datos a mostrar
-        //Map<String, String> datos = new HashMap<String, String>(5);
-        Map<String, String> datos = new LinkedHashMap<String, String>(5);
-        datos.put("Nombre del Profesor :", nombreProfesor);
-        datos.put("Apellido del Profesor :", apellidoProfesor);
-        datos.put("Telefono del Profesor :", telefono);
-        datos.put("Estado:", estado.toString());
-
-
-        // Llamar al método genérico para mostrar la información
-        //primer parametro: nombre de tu boton, cuarto parametro: tamaño letra y ultimo parametro es la longitud de la cadena
-        DialogUtils.mostrarInformacion("Aceptar", "INFORMACIÓN DEL PROFESOR", datos, 18, 20);*/
     }
 
     private boolean validarDatosCategoria(){
@@ -672,4 +654,5 @@ public class jifProfesores extends javax.swing.JInternalFrame {
         }
         return true;
     }
+
 }
