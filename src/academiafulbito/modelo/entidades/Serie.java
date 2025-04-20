@@ -63,4 +63,16 @@ public class Serie {
         this.tipoComprobantes = tipoComprobantes;
     }
 
+     public String getCodigoSerie() {
+        return codigo_serie;
+    }
+
+    public void setCodigoSerie(String codigoSerie) {
+        this.codigo_serie = codigoSerie;
+    }
+    @Override
+    public String toString() {
+        return this.codigo_serie; // Muestra solo el nombre del tipo de comprobante
+    }
+
 }
