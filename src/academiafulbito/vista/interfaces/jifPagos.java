@@ -19,6 +19,7 @@ import academiafulbito.controlador.beans.SerieFacade;
 import academiafulbito.controlador.beans.TiposComprobanteFacade;
 import academiafulbito.modelo.entidades.Alumno;
 import academiafulbito.modelo.entidades.CategoriaProducto;
+import academiafulbito.modelo.entidades.Matricula;
 import academiafulbito.modelo.entidades.Padre;
 import academiafulbito.modelo.entidades.Serie;
 import academiafulbito.modelo.entidades.TiposComprobante;
@@ -30,6 +31,7 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
@@ -60,7 +62,17 @@ public class jifPagos extends javax.swing.JInternalFrame {
     jifProductoServicios menuProductoServicios;    
     DefaultTableModel tableModel;
     private DecimalFormat decimalFormat = new DecimalFormat("#.00");
-    
+
+    // Variables para almacenar los objetos seleccionados en los combos
+    private TiposComprobante tipoComprobanteSeleccionado; // Objeto completo
+    private Serie serieSeleccionada; // Objeto completo
+    private CategoriaProducto categoriaProductoSeleccionada; // Objeto completo
+
+    //almacenar la Matricula, Alumno y Padre actuales
+    private Alumno alumnoActual; // Objeto completo
+    private Padre padreActual; // Objeto completo
+    public static Matricula matriculaActual; // Objeto completo <-- Para el caso de pagos de matricula
+
     public jifPagos(JDesktopPane jdpModAF) {
         initComponents();
         jdp = jdpModAF;
@@ -83,6 +95,22 @@ public class jifPagos extends javax.swing.JInternalFrame {
             }
         });
         cargarInformacionEnCombos();
+        jdchFechaPago.setDate(new Date()); // Establecer la fecha actual por defecto
+
+        // Deshabilitar botones inicialmente si no hay items o matricula seleccionada (para Mensualidad)
+        btnPagar.setEnabled(false);
+        btnQuitarConcepto.setEnabled(false);
+        btnAgregarConcepto.setEnabled(false); // Deshabilitar agregar hasta que se seleccione un concepto O una matricula (si aplica)
+        btnBuscarConcepto.setEnabled(false); // Deshabilitar buscar hasta que se seleccione categoria Y (si es mensualidad) matricula
+
+        // Asegurarse de que los campos de pago inicien en 0.00 y sean editables (si quieres que el usuario ingrese montos)
+        txtPagoEfectivo.setText("0.00");
+        txtPagoYape.setText("0.00");
+        txtPagoPlin.setText("0.00");
+        txtPagoEfectivo.setEditable(true);
+        txtPagoYape.setEditable(true);
+        txtPagoPlin.setEditable(true);
+        txtTotalPago.setEditable(false); // El total es solo para mostrar
     }
     
 
@@ -156,7 +184,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Consultar Datos"));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jcbTipoConsulta.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        jcbTipoConsulta.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         jcbTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DNI ALUMNO" }));
         jcbTipoConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -447,27 +475,92 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
     private void btnAgregarConceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarConceptoActionPerformed
         // TODO add your handling code here:
-        //para la segunda condicion se busca el codConcepto dentro de la tabla de agregados, haber si ya existe el producto
-        if (validarConceptoAgregado() && !Utils.validarDatoRegistroTabla(tblItemsConceptos, 0, txtCodConceptoPago.getText(), txtConceptoPago.getText())) {
+        // El boton agregar concepto ahora se habilita despues de buscar/seleccionar un producto
+        // La validacion de la matricula (si es mensualidad) se hace antes de habilitar este boton.
+
+        // Validar que hay un productoServicio seleccionado (de la busqueda previa)
+         if (productoServicio == null) {
+             Utils.mensajeError("Debe buscar y seleccionar un Concepto de Pago primero.");
+             return;
+         }
+
+        // Validar que el concepto no este ya agregado (usa tu metodo existente)
+         /*if (validarConceptoAgregado() && !Utils.validarDatoRegistroTabla(tblItemsConceptos, 0, txtCodConceptoPago.getText(), txtConceptoPago.getText())) {
             agregarProductoAPagar();
+        }*/
+        if (!Utils.validarDatoRegistroTabla(tblItemsConceptos, 0, String.valueOf(productoServicio.getIdProducto()), productoServicio.getNombreProducto())) {
+            agregarProductoAPagar();
+            // Después de agregar, limpia el producto seleccionado temporalmente
+            productoServicio = null;
+            limpiarCamposProductosServ(); // Limpia los campos del concepto en la UI
+
+            // Deshabilitar btnAgregarConcepto de nuevo hasta que se busque otro producto
+            btnAgregarConcepto.setEnabled(false);
+
+        } else {
+            Utils.mensajeInformacion("El concepto '" + productoServicio.getNombreProducto() + "' ya ha sido agregado.");
+            // Después de informar que ya está, limpiar el producto seleccionado temporalmente
+            productoServicio = null;
+            limpiarCamposProductosServ();
+            btnAgregarConcepto.setEnabled(false);
         }
     }//GEN-LAST:event_btnAgregarConceptoActionPerformed
 
     private void btnBuscarConceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarConceptoActionPerformed
         // TODO add your handling code here:
-        if (Utils.validarCadena(txtDniAlumno.getText())) {
-            if (jfPrincipal.menuProductoServicios == null || jfPrincipal.menuProductoServicios.isClosed()) {
-                jfPrincipal.menuProductoServicios = new jifProductoServicios(jdp);
-                Utils.visualizarInternalFrame(jfPrincipal.menuProductoServicios, jdp);
-            }
-            jfPrincipal.menuProductoServicios.permiteSelFila = 0;
-            jfPrincipal.menuProductoServicios.idCategoriaProducto = obtenerIDCategoriaSeleccionada();
-            jfPrincipal.menuProductoServicios.listarProductoServicio(paginaActual, tamanioPagina);
-            jfPrincipal.menuProductoServicios.toFront();
-        } else {
-            Utils.mensajeError("ERROR!!, DEBES BUSCAR EL ALUMNO PRIMERO");
+        // Este boton busca productos/servicios para agregarlos a la tabla
+        // Solo debe estar habilitado si hay un Alumno/Padre seleccionado
+        // Y, si la categoria es Mensualidad, si hay una Matricula seleccionada.
+
+        // Validar que haya un alumno/padre seleccionado (usando los campos de DNI)
+        if (!Utils.validarCadena(txtDniAlumno.getText()) && !Utils.validarCadena(txtDniPadre.getText())) {
+            Utils.mensajeError("ERROR!!, DEBES BUSCAR EL ALUMNO O APODERADO PRIMERO");
+            return;
         }
 
+        // Si la categoría seleccionada es Mensualidad, validar que haya una Matrícula seleccionada
+        if (categoriaProductoSeleccionada != null && categoriaProductoSeleccionada.getNombreCategoria().equalsIgnoreCase(LiteralesTexto.LITERAL_MENSUALIDAD)) {
+            if (matriculaActual == null) {
+                Utils.mensajeError("Para la categoría Mensualidad, debes buscar y seleccionar una Matrícula primero.");
+                return;
+            }
+        }
+
+
+        // Si las validaciones pasan, abrir la ventana de búsqueda de productos
+        if (jfPrincipal.menuProductoServicios == null || jfPrincipal.menuProductoServicios.isClosed()) {
+            jfPrincipal.menuProductoServicios = new jifProductoServicios(jdp);
+            Utils.visualizarInternalFrame(jfPrincipal.menuProductoServicios, jdp);
+        }
+
+        // Configurar la ventana de búsqueda de productos:
+        // 1. Permitir selección de una fila
+        jfPrincipal.menuProductoServicios.permiteSelFila = 0; // Asumo que 0 significa SINGLE_SELECTION o similar
+
+        // 2. Pasar el ID de la Categoría seleccionada para filtrar la búsqueda
+        jfPrincipal.menuProductoServicios.idCategoriaProducto = obtenerIDCategoriaSeleccionada();
+
+        // 3. Necesitas una forma en jifProductoServicios para DEVOLVER el ProductoServicio seleccionado
+        // Puedes pasar una referencia de jifPagos a jifProductoServicios,
+        // y jifProductoServicios, al seleccionar un producto, llama a un método en jifPagos
+        // Por ejemplo: jifProductoServicios.setJifPagosParent(this);
+        // En jifProductoServicios.btnSeleccionarProductoActionPerformed:
+        //   ProductoServicio ps = obtenerProductoSeleccionadoDeLaTabla();
+        
+        //   this.dispose();
+
+        // TEMPORAL: Necesitas implementar el mecanismo para que jifProductoServicios devuelva el objeto ProductoServicio seleccionado
+        // Mientras tanto, tu código original solo abre la ventana. El resto (selección y retorno) debe estar en jifProductoServicios.
+        // Asumiremos que, al cerrar jifProductoServicios después de una selección, la variable `jifPagos.productoServicio` estática *se llenará*
+        // (aunque usar static para esto no es la mejor práctica, usaremos tu estructura existente).
+
+        jfPrincipal.menuProductoServicios.listarProductoServicio(paginaActual, tamanioPagina); // Iniciar la búsqueda con la categoría filtrada
+        jfPrincipal.menuProductoServicios.toFront();
+
+        // IMPORTANTE: La lógica de habilitar btnAgregarConcepto debe ejecutarse *después* de que se ha seleccionado un producto
+        // en `jifProductoServicios` y se ha retornado a `jifPagos`.
+        // Esto generalmente se hace en un método de callback o cuando detectas que `productoServicio` estático ya no es null.
+        if (productoServicio != null) btnAgregarConcepto.setEnabled(true);
     }//GEN-LAST:event_btnBuscarConceptoActionPerformed
 
     private void txtDatoBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDatoBusquedaKeyTyped
@@ -479,11 +572,26 @@ public class jifPagos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtDatoBusquedaKeyTyped
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        mostrarDatosPersona(txtDatoBusqueda.getText());        // TODO add your handling code here:
+        // Limpiar la lista de items y la matricula si se busca una nueva persona
+        tableModel.setRowCount(0);
+        actualizarTotalAPagar();
+        setMatriculaActual(null); // Limpiar matricula si se busca otra persona
+
+        mostrarDatosPersona(txtDatoBusqueda.getText()); // Esto carga alumno/padre en variables de instancia y UI
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void jcbTipoConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbTipoConsultaActionPerformed
-        limpiarCamposBusquedaPersona(); // TODO add your handling code here:
+        // Cuando cambia el tipo de consulta (DNI ALUMNO), limpiar los campos de persona
+        limpiarCamposBusquedaPersona();
+        alumnoActual = null;
+        padreActual = null;
+        // También limpiar la tabla de items y la matricula
+        tableModel.setRowCount(0);
+        actualizarTotalAPagar();
+        setMatriculaActual(null);
+         // Asegurarse de que la visibilidad de jpMatricula y la habilitacion de botones se ajuste
+         // Esto se maneja mejor al seleccionar la CategoriaProducto, pero un reset aquí no hace daño.
+         cargarPanelMatricula(); // Recarga el estado basado en la categoria actual
     }//GEN-LAST:event_jcbTipoConsultaActionPerformed
 
     private void btnQuitarConceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarConceptoActionPerformed
@@ -506,29 +614,61 @@ public class jifPagos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBuscarMatriculaActionPerformed
 
     private void jcbTipoCpbteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbTipoCpbteActionPerformed
-        TiposComprobante tipoSeleccionado = (TiposComprobante) jcbTipoCpbte.getSelectedItem();
+        // Guarda el objeto TiposComprobante seleccionado
+        tipoComprobanteSeleccionado = (TiposComprobante) jcbTipoCpbte.getSelectedItem();
 
-    // Verificar que tipoSeleccionado no sea null
-    if (tipoSeleccionado != null) {
-        // Obtener el ID del tipo de comprobante seleccionado
-        int idTipoComprobante = tipoSeleccionado.getIdTiposComprobante();  // Asumiendo que tienes un método getId() en TiposComprobante
-
-        // Obtener las series correspondientes al tipo seleccionado
-        List<Serie> seriesRelacionadas = serieFacade.obtenerTiposSeries(idTipoComprobante);
-
-        // Actualizar el combo de series con los valores obtenidos
-        cargarComboSerie(seriesRelacionadas);
-    }
+        // Actualiza el combo de series basado en el tipo de comprobante seleccionado
+        if (tipoComprobanteSeleccionado != null /*&& !(tipoComprobanteSeleccionado instanceof TiposComprobante && ((String)tipoComprobanteSeleccionado).startsWith("No hay tipos"))*/) {
+            TiposComprobante tiposComprobante = (TiposComprobante) tipoComprobanteSeleccionado;
+            int idTipoComprobante = tipoComprobanteSeleccionado.getIdTiposComprobante();
+            // mi SerieFacade tiene un método para obtener series por ID de TipoComprobante
+            List<Serie> seriesRelacionadas = serieFacade.obtenerTiposSeries(idTipoComprobante); 
+            cargarComboSerie(seriesRelacionadas);
+        } else {
+             cargarComboSerie(null); // Limpiar combo serie si no hay tipo seleccionado válido
+             serieSeleccionada = null; // Limpiar la serie seleccionada
+        }
     }//GEN-LAST:event_jcbTipoCpbteActionPerformed
 
     private void jcbSerieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbSerieActionPerformed
         // TODO add your handling code here:
-
+        // Guarda el objeto Serie seleccionado
+        serieSeleccionada = (Serie) jcbSerie.getSelectedItem();
+        // No se necesita lógica adicional aquí por ahora, el objeto ya está guardado
     }//GEN-LAST:event_jcbSerieActionPerformed
 
     private void jcbCategoriaProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaProductoActionPerformed
         // TODO add your handling code here:
+        // Guarda el objeto CategoriaProducto seleccionado
+        Object selectedItem = jcbCategoriaProducto.getSelectedItem();
+         if (selectedItem instanceof CategoriaProducto) {
+             categoriaProductoSeleccionada = (CategoriaProducto) selectedItem;
+         } else {
+             categoriaProductoSeleccionada = null; // Si es el placeholder o null
+         }
+
+        // Ajustar la UI (visibilidad de jpMatricula y habilitacion de botones)
         cargarPanelMatricula();
+
+        // Limpiar campos de concepto y la tabla de items
+        limpiarCamposProductosServ();
+        productoServicio = null; // Limpiar el producto temporalmente seleccionado
+
+        if (tableModel.getRowCount() > 0) {
+            // Opcional: Preguntar al usuario si quiere quitar los productos si cambia la categoria
+            // int confirm = Utils.mensajeConfirmacion("¿Desea limpiar la lista de productos al cambiar la categoría?");
+            // if (confirm == JOptionPane.YES_OPTION) {
+                Utils.mensajeInformacion("Limpiando lista de productos...");
+                tableModel.setRowCount(0);
+                actualizarTotalAPagar();
+            // } else {
+            //    // Considerar qué hacer si no se limpia - puede haber inconsistencias
+            // }
+        } else {
+            actualizarTotalAPagar(); // Asegurarse que el total sea 0 si la tabla ya estaba vacía
+        }
+
+        // La habilitacion de botones (buscar/agregar concepto, pagar) se maneja en cargarPanelMatricula y activarBotonProcesoPago
     }//GEN-LAST:event_jcbCategoriaProductoActionPerformed
 
     private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
@@ -538,7 +678,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarConcepto;
+    public static javax.swing.JButton btnAgregarConcepto;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarConcepto;
     private javax.swing.JButton btnBuscarMatricula;
@@ -601,52 +741,81 @@ public class jifPagos extends javax.swing.JInternalFrame {
         return esCorrecto;
     }
 
+    // Asegúrate de que mostrarDatosAlumno y mostrarDatosPadre guarden los objetos completos
     private void mostrarDatosAlumno(Alumno alumno, Padre padre) {
-        txtApellidosAlumno.setText(alumno.getApellidoAlumno());
-        txtNombresAlumno.setText(alumno.getNombreAlumno());
-        txtDniAlumno.setText(alumno.getDniAlumno());
-        txtNombresApellidosPadre.setText(padre.getApellidoPadre() + " " + padre.getNombrePadre());
-        txtDniPadre.setText(padre.getDniPadre());
+        this.alumnoActual = alumno; // Guardar objeto alumno
+        this.padreActual = padre; // Guardar objeto padre
+
+        txtApellidosAlumno.setText(alumno != null ? alumno.getApellidoAlumno() : LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombresAlumno.setText(alumno != null ? alumno.getNombreAlumno() : LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtDniAlumno.setText(alumno != null ? alumno.getDniAlumno() : LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombresApellidosPadre.setText(padre != null ? (padre.getApellidoPadre() + " " + padre.getNombrePadre()) : LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtDniPadre.setText(padre != null ? padre.getDniPadre() : LiteralesTexto.LITERAL_CADENA_VACIA);
+
+        // Cargar foto
         try {
-            if (alumno.getFoto() != null) {
+            if (alumno != null && alumno.getFoto() != null) {
                 Image image = Imagen.abrirImagen(alumno.getFoto());
                 Utils.cargarImagenEnLabel(image, lblFotoAlumno);
             } else {
+                // Si no hay alumno o no tiene foto, poner imagen por defecto
                 ImageIcon imageIcon = new ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/noDisponible.png"));
                 Utils.cargarImagenEnLabel(imageIcon.getImage(), lblFotoAlumno);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+             // Si hay un error al cargar la foto, poner imagen por defecto
+             ImageIcon imageIcon = new ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/noDisponible.png"));
+             Utils.cargarImagenEnLabel(imageIcon.getImage(), lblFotoAlumno);
         }
+        // Si se carga un alumno/padre, resetear la matricula actual si no coincide
+         if (matriculaActual != null && (this.alumnoActual == null || matriculaActual.getAlumno() == null || matriculaActual.getAlumno().getIdAlumno() != this.alumnoActual.getIdAlumno())) {
+             setMatriculaActual(null); // Limpiar info de matricula si no corresponde al nuevo alumno/padre
+         }
+          // Después de cargar los datos de la persona, habilitar btnBuscarConcepto (si la categoria no es Mensualidad)
+          // o btnBuscarMatricula (si es Mensualidad). Esto se maneja en cargarPanelMatricula().
+          cargarPanelMatricula();
     }
     
     private void mostrarDatosPadre(String dni) {
         try {
             Padre padre = padreFacade.findPadreByDni(dni);
             if (padre != null) {
-                Alumno alumno = alumnoFacade.findAlumnoByIdPadre(padre.getIdPadre());
-                if (alumno != null) {
-                    mostrarDatosAlumno(alumno, padre);
-                }
+                Alumno alumno = alumnoFacade.findAlumnoByIdPadre(padre.getIdPadre()); // Asumo un método para buscar Alumno por ID Padre
+                mostrarDatosAlumno(alumno, padre); // Este método guarda los objetos y actualiza UI
+            } else {
+                Utils.mensajeInformacion("No se encontró un Padre con el DNI ingresado.");
+                limpiarCamposBusquedaPersonaCompleta(); // Limpiar todos los campos de persona
             }
-
         } catch (Exception ex) {
             ex.printStackTrace();
+            Utils.mensajeError("Error al buscar padre: " + ex.getMessage());
+            limpiarCamposBusquedaPersonaCompleta();
         }
     }
 
     private void mostrarDatosAlumno(String dni){
         Alumno alumno = alumnoFacade.findAlumnoByDni(dni);
         if (alumno!= null){
-            mostrarDatosAlumno(alumno, alumno.getPadre());
+            Padre padre = alumno.getPadre(); // Asumo que Alumno tiene referencia a Padre
+            mostrarDatosAlumno(alumno, padre); // Este método guarda los objetos y actualiza UI
+        } else {
+             Utils.mensajeInformacion("No se encontró un Alumno con el DNI ingresado.");
+             limpiarCamposBusquedaPersonaCompleta();
         }
     }
 
     private void mostrarDatosPersona(String dni) {
-        if(jcbTipoConsulta.getSelectedIndex()==1){
-            mostrarDatosPadre(dni);
-        } else if (jcbTipoConsulta.getSelectedIndex()==0){
-            mostrarDatosAlumno(dni);
+        if (Utils.validarCadena(dni)) {
+            // Asumo que 0 es DNI ALUMNO y 1 es DNI PADRE en tu jcbTipoConsulta
+            if (jcbTipoConsulta.getSelectedIndex() == 0) { // DNI ALUMNO
+                mostrarDatosAlumno(dni);
+            } else if (jcbTipoConsulta.getSelectedIndex() == 1) { // DNI PADRE
+                mostrarDatosPadre(dni);
+            }
+        } else {
+            Utils.mensajeInformacion("Ingrese un DNI para buscar.");
+            limpiarCamposBusquedaPersonaCompleta();
         }
     }
 
@@ -665,19 +834,41 @@ public class jifPagos extends javax.swing.JInternalFrame {
     }
 
     private void limpiarCamposProductosServ1(){
+        // Limpiar campos de Matricula
         txtIdMatricula.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
         txtDetallesMatricula.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        matriculaActual = null; // Limpiar el objeto Matricula seleccionado
 
     }
 
     private void activarBotonProcesoPago(){
-        if (tblItemsConceptos.getRowCount() > 0) {
-            btnPagar.setEnabled(true);
-            btnQuitarConcepto.setEnabled(true);
+        boolean hayItemsEnTabla = tableModel.getRowCount() > 0;
+        boolean personaSeleccionada = alumnoActual != null || padreActual != null; // O basarse en txtDniAlumno/txtDniPadre
+        boolean esCategoriaMensualidad = categoriaProductoSeleccionada != null && categoriaProductoSeleccionada.getNombreCategoria().equalsIgnoreCase(LiteralesTexto.LITERAL_MENSUALIDAD);
+        boolean matriculaSeleccionada = matriculaActual != null;
+
+        // btnQuitarConcepto: Habilitado si hay items seleccionados en la tabla (tu lógica existente lo maneja, no lo sobreescribimos aquí)
+         btnQuitarConcepto.setEnabled(hayItemsEnTabla); // Tu listener de tabla lo hace
+
+        // btnPagar: Habilitado si hay items en la tabla Y (si es mensualidad) hay matricula seleccionada
+        if (hayItemsEnTabla) {
+             if (esCategoriaMensualidad) {
+                  btnPagar.setEnabled(matriculaSeleccionada); // Solo si hay items Y matricula para mensualidad
+             } else {
+                  btnPagar.setEnabled(true); // Habilitado si hay items para otras categorias
+             }
         } else {
-            btnPagar.setEnabled(false);
-            btnQuitarConcepto.setEnabled(false);
+             btnPagar.setEnabled(false); // Deshabilitado si no hay items
         }
+
+        // btnBuscarConcepto: Habilitado si hay persona seleccionada
+        btnBuscarConcepto.setEnabled(personaSeleccionada);
+
+        // btnAgregarConcepto: Habilitado por setProductoSeleccionado() cuando se selecciona un producto de la búsqueda.
+        // Inicialmente está deshabilitado.
+
+        // btnBuscarMatricula: Habilitado si es categoria Mensualidad Y hay persona seleccionada
+        btnBuscarMatricula.setEnabled(esCategoriaMensualidad && personaSeleccionada);
     }
 
     private void actualizarTotalAPagar(){
@@ -772,9 +963,11 @@ public class jifPagos extends javax.swing.JInternalFrame {
     }
 
     private void cargarInformacionEnCombos() {
-        cargarComboTipoComprobante(tiposComprobanteFacade.obtenerTiposComprobante());
-        
-        // 1. Guarda el ActionListener actual
+        // Cargar combo de Tipos de Comprobante
+        cargarComboTipoComprobante(tiposComprobanteFacade.obtenerTiposComprobante()); // Asumo que este método existe
+
+        // Cargar combo de Categoría Producto (sin disparar el ActionListener inicialmente)
+        // 1. Guarda el ActionListener actual (si lo hay)
         ActionListener[] listeners = jcbCategoriaProducto.getActionListeners();
 
         // 2. Remueve todos los ActionListeners para evitar que se dispare el evento
@@ -783,12 +976,23 @@ public class jifPagos extends javax.swing.JInternalFrame {
         }
 
         // 3. Carga los datos en el JComboBox
-        cargarComboCategoriaProducto(categoriaProductoFacade.getListadoCategoriaProducto());
+        cargarComboCategoriaProducto(categoriaProductoFacade.getListadoCategoriaProducto()); // Asumo que este método existe
 
         // 4. Vuelve a agregar los ActionListeners
         for (ActionListener listener : listeners) {
             jcbCategoriaProducto.addActionListener(listener);
         }
+
+         // Seleccionar el primer item por defecto y disparar su evento manualmente
+         if (jcbCategoriaProducto.getItemCount() > 0) {
+             jcbCategoriaProducto.setSelectedIndex(0);
+              // Disparar el evento ActionPerformed después de cargar los items
+              // Esto llamará a jcbCategoriaProductoActionPerformed y a cargarPanelMatricula()
+             ActionListener firstListener = jcbCategoriaProducto.getActionListeners()[0]; // Obtiene el primer listener
+             if (firstListener != null) {
+                  firstListener.actionPerformed(new java.awt.event.ActionEvent(jcbCategoriaProducto, java.awt.event.ActionEvent.ACTION_PERFORMED, null));
+             }
+         }
 
     }
 
@@ -798,6 +1002,12 @@ public class jifPagos extends javax.swing.JInternalFrame {
         if (lista == null || lista.isEmpty()) {
             jcbTipoCpbte.addItem("No hay tipos disponibles");
             jcbTipoCpbte.setEnabled(false);
+            // Limpiar combo serie también
+            jcbSerie.removeAllItems();
+            jcbSerie.addItem("No hay series disponibles");
+            jcbSerie.setEnabled(false);
+            tipoComprobanteSeleccionado = null;
+            serieSeleccionada = null;
             return;
         }
         jcbTipoCpbte.setEnabled(true);
@@ -814,6 +1024,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         if (lista == null || lista.isEmpty()) {
             jcbSerie.addItem("No hay tipos disponibles");
             jcbSerie.setEnabled(false); // Deshabilitar si no hay elementos
+            serieSeleccionada = null;
         } else {
             for (Serie serie : lista) {
                 jcbSerie.addItem(serie);
@@ -823,42 +1034,139 @@ public class jifPagos extends javax.swing.JInternalFrame {
         }
     }
 
-    private  void cargarComboCategoriaProducto(List<CategoriaProducto> lista){
+    private void cargarComboCategoriaProducto(List<CategoriaProducto> lista) {
         jcbCategoriaProducto.removeAllItems();
 
         if (lista == null || lista.isEmpty()) {
             jcbCategoriaProducto.addItem("No hay CATEGORIAS");
             jcbCategoriaProducto.setEnabled(false);
-            return;
+            categoriaProductoSeleccionada = null;
+        } else {
+            for (CategoriaProducto categorias : lista) {
+                jcbCategoriaProducto.addItem(categorias);
+            }
+            // No seleccionar el primer item aquí, se hace en cargarInformacionEnCombos()
+            // jcbCategoriaProducto.setSelectedIndex(0);
+            jcbCategoriaProducto.setEnabled(true);
         }
-        jcbCategoriaProducto.setEnabled(true);
-        for(CategoriaProducto categorias : lista){
-            jcbCategoriaProducto.addItem(categorias);
-        }
-        jcbCategoriaProducto.setSelectedIndex(0);
-        cargarPanelMatricula();
+        // La lógica de ajuste de panel/botones se llama desde el ActionPerformed del combo
+        // cargarPanelMatricula();
     }
 
     private void cargarPanelMatricula(){
-        String categoriaProducto = jcbCategoriaProducto.getSelectedItem().toString();
-        if(categoriaProducto.equalsIgnoreCase(LiteralesTexto.LITERAL_MENSUALIDAD)){
+        // Obtener la categoría seleccionada (ya debe estar en categoriaProductoSeleccionada)
+        boolean esCategoriaMensualidad = categoriaProductoSeleccionada != null && categoriaProductoSeleccionada.getNombreCategoria().equalsIgnoreCase(LiteralesTexto.LITERAL_MENSUALIDAD);
+
+        if(esCategoriaMensualidad){
             jpMatricula.setVisible(true);
-        } else{
+            // Limpiar campos de matricula si no hay una seleccionada o la seleccionada no coincide con el alumno actual
+             if (matriculaActual == null || (alumnoActual != null && !matriculaActual.getAlumno().equals(alumnoActual))) {
+                  limpiarCamposProductosServ1(); // Limpia campos de matricula y setea matriculaActual = null
+             }
+
+        } else {
             jpMatricula.setVisible(false);
-            limpiarCamposProductosServ1();
+            limpiarCamposProductosServ1(); // Limpiar campos de matricula y setea matriculaActual = null si no es mensualidad
         }
+
+        // Limpiar campos de concepto y producto seleccionado al cambiar de categoria
         limpiarCamposProductosServ();
-        if (tblItemsConceptos.getRowCount() > 0) {
-            Utils.mensajeInformacion("SE QUITARÁN LOS PRODUCTOS, YA AGREGADOS!!");
-            tableModel.setRowCount(0);
-        }
+        productoServicio = null;
+
+        // Re-evaluar la habilitación de botones
+        activarBotonProcesoPago();
     }
 
     public int obtenerIDCategoriaSeleccionada() {
-        Object selectedItem = jcbCategoriaProducto.getSelectedItem();
-        if (selectedItem instanceof CategoriaProducto) {
-            return ((CategoriaProducto) selectedItem).getIdCategoriaProd();
+        if (categoriaProductoSeleccionada != null) {
+            return categoriaProductoSeleccionada.getIdCategoriaProd();
         }
-        return -1; // En caso de que no haya una selección válida
+        return -1; // En caso de que no haya una selección válida o sea el placeholder
+    }
+
+    // Nuevo método para limpiar todos los campos de persona y objetos asociados
+    private void limpiarCamposBusquedaPersonaCompleta() {
+        txtApellidosAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombresAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtDniAlumno.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtNombresApellidosPadre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtDniPadre.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        txtDatoBusqueda.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+        lblFotoAlumno.setIcon(null); // Limpiar foto
+        this.alumnoActual = null;
+        this.padreActual = null;
+        setMatriculaActual(null); // Esto también limpia campos de matricula y ajusta visibilidad/habilitacion
+
+    }
+
+    // Este método DEBE ser llamado desde jifMatricula cuando el usuario selecciona una Matricula.
+    public void setMatriculaActual(Matricula matricula) {
+         this.matriculaActual = matricula; // Almacena el objeto Matricula completo
+
+          if (matricula != null) {
+              // Cargar los datos de la Matrícula en los campos de la UI
+              txtIdMatricula.setText(String.valueOf(matricula.getIdMatricula()));
+              // Asumo que la entidad Matricula tiene los getters necesarios
+              /*String detalles = "Periodo: " + (matricula.getPeriodo() != null ? matricula.getPeriodo() : "") +
+                               " - Grado: " + (matricula.getGrado() != null ? matricula.getGrado() : "") +
+                               " - Monto Cuota: " + (matricula.getMontoCuota() != null ? decimalFormat.format(matricula.getMontoCuota()) : "0.00");
+              txtDetallesMatricula.setText(detalles);*/
+
+              // Si al seleccionar la matricula no estaba cargado el alumno/padre, cargarlos
+              if (this.alumnoActual == null && matricula.getAlumno() != null) {
+                   mostrarDatosAlumno(matricula.getAlumno(), matricula.getAlumno().getPadre()); // Esto guardará alumnoActual y padreActual
+              }
+              // Si el alumno actual no coincide con el de la matricula, limpiar el alumno actual
+              else if (this.alumnoActual != null && (matricula.getAlumno() == null || !matricula.getAlumno().equals(this.alumnoActual))) {
+                  Utils.mensajeInformacion("La matrícula seleccionada no corresponde al alumno actual. Limpiando datos del alumno.");
+                  limpiarCamposBusquedaPersonaCompleta(); // Limpia todo
+              }
+
+
+          } else {
+               // Si se pasa null, limpiar los campos de Matricula y la variable de instancia
+               txtIdMatricula.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+               txtDetallesMatricula.setText(LiteralesTexto.LITERAL_CADENA_VACIA);
+               this.matriculaActual = null;
+          }
+
+         // Después de seleccionar/deseleccionar una matrícula, re-evaluar la habilitación de botones
+         cargarPanelMatricula(); // Esto ajusta la visibilidad del panel y llama a activarBotonProcesoPago()
+    }
+
+    // Método para limpiar los campos relevantes después de un pago exitoso
+    private void limpiarFormularioPago() {
+        // Limpiar campos de persona y objetos asociados
+        limpiarCamposBusquedaPersonaCompleta(); // Ahora usa el método completo
+
+        // Limpiar tabla de ítems
+        tableModel.setRowCount(0);
+        actualizarTotalAPagar(); // Esto pondrá el total en 0.00
+
+        // Limpiar campos de pago y objetos asociados
+        jdchFechaPago.setDate(new Date()); // Resetear a la fecha actual
+        if (jcbTipoCpbte.getItemCount() > 0) {
+             jcbTipoCpbte.setSelectedIndex(0); // Seleccionar el primer ítem, esto disparará la carga de series
+        } else {
+            cargarComboTipoComprobante(tiposComprobanteFacade.obtenerTiposComprobante()); // Recargar si no hay items
+        }
+        // jcbSerie se actualiza por el action listener de jcbTipoCpbte
+        txtPagoEfectivo.setText("0.00");
+        txtPagoYape.setText("0.00");
+        txtPagoPlin.setText("0.00");
+        txtTotalPago.setText("0.00"); // Ya se hizo con actualizarTotalAPagar()
+
+        // Limpiar campos de concepto y producto seleccionado
+        limpiarCamposProductosServ();
+        productoServicio = null;
+
+        // Limpiar campos de matricula y objeto seleccionado (ya incluido en limpiarCamposBusquedaPersonaCompleta)
+        // limpiarCamposProductosServ1(); // Redundante si usas limpiarCamposBusquedaPersonaCompleta
+
+        // Ajustar visibilidad y habilitación de botones basado en el estado inicial
+        // Esto se hace al limpiar campos de persona y matricula, y en cargarPanelMatricula() que se llama desde setMatriculaActual(null)
+         cargarPanelMatricula();
+
+
     }
 }
