@@ -921,8 +921,11 @@ public class jifMatricula extends javax.swing.JInternalFrame {
             case 0: //permite llamar desde la ventana pagos
                 int numeroFila=tblMatriculas.getSelectedRow();
                 if(numeroFila!=-1){
-                    jfPrincipal.menuPagos.txtIdMatricula.setText(tblMatriculas.getValueAt(numeroFila,0).toString());
+                    int codMatricula = Integer.parseInt(tblMatriculas.getValueAt(numeroFila,0).toString());
+                    Matricula unaMatricula = matriculaFacade.findMatriculaById(codMatricula);
+                    jfPrincipal.menuPagos.txtIdMatricula.setText(""+codMatricula);
                     jfPrincipal.menuPagos.txtDetallesMatricula.setText(tblMatriculas.getValueAt(numeroFila,12).toString()+" , "+tblMatriculas.getValueAt(numeroFila,13).toString()+" - "+tblMatriculas.getValueAt(numeroFila,14).toString());
+                    jfPrincipal.menuPagos.matriculaActual = unaMatricula;
                 }
                 try {
                     setClosed(true);
