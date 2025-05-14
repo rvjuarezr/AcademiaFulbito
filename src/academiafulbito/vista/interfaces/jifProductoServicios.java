@@ -342,7 +342,7 @@ public class jifProductoServicios extends javax.swing.JInternalFrame {
                     jfPrincipal.menuPagos.txtConceptoPago.setText(tblProductoServicio.getValueAt(nroFila, 1).toString());
                     jfPrincipal.menuPagos.txtPrecio.setText(tblProductoServicio.getValueAt(nroFila, 3).toString());
                     jfPrincipal.menuPagos.productoServicio=unProductoServicio;
-
+                    jfPrincipal.menuPagos.btnAgregarConcepto.setEnabled(true);
                 }
                 try{
                     setClosed(true);
