@@ -10,6 +10,8 @@
  */
 package academiafulbito.vista.interfaces;
 
+import academiafulbito.modelo.entidades.Usuario;
+import academiafulbito.vista.logueo.JFLogin;
 import academiafulbito.vista.utilidades.CabeceraPanel;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.MenuPanel;
@@ -73,9 +75,25 @@ public class jfPrincipal extends javax.swing.JFrame {
     private boolean menuVisible = true; // Controla la visibilidad del menú
     private JLayeredPane layeredPane;
 
+    // *** Variable de instancia para almacenar el usuario logueado ***
+    private Usuario usuarioLogueadoAplicacion;
+
     public jfPrincipal() {
         setUndecorated(false);// Configura la ventana sin bordes
         initComponents();
+
+        // *** OBTENER EL USUARIO LOGUEADO DESDE LA VARIABLE ESTATICA DE JFLogin ***
+        this.usuarioLogueadoAplicacion = JFLogin.usuario; // <<<--- OBTENEMOS EL OBJETO USUARIO AUTENTICADO
+
+        // *** Validar que el usuario se obtuvo correctamente ***
+        if (this.usuarioLogueadoAplicacion == null) {
+             // Esto NO deberia pasar si JFLogin creo jfPrincipal SOLO despues de un login exitoso,
+             // pero es una red de seguridad.
+             JOptionPane.showMessageDialog(this, "Error interno: No se recibió información de usuario logueado después del login.", "Error Fatal", JOptionPane.ERROR);
+             // Decide si lanzar excepcion o salir de la aplicacion.
+             // throw new IllegalStateException("Usuario logueado no puede ser null al iniciar jfPrincipal");
+             System.exit(1); // Salir de la aplicacion si no hay usuario
+        }
 
         // Maximizar la ventana del JFrame para ocupar toda la pantalla
         setExtendedState(JFrame.MAXIMIZED_BOTH);

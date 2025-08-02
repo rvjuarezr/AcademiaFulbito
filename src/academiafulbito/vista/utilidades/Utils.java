@@ -14,6 +14,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -360,6 +361,26 @@ public class Utils extends DefaultTableCellRenderer{
             }
         }
         return respuesta;
+    }
+
+    public static BigDecimal parseBigDecimal(DecimalFormat decimalFormat, String text) throws ParseException {
+        // Validar si el texto esta vacio o es null
+        if (text == null || text.trim().isEmpty()) {
+             // Retornar ZERO si el campo vacio representa 0.00
+             return BigDecimal.ZERO;
+        }
+        text = text.trim();
+
+        // Intenta parsear el texto usando el DecimalFormat configurado
+        // Esto manejara correctamente la coma como separador decimal y el punto como separador de miles.
+        Number parsedNumber = decimalFormat.parse(text);
+
+        // Convertir el Number parseado a BigDecimal
+        if (parsedNumber instanceof BigDecimal) {
+            return (BigDecimal) parsedNumber;
+        } else {
+            return new BigDecimal(parsedNumber.toString());
+        }
     }
     
 }

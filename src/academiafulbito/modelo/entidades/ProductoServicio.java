@@ -54,10 +54,14 @@ public class ProductoServicio {
     @Column(name = "tipo_producto", length = 1)
     private char tipo_producto;
 
+    // *** NUEVO CAMPO PARA ESTADO TRIBUTARIO ***
+    @Column(name = "estado_tributario", length = 50)
+    private String estadoTributario;
+    
     public ProductoServicio() {
     }
 
-    public ProductoServicio(int idProducto, String nombreProducto, String descripcion, BigDecimal precio, int stock, CategoriaProducto categoriaProducto, Estado estado,char tipo_producto) {
+    public ProductoServicio(int idProducto, String nombreProducto, String descripcion, BigDecimal precio, int stock, CategoriaProducto categoriaProducto, Estado estado,char tipo_producto, String estadoTributario) {
         this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
@@ -66,6 +70,7 @@ public class ProductoServicio {
         this.categoriaProducto = categoriaProducto;
         this.estado = estado;
         this.tipo_producto=tipo_producto;
+        this.estadoTributario = estadoTributario;
     }
 
     public CategoriaProducto getCategoriaProducto() {
@@ -132,7 +137,13 @@ public class ProductoServicio {
         this.tipo_producto = tipo_producto;
     }
 
+    // *** Getter y Setter para el nuevo campo ***
+    public String getEstadoTributario() {
+        return estadoTributario;
+    }
 
-
+    public void setEstadoTributario(String estadoTributario) {
+        this.estadoTributario = estadoTributario;
+    }
 
 }

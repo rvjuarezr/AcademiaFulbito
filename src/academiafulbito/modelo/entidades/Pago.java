@@ -5,7 +5,7 @@
 
 package academiafulbito.modelo.entidades;
 
-import academiafulbito.modelo.enums.EstadoPago;
+import academiafulbito.modelo.enums.Estado;
 import academiafulbito.modelo.enums.TipoPago;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -49,7 +49,7 @@ public class Pago {
 
     @Enumerated(EnumType.STRING) // Mapeo como tipo STRING
     @Column(name = "Estado")
-    private EstadoPago estadoPago;
+    private Estado estadoPago;
 
     @ManyToOne
     @JoinColumn(name = "ID_usuario", referencedColumnName = "ID_usuario")
@@ -112,11 +112,30 @@ public class Pago {
 
     @Column(name = "tipo_cambio", precision = 10, scale = 3)
     private BigDecimal tipoCambio;
-
+    // --- Nuevos campos para montos recibidos y cambio ---
+    @Column(name = "monto_efectivo_recibido", precision = 10, scale = 2)
+    private BigDecimal montoEfectivoRecibido;
+    @Column(name = "monto_yape_recibido", precision = 10, scale = 2)
+    private BigDecimal montoYapeRecibido;
+    @Column(name = "monto_plin_recibido", precision = 10, scale = 2)
+    private BigDecimal montoPlinRecibido;
+    @Column(name = "cambio_entregado", precision = 10, scale = 2)
+    private BigDecimal cambioEntregado;
+// --- Fin nuevos campos ---
     public Pago() {
+        // Inicializar los nuevos campos a 0.00 por defecto si no son null en DB
+        this.montoEfectivoRecibido = BigDecimal.ZERO;
+        this.montoYapeRecibido = BigDecimal.ZERO;
+        this.montoPlinRecibido = BigDecimal.ZERO;
+        this.cambioEntregado = BigDecimal.ZERO;
     }
 
-    public Pago(int idPago, Matricula matricula, Date fechaPago, BigDecimal monto, EstadoPago estadoPago, Usuario usuario, String correlativo, TiposComprobante tiposComprobante, String serieDocumento, String docIdentidad, String razonSocial, String tipoDocumento, BigDecimal operacionGravada, BigDecimal montoIgv, BigDecimal operacionInafecta, BigDecimal operacionExonerada, BigDecimal operacionGratuita, BigDecimal descuento, String motivoAnulado, TipoPago tipoPago, Date fechaHora, Date horaRegistro, String moneda, BigDecimal tipoCambio) {
+    public Pago(int idPago, Matricula matricula, Date fechaPago, BigDecimal monto, Estado estadoPago, Usuario usuario, 
+            String correlativo, TiposComprobante tiposComprobante, String serieDocumento, String docIdentidad, String razonSocial,
+            String tipoDocumento, BigDecimal operacionGravada, BigDecimal montoIgv, BigDecimal operacionInafecta,
+            BigDecimal operacionExonerada, BigDecimal operacionGratuita, BigDecimal descuento, String motivoAnulado, TipoPago tipoPago,
+            Date fechaHora, Date horaRegistro, String moneda, BigDecimal tipoCambio, BigDecimal montoEfectivoRecbido, BigDecimal montoYapeRecibido,
+            BigDecimal montoPlinRecibido, BigDecimal cambioEntregado) {
         this.idPago = idPago;
         this.matricula = matricula;
         this.fechaPago = fechaPago;
@@ -141,6 +160,10 @@ public class Pago {
         this.horaRegistro = horaRegistro;
         this.moneda = moneda;
         this.tipoCambio = tipoCambio;
+        this.montoEfectivoRecibido = montoEfectivoRecbido;
+        this.montoYapeRecibido = montoYapeRecibido;
+        this.montoPlinRecibido = montoPlinRecibido;
+        this.cambioEntregado = cambioEntregado;
     }
 
     public String getCorrelativo() {
@@ -167,11 +190,11 @@ public class Pago {
         this.docIdentidad = docIdentidad;
     }
 
-    public EstadoPago getEstadoPago() {
+    public Estado getEstadoPago() {
         return estadoPago;
     }
 
-    public void setEstadoPago(EstadoPago estadoPago) {
+    public void setEstadoPago(Estado estadoPago) {
         this.estadoPago = estadoPago;
     }
 
@@ -333,6 +356,38 @@ public class Pago {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public BigDecimal getCambioEntregado() {
+        return cambioEntregado;
+    }
+
+    public void setCambioEntregado(BigDecimal cambioEntregado) {
+        this.cambioEntregado = cambioEntregado;
+    }
+
+    public BigDecimal getMontoEfectivoRecibido() {
+        return montoEfectivoRecibido;
+    }
+
+    public void setMontoEfectivoRecibido(BigDecimal montoEfectivoRecibido) {
+        this.montoEfectivoRecibido = montoEfectivoRecibido;
+    }
+
+    public BigDecimal getMontoPlinRecibido() {
+        return montoPlinRecibido;
+    }
+
+    public void setMontoPlinRecibido(BigDecimal montoPlinRecibido) {
+        this.montoPlinRecibido = montoPlinRecibido;
+    }
+
+    public BigDecimal getMontoYapeRecibido() {
+        return montoYapeRecibido;
+    }
+
+    public void setMontoYapeRecibido(BigDecimal montoYapeRecibido) {
+        this.montoYapeRecibido = montoYapeRecibido;
     }
 
 }
