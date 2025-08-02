@@ -15,14 +15,22 @@ import academiafulbito.modelo.entidades.ProductoServicio;
 import academiafulbito.controlador.beans.AlumnoFacade;
 import academiafulbito.controlador.beans.CategoriaProductoFacade;
 import academiafulbito.controlador.beans.PadreFacade;
+import academiafulbito.controlador.beans.PagoFacade;
+import academiafulbito.controlador.beans.ProductoServicioFacade;
 import academiafulbito.controlador.beans.SerieFacade;
 import academiafulbito.controlador.beans.TiposComprobanteFacade;
+import academiafulbito.modelo.dto.ItemPagoDTO;
 import academiafulbito.modelo.entidades.Alumno;
 import academiafulbito.modelo.entidades.CategoriaProducto;
 import academiafulbito.modelo.entidades.Matricula;
 import academiafulbito.modelo.entidades.Padre;
+import academiafulbito.modelo.entidades.Pago;
 import academiafulbito.modelo.entidades.Serie;
 import academiafulbito.modelo.entidades.TiposComprobante;
+import academiafulbito.modelo.entidades.Usuario;
+import academiafulbito.modelo.enums.Estado;
+import academiafulbito.modelo.enums.TipoPago;
+import academiafulbito.vista.logueo.JFLogin;
 import academiafulbito.vista.utilidades.Imagen;
 import academiafulbito.vista.utilidades.LiteralesTexto;
 import academiafulbito.vista.utilidades.Utils;
@@ -31,12 +39,17 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -59,9 +72,11 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private TiposComprobanteFacade tiposComprobanteFacade;
     private SerieFacade serieFacade ;
     private CategoriaProductoFacade categoriaProductoFacade;
+    private PagoFacade pagoFacade;
+    private ProductoServicioFacade productoServicioFacade; // *** NUEVA INSTANCIA DEL FACADE ***
     jifProductoServicios menuProductoServicios;    
     DefaultTableModel tableModel;
-    private DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    private DecimalFormat decimalFormat;
 
     // Variables para almacenar los objetos seleccionados en los combos
     private TiposComprobante tipoComprobanteSeleccionado; // Objeto completo
@@ -72,15 +87,59 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private Alumno alumnoActual; // Objeto completo
     private Padre padreActual; // Objeto completo
     public static Matricula matriculaActual; // Objeto completo <-- Para el caso de pagos de matricula
+    // *** NUEVA LISTA PARALELA para almacenar los objetos ProductoServicio ***
+    private List<ProductoServicio> itemsProductosList = new ArrayList<ProductoServicio>();
+
+    // La variable de instancia para el usuario logueado en jifPagos.
+    // Ya la habiamos declarado asi cuando conceptualizamos pasarla por constructor.
+    // Ahora, en lugar de recibirla por constructor, la obtendremos de JFLogin.usuario
+    private Usuario usuarioLogueadoAplicacion; // Variable de instancia para guardar el usuario en esta ventana
 
     public jifPagos(JDesktopPane jdpModAF) {
         initComponents();
         jdp = jdpModAF;
+
+        // Es CRUCIAL que para este punto, el login ya se haya completado exitosamente
+        // y JFLogin.usuario haya sido llenado con el objeto Usuario autenticado.
+        this.usuarioLogueadoAplicacion = JFLogin.usuario; // <<<--- ACCEDEMOS A LA VARIABLE ESTATICA
+        // *** Validar que el usuario se obtuvo correctamente ***
+        // Si JFLogin solo crea jfPrincipal y luego jifPagos *despues* de un login exitoso,
+        // entonces `JFLogin.usuario` NO deberia ser null aqui.
+        if (this.usuarioLogueadoAplicacion == null) {
+             // Esto indica un problema en el flujo de inicio o que el login fallo/cancelo
+             // y esta ventana se abrio de todas formas.
+             JOptionPane.showMessageDialog(this, "Error interno: No se pudo obtener la información del usuario logueado al abrir la ventana de Pagos.", "Error Fatal", JOptionPane.ERROR);
+             // Decide si lanzar una excepcion o cerrar la ventana inmediatamente.
+             // dispose(); // Cerrar la ventana de pagos
+             // throw new IllegalStateException("Usuario logueado no puede ser null al iniciar jifPagos"); // Lanzar excepcion
+             System.err.println("Usuario logueado es NULL al iniciar jifPagos. Verificar flujo de login."); // Log del error
+             // Para evitar NullPointerException mas adelante, podrias deshabilitar botones clave:
+             btnPagar.setEnabled(false);
+             // Y salir de la inicializacion del constructor o de la ventana.
+        } else {
+             // Usuario obtenido con exito. Puedes usar this.usuarioLogueadoAplicacion.
+             System.out.println("jifPagos iniciado para usuario: " + this.usuarioLogueadoAplicacion.getNombreUsuario()); // Log o depuracion
+        }
+
         padreFacade = new PadreFacade();
         alumnoFacade = new AlumnoFacade();
         tiposComprobanteFacade = new TiposComprobanteFacade();
         serieFacade=new SerieFacade();
         categoriaProductoFacade = new CategoriaProductoFacade();
+        pagoFacade = new PagoFacade();
+        productoServicioFacade = new ProductoServicioFacade(); // *** Inicializa el nuevo facade ***
+
+        // *** Inicializar decimalFormat AQUI, con simbolos personalizados ***
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(','); // <<<--- Usar la COMA como separador decimal
+        symbols.setGroupingSeparator('.'); // <<<--- Usar el PUNTO como separador de miles
+
+        // Crea el DecimalFormat usando un patron que incluya separador de miles y decimal,
+        // y los simbolos personalizados.
+        // "#,##0.00" es un patron común: muestra separador de miles cada 3 digitos (con el GroupingSeparator),
+        // muestra al menos un digito antes del decimal (con 0), y muestra exactamente dos decimales (con .00 usando DecimalSeparator).
+        decimalFormat = new DecimalFormat("#,##0.00", symbols); // <<<--- Patrón y Símbolos
+
         jpMatricula.setVisible(false);
         tableModel = (DefaultTableModel) tblItemsConceptos.getModel();
         tableModel.addTableModelListener(new TableModelListener() {
@@ -97,20 +156,34 @@ public class jifPagos extends javax.swing.JInternalFrame {
         cargarInformacionEnCombos();
         jdchFechaPago.setDate(new Date()); // Establecer la fecha actual por defecto
 
+        // ... (Habilitacion/deshabilitacion inicial de botones y campos de pago) ...
+        // Asegurate que btnPagar este deshabilitado si usuarioLogueadoAplicacion es null
+        if (this.usuarioLogueadoAplicacion != null) { // Solo habilitar si hay usuario
+             btnPagar.setEnabled(false); // Se habilitara cuando haya items y (si es mensualidad) matricula
+        } else {
+             btnPagar.setEnabled(false); // Deshabilitado por defecto o si no hay usuario
+        }
+
         // Deshabilitar botones inicialmente si no hay items o matricula seleccionada (para Mensualidad)
         btnPagar.setEnabled(false);
         btnQuitarConcepto.setEnabled(false);
         btnAgregarConcepto.setEnabled(false); // Deshabilitar agregar hasta que se seleccione un concepto O una matricula (si aplica)
         btnBuscarConcepto.setEnabled(false); // Deshabilitar buscar hasta que se seleccione categoria Y (si es mensualidad) matricula
 
-        // Asegurarse de que los campos de pago inicien en 0.00 y sean editables (si quieres que el usuario ingrese montos)
-        txtPagoEfectivo.setText("0.00");
-        txtPagoYape.setText("0.00");
-        txtPagoPlin.setText("0.00");
+        
         txtPagoEfectivo.setEditable(true);
         txtPagoYape.setEditable(true);
         txtPagoPlin.setEditable(true);
         txtTotalPago.setEditable(false); // El total es solo para mostrar
+        
+        lblCambio.setText(decimalFormat.format(BigDecimal.ZERO));
+
+        // Asegurarse de que los campos de pago inicien en 0.00 y sean editables (si quieres que el usuario ingrese montos)
+        reiniciaPrecioFormaPago();
+        // Añadir listeners para actualizar el label de cambio y quizas validar input
+        initPaymentFieldsListeners();
+        //reiniciar los valor de UI
+        reiniciarPreciosUI();
     }
     
 
@@ -142,21 +215,6 @@ public class jifPagos extends javax.swing.JInternalFrame {
         txtConceptoPago = new javax.swing.JTextField();
         btnAgregarConcepto = new javax.swing.JButton();
         btnQuitarConcepto = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        jdchFechaPago = new com.toedter.calendar.JDateChooser();
-        jLabel8 = new javax.swing.JLabel();
-        jcbTipoCpbte = new javax.swing.JComboBox();
-        jLabel9 = new javax.swing.JLabel();
-        txtPagoEfectivo = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        txtPagoYape = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        txtPagoPlin = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
-        txtTotalPago = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jcbSerie = new javax.swing.JComboBox();
         jspTblItemsConceptos = new javax.swing.JScrollPane();
         tblItemsConceptos = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
@@ -176,6 +234,38 @@ public class jifPagos extends javax.swing.JInternalFrame {
         txtDniAlumno = new javax.swing.JTextField();
         jcbCategoriaProducto = new javax.swing.JComboBox();
         jLabel15 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jdchFechaPago = new com.toedter.calendar.JDateChooser();
+        jLabel8 = new javax.swing.JLabel();
+        jcbTipoCpbte = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
+        txtPagoEfectivo = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        txtPagoYape = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        txtPagoPlin = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        txtTotalPago = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jcbSerie = new javax.swing.JComboBox();
+        lblCambio = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        lblOperacionGravada = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        lblMontoIgv = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        lblOperacionInafecta = new javax.swing.JLabel();
+        lblOperacionExonerada = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        lblDescuento = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        lblOperacionGratuita = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel22 = new javax.swing.JLabel();
 
         setClosable(true);
         setTitle("PAGOS DIVERSOS");
@@ -184,7 +274,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Consultar Datos"));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jcbTipoConsulta.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        jcbTipoConsulta.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         jcbTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DNI ALUMNO" }));
         jcbTipoConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -224,7 +314,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jLabel1.setText("APELLIDOS");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 120, 30));
 
-        txtApellidosAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtApellidosAlumno.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         getContentPane().add(txtApellidosAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, 820, 30));
 
         jLabel2.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
@@ -251,7 +341,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setText("PRECIO");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 10, 180, 20));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, 180, 20));
 
         btnBuscarConcepto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/buscar.png"))); // NOI18N
         btnBuscarConcepto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -265,7 +355,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jPanel2.add(btnBuscarConcepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 60, 50));
 
         txtConceptoPago.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        jPanel2.add(txtConceptoPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 710, 50));
+        jPanel2.add(txtConceptoPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 410, 50));
 
         btnAgregarConcepto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/agregar.png"))); // NOI18N
         btnAgregarConcepto.setBorderPainted(false);
@@ -275,7 +365,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
                 btnAgregarConceptoActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAgregarConcepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 30, 60, 50));
+        jPanel2.add(btnAgregarConcepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 30, 60, 50));
 
         btnQuitarConcepto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/quitar.png"))); // NOI18N
         btnQuitarConcepto.setBorderPainted(false);
@@ -285,73 +375,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
                 btnQuitarConceptoActionPerformed(evt);
             }
         });
-        jPanel2.add(btnQuitarConcepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 30, 60, 50));
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel1.add(jdchFechaPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 160, 30));
-
-        jLabel8.setText("FECHA DEL PAGO");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 20));
-
-        jcbTipoCpbte.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbTipoCpbteActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jcbTipoCpbte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 140, 30));
-
-        jLabel9.setText("TIPO CPBTE.");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 130, 20));
-
-        txtPagoEfectivo.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtPagoEfectivo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPagoEfectivo.setText("0.00");
-        jPanel1.add(txtPagoEfectivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 150, 30));
-
-        jLabel12.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
-        jLabel12.setText("YAPE  ( S/.)");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 140, 30));
-
-        txtPagoYape.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtPagoYape.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPagoYape.setText("0.00");
-        jPanel1.add(txtPagoYape, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 150, 30));
-
-        jLabel13.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
-        jLabel13.setText("PLIN ( S/.)");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 140, 30));
-
-        txtPagoPlin.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
-        txtPagoPlin.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPagoPlin.setText("0.00");
-        jPanel1.add(txtPagoPlin, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 150, 30));
-
-        jLabel14.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
-        jLabel14.setText("EFECTIVO  ( S/.)");
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 140, 30));
-
-        txtTotalPago.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
-        txtTotalPago.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtTotalPago.setText("0.00");
-        jPanel1.add(txtTotalPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, 150, 30));
-
-        jLabel11.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
-        jLabel11.setText("TOTAL A PAGAR");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 140, 30));
-
-        jLabel18.setText("SERIE");
-        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 130, 20));
-
-        jcbSerie.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbSerieActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jcbSerie, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 150, 30));
-
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 90, 310, 240));
+        jPanel2.add(btnQuitarConcepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 30, 60, 50));
 
         tblItemsConceptos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -371,7 +395,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         });
         jspTblItemsConceptos.setViewportView(tblItemsConceptos);
 
-        jPanel2.add(jspTblItemsConceptos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 850, 240));
+        jPanel2.add(jspTblItemsConceptos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 850, 250));
 
         jLabel7.setText("CODIGO");
         jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 90, 20));
@@ -381,12 +405,12 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
         txtPrecio.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         txtPrecio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jPanel2.add(txtPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 180, 50));
+        jPanel2.add(txtPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 30, 180, 50));
 
         jLabel16.setText("CONCEPTO DE PAGO");
         jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 310, 20));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 1190, 340));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 870, 350));
 
         btnVerPagos.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
         btnVerPagos.setText("VER PAGOS");
@@ -423,6 +447,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jpMatricula.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtIdMatricula.setEditable(false);
+        txtIdMatricula.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         jpMatricula.add(txtIdMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 90, 30));
 
         btnBuscarMatricula.setIcon(new javax.swing.ImageIcon(getClass().getResource("/academiafulbito/vista/imagenes/buscar.png"))); // NOI18N
@@ -436,7 +461,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jpMatricula.add(btnBuscarMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, -1, 60));
 
         txtDetallesMatricula.setEditable(false);
-        jpMatricula.add(txtDetallesMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 850, 30));
+        txtDetallesMatricula.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        jpMatricula.add(txtDetallesMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 520, 30));
 
         jLabel17.setText("DETALLES DE LA MATRICULA DEL ALUMNO");
         jpMatricula.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 310, 20));
@@ -444,7 +470,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jLabel19.setText("ID MATRICULA");
         jpMatricula.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 100, 20));
 
-        getContentPane().add(jpMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 210, 1020, 60));
+        getContentPane().add(jpMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 210, 700, 60));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel4.setText("    DNI :");
@@ -464,6 +490,158 @@ public class jifPagos extends javax.swing.JInternalFrame {
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel15.setText("CATEGORIA PRODUCTO");
         getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 160, 20));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel1.add(jdchFechaPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 160, 30));
+
+        jLabel8.setText("FECHA DEL PAGO");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 20));
+
+        jcbTipoCpbte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbTipoCpbteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jcbTipoCpbte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 140, 30));
+
+        jLabel9.setText("TIPO CPBTE.");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 130, 20));
+
+        txtPagoEfectivo.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtPagoEfectivo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtPagoEfectivo.setText("0.00");
+        jPanel1.add(txtPagoEfectivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 150, 20));
+
+        jLabel12.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
+        jLabel12.setText("YAPE  ( S/.)");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 140, 20));
+
+        txtPagoYape.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtPagoYape.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtPagoYape.setText("0.00");
+        jPanel1.add(txtPagoYape, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 340, 150, 20));
+
+        jLabel13.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
+        jLabel13.setText("PLIN ( S/.)");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 140, 20));
+
+        txtPagoPlin.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        txtPagoPlin.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtPagoPlin.setText("0.00");
+        jPanel1.add(txtPagoPlin, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 360, 150, 20));
+
+        jLabel14.setBackground(new java.awt.Color(153, 255, 204));
+        jLabel14.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("FORMAS DE PAGO");
+        jLabel14.setOpaque(true);
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, 300, 20));
+
+        txtTotalPago.setBackground(new java.awt.Color(255, 255, 153));
+        txtTotalPago.setFont(new java.awt.Font("Bookman Old Style", 1, 24));
+        txtTotalPago.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtTotalPago.setText("0.00");
+        jPanel1.add(txtTotalPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 150, 30));
+
+        jLabel11.setBackground(new java.awt.Color(255, 255, 153));
+        jLabel11.setFont(new java.awt.Font("Bookman Old Style", 1, 14)); // NOI18N
+        jLabel11.setText("TOTAL A PAGAR");
+        jLabel11.setOpaque(true);
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, 140, 30));
+
+        jLabel18.setText("SERIE");
+        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 130, 20));
+
+        jcbSerie.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbSerieActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jcbSerie, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 150, 30));
+
+        lblCambio.setBackground(new java.awt.Color(255, 255, 153));
+        lblCambio.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
+        lblCambio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblCambio.setText("0.00");
+        lblCambio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblCambio.setOpaque(true);
+        jPanel1.add(lblCambio, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, 150, 30));
+
+        jLabel20.setBackground(new java.awt.Color(255, 255, 153));
+        jLabel20.setFont(new java.awt.Font("Bookman Old Style", 1, 14)); // NOI18N
+        jLabel20.setText("CAMBIO A DAR");
+        jLabel20.setOpaque(true);
+        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, 140, 30));
+
+        jLabel21.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
+        jLabel21.setText("OP. GRAVADA:");
+        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 140, 20));
+
+        lblOperacionGravada.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        lblOperacionGravada.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblOperacionGravada.setText("0.00");
+        lblOperacionGravada.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(lblOperacionGravada, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 150, 20));
+
+        jLabel23.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
+        jLabel23.setText("MONTO I.G.V:");
+        jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 140, 20));
+
+        lblMontoIgv.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        lblMontoIgv.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblMontoIgv.setText("0.00");
+        lblMontoIgv.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(lblMontoIgv, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 150, 150, 20));
+
+        jLabel25.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
+        jLabel25.setText("OP. INAFECTA:");
+        jPanel1.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 140, 20));
+
+        lblOperacionInafecta.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        lblOperacionInafecta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblOperacionInafecta.setText("0.00");
+        lblOperacionInafecta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(lblOperacionInafecta, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 150, 20));
+
+        lblOperacionExonerada.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        lblOperacionExonerada.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblOperacionExonerada.setText("0.00");
+        lblOperacionExonerada.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(lblOperacionExonerada, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 150, 20));
+
+        jLabel28.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
+        jLabel28.setText("OP. EXONERADA:");
+        jPanel1.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 140, 20));
+
+        lblDescuento.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        lblDescuento.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblDescuento.setText("0.00");
+        lblDescuento.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(lblDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 150, 20));
+
+        jLabel30.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
+        jLabel30.setText("TOTAL DSCTO.:");
+        jPanel1.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 140, 20));
+
+        jLabel31.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
+        jLabel31.setText("TOTAL GRATUITA:");
+        jPanel1.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 140, 20));
+
+        lblOperacionGratuita.setFont(new java.awt.Font("Bookman Old Style", 1, 18));
+        lblOperacionGratuita.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblOperacionGratuita.setText("0.00");
+        lblOperacionGratuita.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(lblOperacionGratuita, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 150, 20));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 320, 10));
+        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 320, -1));
+
+        jLabel22.setFont(new java.awt.Font("Bookman Old Style", 1, 14));
+        jLabel22.setText("EFECTIVO  ( S/.)");
+        jPanel1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 140, 20));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 210, 320, 420));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -673,6 +851,264 @@ public class jifPagos extends javax.swing.JInternalFrame {
 
     private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
         // TODO add your handling code here:
+
+        // *** Validar que el usuario logueado esta disponible ***
+        if (this.usuarioLogueadoAplicacion == null) {
+             // Esto no deberia ocurrir si el constructor valido correctamente,
+             // pero es una capa adicional de seguridad antes de llamar al Facade.
+             JOptionPane.showMessageDialog(this, "No se pudo registrar el pago: Usuario no autenticado.", "Error", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+
+        // 1. Obtener y Validar el Total a Pagar (UI)
+        BigDecimal totalAPagarCalculado = BigDecimal.ZERO;
+        try {
+            totalAPagarCalculado = Utils.parseBigDecimal(decimalFormat, txtTotalPago.getText());
+            if (totalAPagarCalculado.compareTo(BigDecimal.ZERO) <= 0) {
+                Utils.mensajeInformacion("No hay conceptos agregados o el total a pagar es cero. No se puede procesar el pago.");
+                return;
+            }
+        } catch (ParseException e) {
+             Utils.mensajeError("El total a pagar no es un número válido: " + e.getMessage());
+             return;
+        }
+
+        // 2. Validar y obtener montos recibidos por tipo de pago (Contado) (UI)
+        BigDecimal montoEfectivo = BigDecimal.ZERO;
+        BigDecimal montoYape = BigDecimal.ZERO;
+        BigDecimal montoPlin = BigDecimal.ZERO;
+        BigDecimal vueltoAEntregar = BigDecimal.ZERO;
+        BigDecimal totalPagadoIngresado = BigDecimal.ZERO;
+
+        try {
+            montoEfectivo = Utils.parseBigDecimal(decimalFormat, txtPagoEfectivo.getText());
+            montoYape = Utils.parseBigDecimal(decimalFormat, txtPagoYape.getText());
+            montoPlin = Utils.parseBigDecimal(decimalFormat, txtPagoPlin.getText());
+            vueltoAEntregar = Utils.parseBigDecimal(decimalFormat, lblCambio.getText());
+
+            totalPagadoIngresado = montoEfectivo.add(montoYape).add(montoPlin);
+
+        } catch (ParseException e) {
+            Utils.mensajeError("Uno o más montos de pago ingresados (Efectivo, Yape, Plin, Cambio a Dar) no son números válidos: " + e.getMessage());
+            return;
+        }
+
+        // 3. Validar que la suma pagada es suficiente para el Pago al Contado (UI)
+        if (totalPagadoIngresado.compareTo(totalAPagarCalculado) < 0) {
+            Utils.mensajeError("El total pagado (" + decimalFormat.format(totalPagadoIngresado) + ") es menor que el total a pagar ("
+                    + decimalFormat.format(totalAPagarCalculado) + ").");
+            return;
+        }
+
+        // 4. Calcular y Mostrar Cambio (ya se hizo y mostró en actualizarLabelCambio())
+        
+        // 5. Recolectar Información Adicional Necesaria para el Objeto Pago y Entidades Relacionadas
+        Date fechaPago = jdchFechaPago.getDate();
+        if (fechaPago == null) {
+            Utils.mensajeError("Error interno: La fecha del pago no está seleccionada.");
+            return;
+        }
+
+        TiposComprobante tipoComprobante = this.tipoComprobanteSeleccionado;
+        if (tipoComprobante == null || !(tipoComprobante instanceof TiposComprobante)) {
+            Utils.mensajeError("Debe seleccionar un Tipo de Comprobante válido.");
+            return;
+        }
+
+        Serie serie = this.serieSeleccionada;
+        if (serie == null || !(serie instanceof Serie)) {
+            Utils.mensajeError("Debe seleccionar una Serie válida.");
+            return;
+        }
+
+        // Datos del cliente: Usamos las variables de instancia `alumnoActual` y `padreActual`
+        String docIdentidad = "";
+        String razonSocial = null;
+        String tipoDocumentoCliente = "";
+        // *** LÓGICA PARA DETERMINAR EL TIPO Y DATOS DEL DOCUMENTO DEL CLIENTE ***
+        // Copia/Adapta la lógica del punto 5 de la explicacion anterior.
+        // EJEMPLO SIMPLE: Usa DNI/Nombre del Padre (si existe) o Alumno, y asume tipo '1' (DNI).
+        if (padreActual != null) {
+            docIdentidad = padreActual.getDniPadre();
+            razonSocial = padreActual.getApellidoPadre() + " " + padreActual.getNombrePadre();
+            tipoDocumentoCliente = "1"; // Asumo '1' para DNI
+        } else if (alumnoActual != null) {
+            docIdentidad = alumnoActual.getDniAlumno();
+            razonSocial = alumnoActual.getApellidoAlumno() + " " + alumnoActual.getNombreAlumno();
+            tipoDocumentoCliente = "1"; // Asumo '1' para DNI
+        } else {
+            Utils.mensajeError("Error interno: No se ha seleccionado un Alumno/Apoderado para registrar el pago.");
+            return;
+        }
+
+        // Matrícula: Usamos la variable de instancia `matriculaActual`
+        Matricula matriculaParaPago = this.matriculaActual;
+
+        // Validamos que, si la categoría es Mensualidad, la matricula esté seleccionada.
+        if (categoriaProductoSeleccionada != null && categoriaProductoSeleccionada.getNombreCategoria().equalsIgnoreCase(LiteralesTexto.LITERAL_MENSUALIDAD)) {
+            if (matriculaParaPago == null) {
+                Utils.mensajeError("Para registrar un pago de Mensualidad, debe buscar y seleccionar una Matrícula.");
+                return;
+            }
+        }
+
+        // Usuario logueado: *** USANDO LA VARIABLE DE INSTANCIA OBTENIDA EN EL CONSTRUCTOR ***
+        // Ya no necesitamos leer JFLogin.usuario aqui, ya esta en `this.usuarioLogueadoAplicacion`
+        Usuario usuarioLogueadoParaPago = this.usuarioLogueadoAplicacion; // <<-- Usamos la variable de instancia
+
+        // 6. Calcular Desglose de Montos (operacionGravada, montoIgv, etc.) - Lógica en UI
+        // No se calcula de nuevo aquí, pero se obtienen los valores de los labels para el objeto Pago.
+        // Asegurarse de que los labels esten actualizados antes de leerlos!
+        // llamar a actualizarDesgloseTributarioUI() justo antes si no confias en el TableModelListener.
+        // actualizarDesgloseTributarioUI(); // Opcional, si no confias en el listener
+        BigDecimal totalOperacionGravada = BigDecimal.ZERO;
+        BigDecimal totalMontoIgv = BigDecimal.ZERO;
+        BigDecimal totalOperacionInafecta = BigDecimal.ZERO;
+        BigDecimal totalOperacionExonerada = BigDecimal.ZERO;
+        BigDecimal totalOperacionGratuita = BigDecimal.ZERO;
+        BigDecimal totalDescuento = BigDecimal.ZERO;
+
+        try {
+            // Leemos los valores YA CALCULADOS Y MOSTRADOS en los labels
+            totalOperacionGravada = Utils.parseBigDecimal(decimalFormat, lblOperacionGravada.getText());
+            totalMontoIgv = Utils.parseBigDecimal(decimalFormat, lblMontoIgv.getText());
+            totalOperacionInafecta = Utils.parseBigDecimal(decimalFormat, lblOperacionInafecta.getText());
+            totalOperacionExonerada = Utils.parseBigDecimal(decimalFormat, lblOperacionExonerada.getText());
+            totalOperacionGratuita = Utils.parseBigDecimal(decimalFormat, lblOperacionGratuita.getText());
+            totalDescuento = Utils.parseBigDecimal(decimalFormat, lblDescuento.getText());
+
+        } catch (ParseException e) {
+             Utils.mensajeError("Error al leer los valores calculados del desglose desde la interfaz: " + e.getMessage());
+             return; // Detener si no podemos leer el desglose calculado.
+        }
+
+        // 7. Preparar el Objeto Pago (Instancia Java) - Llenar con todos los datos
+        Pago nuevoPago = new Pago();
+        // ID_pago autogenerado
+        // Matricula, Usuario, TiposComprobante, Serie se asignan en el Facade con los objetos adjuntos
+        nuevoPago.setFechaPago(fechaPago);
+        nuevoPago.setMonto(totalAPagarCalculado); // Monto TOTAL del comprobante.
+        // *** ASIGNAR LOS NUEVOS CAMPOS DE MONTOS RECIBIDOS Y CAMBIO ***
+        // Asegurate de setear los valores a 0.00 si no se usó ese método de pago.
+        // Yape y Plin son el monto exacto ingresado. Efectivo es el monto exacto ingresado.
+        nuevoPago.setMontoEfectivoRecibido(montoEfectivo); // El monto que el cliente dio en efectivo
+        nuevoPago.setMontoYapeRecibido(montoYape);       // El monto que el cliente dio por Yape
+        nuevoPago.setMontoPlinRecibido(montoPlin);       // El monto que el cliente dio por Plin
+        nuevoPago.setCambioEntregado(vueltoAEntregar);      // El cambio a entregar (0 si no hubo cambio positivo)
+        nuevoPago.setEstadoPago(Estado.ACTIVO); // Enum de tu entidad/DB ('Activo')
+        // Correlativo se asigna en el Facade
+        nuevoPago.setDocIdentidad(docIdentidad);
+        nuevoPago.setRazonSocial(razonSocial);
+        nuevoPago.setTipoDocumento(tipoDocumentoCliente);
+        // Asignar los montos de desglose calculados
+        nuevoPago.setOperacionGravada(totalOperacionGravada);
+        nuevoPago.setMontoIgv(totalMontoIgv);
+        nuevoPago.setOperacionInafecta(totalOperacionInafecta);
+        nuevoPago.setOperacionExonerada(totalOperacionExonerada);
+        nuevoPago.setOperacionGratuita(totalOperacionGratuita);
+        nuevoPago.setDescuento(totalDescuento);
+        nuevoPago.setMotivoAnulado(null);
+        nuevoPago.setTipoPago(TipoPago.CONTADO); // Enum de tu entidad/DB. HARDCODEADO A CONTADO.
+        nuevoPago.setFechaHora(new Date()); // Fecha y hora actual del registro.
+        nuevoPago.setHoraRegistro(new Date()); // Hora actual del registro.
+        nuevoPago.setMoneda("PEN");
+        nuevoPago.setTipoCambio(null); // null para PEN
+
+
+        // 8. EXTRAER DATOS DE LA TABLA SWING Y PASAR AL FACADE
+        // Creamos la lista de DTOs para los detalles del pago.
+        List<ItemPagoDTO> itemsParaDetalle = new java.util.ArrayList<ItemPagoDTO>();
+        if (!itemsProductosList.isEmpty()) { // Iteramos sobre la lista paralela de objetos
+            // Validamos que las listas tengan el mismo tamaño, si no, algo anda mal.
+            if (itemsProductosList.size() != tableModel.getRowCount()) {
+                Utils.mensajeError("Error interno: El número de ítems en la lista y la tabla no coincide.");
+                return;
+            }
+
+            for (int i = 0; i < itemsProductosList.size(); i++) {
+                try {
+                    // Obtenemos el objeto ProductoServicio de la lista paralela
+                    ProductoServicio prodServicio = itemsProductosList.get(i);
+                    // Obtener cantidad y subtotal de la tabla usando parseBigDecimal()
+                    String cantidadStr = tableModel.getValueAt(i, 4) != null ? tableModel.getValueAt(i, 4).toString().trim() :
+                        decimalFormat.format(BigDecimal.ONE.setScale(2, RoundingMode.HALF_UP)); // Columna 4: CANT
+                    String subtotalStr = tableModel.getValueAt(i, 5) != null ? tableModel.getValueAt(i, 5).toString().trim() :
+                        decimalFormat.format(BigDecimal.ZERO); // Columna 5: TOTAL
+
+                    BigDecimal cantidad = Utils.parseBigDecimal(decimalFormat, cantidadStr);
+                    BigDecimal subtotal = Utils.parseBigDecimal(decimalFormat, subtotalStr);
+
+                    // Validacion basica de datos (redundante si ya validaste al agregar/actualizar, pero seguro)
+                    if (prodServicio.getIdProducto() <= 0 || prodServicio.getPrecio().compareTo(BigDecimal.ZERO) < 0 || subtotal.compareTo(BigDecimal.ZERO) < 0) {
+                        Utils.mensajeError("Error: Datos inválidos en la fila " + (i + 1) + " de la tabla de ítems.");
+                        return; // Detener si un item es inválido
+                    }
+                    if (cantidad.compareTo(BigDecimal.ZERO) <= 0) {
+                        Utils.mensajeError("La cantidad debe ser mayor que cero en fila " + (i + 1));
+                        return;
+                    }
+
+                    // Crear el DTO (usando los datos de la tabla y el objeto ProductoServicio)
+                    itemsParaDetalle.add(new ItemPagoDTO(
+                            prodServicio.getIdProducto(), // ID del Producto desde el objeto (más seguro que la tabla String)
+                            prodServicio.getNombreProducto(), // Nombre desde el objeto
+                            prodServicio.getPrecio(), // Precio unitario desde el objeto
+                            cantidad, // Cantidad desde la tabla Swing
+                            subtotal // Subtotal desde la tabla Swing
+                            ));
+
+                } catch (ParseException e) {
+                     System.err.println("Error de formato al extraer datos de la tabla para DTO en fila " + (i + 1) + ": " + e.getMessage());
+                     Utils.mensajeError("Error al leer los datos numéricos de la tabla de ítems en la fila " + (i + 1) + ". Verifique los formatos.");
+                     return;
+                } catch (Exception e) { // Otros errores
+                     System.err.println("Error inesperado al extraer datos de la tabla para DTO en fila " + (i + 1) + ": " + e.getMessage());
+                     Utils.mensajeError("Error inesperado al preparar los datos de los ítems en la fila " + (i + 1) + ".");
+                     return;
+                }
+            }
+        } else {
+            // Si la lista de productos está vacía pero el total a pagar > 0 (ya validado), esto es un error lógico.
+             if (totalAPagarCalculado.compareTo(BigDecimal.ZERO) > 0) {
+                  Utils.mensajeError("Error: El total a pagar es mayor que cero, pero no hay ítems agregados.");
+                  return;
+             }
+             // Si total a pagar es 0 y la lista está vacía, no hay nada que procesar, la validación inicial lo manejo.
+        }
+
+
+        // 9. Llamar al PagoFacade para registrar el pago transactionalmente
+        try {
+            // Llamamos al Facade, pasando el objeto Pago, entidades relacionadas y la lista de items.
+            pagoFacade.registrarPagoContadoTransactionally(
+                    nuevoPago, // Objeto Pago (con desgloses ya puestos)
+                    serie, // Objeto Serie
+                    matriculaParaPago, // Objeto Matricula (puede ser null)
+                    usuarioLogueadoParaPago, // Objeto Usuario
+                    itemsParaDetalle // *** La lista de DTOs de los items ***
+            );
+
+
+            // Si el Facade no lanzó excepción, todo fue bien.
+            // El mensaje de éxito ya se mostró en el Facade.
+
+            // 10. Limpiar la interfaz después del éxito
+            limpiarFormularioPago();
+
+
+        } catch (Exception e) {
+            // 11. Manejar Errores que vienen del Facade
+            // El Facade ya hizo rollback si hubo un error de DB.
+            // Aquí mostramos el mensaje de error al usuario que viene del Facade.
+            System.err.println("Error al registrar pago (capturado en UI): " + e.getMessage());
+            e.printStackTrace(); // Imprimir stack trace para depuración
+            Utils.mensajeError("No se pudo registrar el pago: " + e.getMessage());
+            // No limpiar el formulario si hay un error, para que el usuario vea los datos.
+        }
+
+        // No se necesita bloque finally ni cerrar conexión/statements aquí,
+        // eso lo maneja el EntityManager dentro del Facade.
+        
     }//GEN-LAST:event_btnPagarActionPerformed
 
 
@@ -697,7 +1133,15 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
@@ -707,6 +1151,8 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JComboBox jcbCategoriaProducto;
     private javax.swing.JComboBox jcbSerie;
     private javax.swing.JComboBox jcbTipoConsulta;
@@ -714,7 +1160,14 @@ public class jifPagos extends javax.swing.JInternalFrame {
     private com.toedter.calendar.JDateChooser jdchFechaPago;
     private javax.swing.JPanel jpMatricula;
     private javax.swing.JScrollPane jspTblItemsConceptos;
+    private javax.swing.JLabel lblCambio;
+    private javax.swing.JLabel lblDescuento;
     private javax.swing.JLabel lblFotoAlumno;
+    private javax.swing.JLabel lblMontoIgv;
+    private javax.swing.JLabel lblOperacionExonerada;
+    private javax.swing.JLabel lblOperacionGratuita;
+    private javax.swing.JLabel lblOperacionGravada;
+    private javax.swing.JLabel lblOperacionInafecta;
     private javax.swing.JTable tblItemsConceptos;
     private javax.swing.JTextField txtApellidosAlumno;
     public static javax.swing.JTextField txtCodConceptoPago;
@@ -872,72 +1325,269 @@ public class jifPagos extends javax.swing.JInternalFrame {
     }
 
     private void actualizarTotalAPagar(){
-        BigDecimal totalAPagar = BigDecimal.ZERO;
-        for(int i=0; i< tableModel.getRowCount();i++){
-            totalAPagar = totalAPagar.add(new BigDecimal(tableModel.getValueAt(i, 5).toString()));
+        BigDecimal totalCalculado = BigDecimal.ZERO;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            try {
+                totalCalculado = totalCalculado.add(Utils.parseBigDecimal(decimalFormat, tableModel.getValueAt(i, 5).toString())); // Manejar coma y parsear
+            } catch (ParseException  e) {
+                System.err.println("Error al sumar total: Valor no numérico en la fila " + i + ", columna 5.");
+                e.printStackTrace();
+            }
         }
-        txtTotalPago.setText(totalAPagar.setScale(2,RoundingMode.HALF_UP).toString());
+        // Actualiza el JTextField del total
+        txtTotalPago.setText(decimalFormat.format(totalCalculado.setScale(2, RoundingMode.HALF_UP)));
+        this.totalAPagar = totalCalculado.setScale(2, RoundingMode.HALF_UP); // Actualiza variable de instancia
+
+        // *** LLAMAR AL METODO PARA ACTUALIZAR EL DESGLOSE EN LA UI ***
+        actualizarDesgloseTributarioUI();
+
+        // Llamar a activarBotonProcesoPago ya que el total o el número de items ha cambiado
+        activarBotonProcesoPago();
+
+        // El label de cambio se actualiza cuando se ingresan los montos en los campos de pago (Punto 5)
+        // No se actualiza automáticamente al cambiar el total a pagar.
+        txtPagoEfectivo.setText(decimalFormat.format(totalCalculado.setScale(2, RoundingMode.HALF_UP)));
+    }
+
+    // *** NUEVO METODO PARA CALCULAR Y ACTUALIZAR EL DESGLOSE TRIBUTARIO EN LOS LABELS DE LA UI ***
+    private void actualizarDesgloseTributarioUI(){
+        BigDecimal totalOperacionGravada = BigDecimal.ZERO;
+        BigDecimal totalMontoIgv = BigDecimal.ZERO;
+        BigDecimal totalOperacionInafecta = BigDecimal.ZERO;
+        BigDecimal totalOperacionExonerada = BigDecimal.ZERO;
+        BigDecimal totalOperacionGratuita = BigDecimal.ZERO; // Si aplica
+        BigDecimal totalDescuento = BigDecimal.ZERO;       // Si aplica
+
+        // La posicion en itemsProductosList corresponde a la fila en tableModel.
+        // *** LÓGICA DE DESGLOSE REAL (basada en itemsProductosList) ***
+        BigDecimal IGV_RATE;
+        // La posicion en itemsProductosList corresponde a la fila en tableModel.
+        try {
+            IGV_RATE = Utils.parseBigDecimal(decimalFormat, "0.18"); // Tasa de IGV
+            // Iterar sobre la lista de objetos ProductoServicio almacenados
+        } catch (ParseException ex) {
+            Utils.mensajeError("Error para obtener la Tasa de IGV");
+            return;
+        }
+        for (int i = 0; i < itemsProductosList.size(); i++) {
+            try {
+                // Obtenemos el objeto ProductoServicio de la lista paralela
+                ProductoServicio ps = itemsProductosList.get(i);
+
+                // Obtenemos el total de la fila CORRESPONDIENTE en la tabla Swing
+                // Aunque podriamos calcularlo de ps.getPrecio() * cantidad de la tabla,
+                // usar el total ya calculado en la tabla asegura consistencia visual.
+                // Validamos el indice antes de acceder a tableModel
+                BigDecimal totalItem = BigDecimal.ZERO;
+                if (i < tableModel.getRowCount()) {
+                    totalItem = Utils.parseBigDecimal(decimalFormat, tableModel.getValueAt(i, 5).toString());
+                } else {
+                    Utils.mensajeError("Error lógico: La lista de productos es más larga que la tabla Swing en el cálculo de desglose UI.");
+                    continue; // Saltar esta fila si no hay correspondencia
+                }
+
+                // Obtenemos el estado tributario del objeto ProductoServicio
+                String estadoTributario = ps.getEstadoTributario(); // Asumo que el getter existe y devuelve el String
+                // *** AQUI APLICAS LA LÓGICA DE CÁLCULO SEGÚN EL ESTADO TRIBUTARIO ***
+                // Debes usar los nombres de estado que guardas en la DB (ej: 'GRAVADO', 'EXONERADO', 'INAFECTO', 'GRATUITO')
+                // Considera el caso null o vacio si la columna `estado_tributario` permite null/vacio.
+                if (estadoTributario != null) {
+                    if (estadoTributario.equalsIgnoreCase("GRAVADO")) {
+                        // Cálculo para productos gravados
+                        BigDecimal operacionGravadaItem = totalItem.divide(BigDecimal.ONE.add(IGV_RATE), 2, RoundingMode.HALF_UP);
+                        BigDecimal montoIgvItem = totalItem.subtract(operacionGravadaItem).setScale(2, RoundingMode.HALF_UP);
+                        totalOperacionGravada = totalOperacionGravada.add(operacionGravadaItem);
+                        totalMontoIgv = totalMontoIgv.add(montoIgvItem);
+
+                    } else if (estadoTributario.equalsIgnoreCase("EXONERADO")) {
+                        // Cálculo para productos exonerados
+                        totalOperacionExonerada = totalOperacionExonerada.add(totalItem);
+
+                    } else if (estadoTributario.equalsIgnoreCase("INAFECTO")) {
+                        // Cálculo para productos inafectos
+                        totalOperacionInafecta = totalOperacionInafecta.add(totalItem);
+
+                    } else if (estadoTributario.equalsIgnoreCase("GRATUITO")) {
+                        // Cálculo para productos gratuitos (generalmente no suman al total de pago, pero si al desglose)
+                        // Si los productos gratuitos se añaden a la tabla con precio 0, su totalItem será 0.
+                        // Si se añaden con precio > 0 pero son gratuitos (ej: para muestras), la lógica es diferente.
+                        // Asumiendo que si estado es GRATUITO, su totalItem deberia ser 0 o se suma a operacion_gratuita.
+                        // Verifica tu logica de negocio para items gratuitos en la tabla Swing.
+                        totalOperacionGratuita = totalOperacionGratuita.add(totalItem);
+                        // Si totalItem > 0 para gratuitos, quizas NO SUMA al totalAPagarCalculado pero si va aqui? Revisa tu negocio.
+                    }
+                    // Agregar logica para DESCUENTO si aplica a nivel de item
+                    // totalDescuento = totalDescuento.add(...); // Si hay descuentos por item
+
+                } else {
+                    // Manejar caso donde el estado tributario es null o desconocido
+                    Utils.mensajeError("Advertencia: Estado tributario no definido para producto con ID " + ps.getIdProducto() + " ('" + ps.getNombreProducto() + "'). No se incluyó en el desglose.");
+                    // Decide si esto deberia detener el proceso o simplemente advertir.
+                }
+
+
+            } catch (ParseException ex){// |  ArithmeticException ex
+                System.err.println("Error calculando desglose para UI en fila " + i + ": " + ex.getMessage());
+                // Continuar con la siguiente fila si hay error en esta, o decidir detener.
+            } catch (IndexOutOfBoundsException ex){
+                Utils.mensajeError("Error: Indice fuera de rango al acceder a tableModel en fila " + i + ". Lista paralela y tabla desincronizadas?");
+                ex.printStackTrace();
+                break; // Detener el bucle si hay un problema grave de sincronizacion
+            }
+        }
+
+        // Los totales de Gratuita y Descuento si no se calcularon por item, serian 0.00 segun DDL.
+        // lblOperacionGratuita y lblDescuento labels ya existen en tu UI. Actualizalos.
+        lblOperacionGratuita.setText(decimalFormat.format(totalOperacionGratuita.setScale(2, RoundingMode.HALF_UP)));
+        lblDescuento.setText(decimalFormat.format(totalDescuento.setScale(2, RoundingMode.HALF_UP)));
+
+
+        // Actualizar el texto de los Labels de la UI con los totales calculados, formateados a 2 decimales.
+        lblOperacionGravada.setText(decimalFormat.format(totalOperacionGravada.setScale(2, RoundingMode.HALF_UP)));
+        lblMontoIgv.setText(decimalFormat.format(totalMontoIgv.setScale(2, RoundingMode.HALF_UP)));
+        lblOperacionInafecta.setText(decimalFormat.format(totalOperacionInafecta.setScale(2, RoundingMode.HALF_UP)));
+        lblOperacionExonerada.setText(decimalFormat.format(totalOperacionExonerada.setScale(2, RoundingMode.HALF_UP)));
+
+        // Nota: El lbl de Cambio se actualiza separadamente en el metodo btnPagarActionPerformed
+        // cuando se compara totalPagadoIngresado con totalAPagarCalculado.
+    }
+
+    // Método para calcular y mostrar el cambio a dar en el label
+    private void actualizarLabelCambio() {
+        try {
+            BigDecimal totalAPagarCambio = Utils.parseBigDecimal(decimalFormat, txtTotalPago.getText());
+            BigDecimal montoEfectivo = Utils.parseBigDecimal(decimalFormat, txtPagoEfectivo.getText());
+            BigDecimal montoYape = Utils.parseBigDecimal(decimalFormat, txtPagoYape.getText());
+            BigDecimal montoPlin = Utils.parseBigDecimal(decimalFormat, txtPagoPlin.getText());
+            BigDecimal totalPagado = montoEfectivo.add(montoYape).add(montoPlin);
+
+            BigDecimal cambio = totalPagado.subtract(totalAPagarCambio).setScale(2, RoundingMode.HALF_UP);
+
+            // Mostrar el cambio en el label
+            lblCambio.setText(decimalFormat.format(cambio)); 
+
+        } catch (ParseException  e) {
+            // Si hay error de formato en los campos de pago, mostrar 0.00 o un indicador de error
+            lblCambio.setText("ERROR"); // O "0.00"
+        } catch (ArithmeticException e) {
+            lblCambio.setText("ERROR"); // O "0.00"
+        }
     }
 
     private void agregarProductoAPagar(){
-        if (productoServicio != null) {
+        if (productoServicio != null) {// productoServicio es el objeto seleccionado temporalmente
 
-            //calcular total
+            // Validar que precio sea > 0 antes de agregar si es requerido
+            if (productoServicio.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
+                Utils.mensajeError("No se puede agregar un producto con precio cero o negativo.");
+                productoServicio = null; // Limpiar
+                limpiarCamposProductosServ();
+                btnAgregarConcepto.setEnabled(false);
+                return;
+            }
+
+            // *** AÑADIR EL OBJETO ProductoServicio A LA LISTA PARALELA ***
+            itemsProductosList.add(productoServicio);
+            
+            // Calcular total del item
             BigDecimal itemPrecio = productoServicio.getPrecio();
             BigDecimal itemCantidad = BigDecimal.ONE.setScale(2,RoundingMode.HALF_UP);   
             BigDecimal itemTotal = itemPrecio.multiply(itemCantidad).setScale(2,RoundingMode.HALF_UP);
 
+            // Datos a agregar a la tabla Swing
             Object item[] = {
-                "" + productoServicio.getIdProducto(),
-                "" + productoServicio.getCategoriaProducto().getIdCategoriaProd(),
-                productoServicio.getNombreProducto(),
-                itemPrecio.setScale(2,RoundingMode.HALF_UP),
-                itemCantidad,
-                itemTotal
+                String.valueOf(productoServicio.getIdProducto()),// Col 0: ID.PROD (oculta)
+                String.valueOf(productoServicio.getCategoriaProducto().getIdCategoriaProd()),// Col 1: ID.CAT.PROD (oculta)
+                productoServicio.getNombreProducto(),// Col 2: NOMBRE PRODUCTO
+                decimalFormat.format(itemPrecio.setScale(2, RoundingMode.HALF_UP)), // Col 3: PRECIO (formateado String)
+                decimalFormat.format(itemCantidad.setScale(0, RoundingMode.HALF_UP)), // Col 4: CANT (formateado String, sin decimales si es int)
+                decimalFormat.format(itemTotal.setScale(2, RoundingMode.HALF_UP)) // Col 5: TOTAL (formateado String)
             };
-            tableModel.addRow(item);
+            tableModel.addRow(item);            
 
-            //actualizar el total
-            actualizarTotalAPagar();
-            activarBotonProcesoPago();
-        }
-        int[] anchoColumnas = {
-            15,// idProd
-            15, //idCatPro
-            120, //prod
-            20, //precio
-            20, //cantidad
-            20 // total
-        }; // Anchos específicos para cada columna
-        Utils.setAnchoColumnas(tblItemsConceptos, anchoColumnas);
-        Utils.ocultarColumnas(tblItemsConceptos, 0);
-        Utils.ocultarColumnas(tblItemsConceptos, 1);
-        // Establece un renderizador personalizado para las celdas de la tabla.
-        tblItemsConceptos.setDefaultRenderer(Object.class, new Utils(14));
+            int[] anchoColumnas = {
+                15,// idProd
+                15, //idCatPro
+                120, //prod
+                20, //precio
+                20, //cantidad
+                20 // total
+            }; // Anchos específicos para cada columna
+            Utils.setAnchoColumnas(tblItemsConceptos, anchoColumnas);
+            Utils.ocultarColumnas(tblItemsConceptos, 0);// Ocultar ID.PROD
+            Utils.ocultarColumnas(tblItemsConceptos, 1);// Ocultar ID.CAT.PROD
+            // Establece un renderizador personalizado para las celdas de la tabla.
+            tblItemsConceptos.setDefaultRenderer(Object.class, new Utils(14));
 
-        // Establece el modo de selección de filas para permitir solo una selección a la vez.
-        tblItemsConceptos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        limpiarCamposProductosServ();
+            // Establece el modo de selección de filas para permitir solo una selección a la vez.
+            tblItemsConceptos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+            productoServicio = null;
+            limpiarCamposProductosServ();
+            btnAgregarConcepto.setEnabled(false); // Deshabilitar hasta nueva busqueda
+        }        
     }
 
     private void actualizarColumnaTotal(int filaSeleccionada) {
-        //obtener precio y cantidad
-        BigDecimal precioActualizado = new BigDecimal(tableModel.getValueAt(filaSeleccionada, 3).toString());
-        BigDecimal cantidadActualizada = new BigDecimal(tableModel.getValueAt(filaSeleccionada, 4).toString());
 
-        if (precioActualizado.compareTo(BigDecimal.ZERO) <= 0) {
-            Utils.mensajeError("El precio debe ser mayor que 0");
-            return;
+        if (filaSeleccionada < 0 || filaSeleccionada >= tableModel.getRowCount()) {
+            return; // Fila inválida
         }
 
-        if (cantidadActualizada.compareTo(BigDecimal.ZERO) <= 0) {
-            Utils.mensajeError("La Cantidad debe ser mayor que 0");
-            return;
-        }
+        try {
+            // Obtener precio y cantidad de las columnas editables usando parseBigDecimal()
+            String precioStr = tableModel.getValueAt(filaSeleccionada, 3) != null ? tableModel.getValueAt(filaSeleccionada, 3).toString().trim() : decimalFormat.format(BigDecimal.ZERO);
+            String cantidadStr = tableModel.getValueAt(filaSeleccionada, 4) != null ? tableModel.getValueAt(filaSeleccionada, 4).toString().trim() : "1";
 
-        //recalcular el total
-        BigDecimal totalCalculado = precioActualizado.multiply(cantidadActualizada).setScale(2, RoundingMode.HALF_UP);
-        tableModel.setValueAt(totalCalculado, filaSeleccionada, 5);
+            // *** Usar parseBigDecimal() ***
+            BigDecimal precioActualizado = Utils.parseBigDecimal(decimalFormat, precioStr);
+            BigDecimal cantidadActualizada = Utils.parseBigDecimal(decimalFormat, cantidadStr);
+
+            // Validar que los valores sean positivos (precio >= 0, cantidad > 0)
+            if (precioActualizado.compareTo(BigDecimal.ZERO) < 0 || cantidadActualizada.compareTo(BigDecimal.ZERO) <= 0) {
+                 Utils.mensajeError("El precio debe ser >= 0 y la cantidad > 0 en la fila " + (filaSeleccionada + 1));
+                 // Resetear valores invalidos a un valor por defecto (con formato local o como String si es entero)
+                 if(precioActualizado.compareTo(BigDecimal.ZERO) < 0) tableModel.setValueAt(decimalFormat.format(BigDecimal.ZERO), filaSeleccionada, 3);
+                 if(cantidadActualizada.compareTo(BigDecimal.ZERO) <= 0) tableModel.setValueAt("1", filaSeleccionada, 4); // Resetear cantidad a "1" String
+
+                 // Re-parsear valores de las celdas (posiblemente reseteadas)
+                 precioActualizado = Utils.parseBigDecimal(decimalFormat, tableModel.getValueAt(filaSeleccionada, 3).toString().trim());
+                 cantidadActualizada = Utils.parseBigDecimal(decimalFormat, tableModel.getValueAt(filaSeleccionada, 4).toString().trim());
+            }
+
+            // Opcional: Validar que la cantidad BigDecimal pueda convertirse a int si la DB/Entidad es INT
+             int cantidadInt;
+             try {
+                  cantidadInt = cantidadActualizada.intValueExact(); // Esto lanzara ArithmeticException si tiene decimales no cero
+             } catch (ArithmeticException ex) {
+                  Utils.mensajeError("La cantidad debe ser un número entero en la fila " + (filaSeleccionada + 1) + ". Se usará la parte entera.");
+                  cantidadInt = cantidadActualizada.intValue(); // Truncar o redondear si lo permites
+                  tableModel.setValueAt(String.valueOf(cantidadInt), filaSeleccionada, 4); // Actualizar la celda con el entero (como String)
+                   cantidadActualizada = BigDecimal.valueOf(cantidadInt); // Usar el entero para el calculo
+             }
+
+            // recalcular el total (Precio * Cantidad)
+            // Usar cantidadActualizada (BigDecimal) para el calculo, incluso si se guardara como int
+            BigDecimal totalCalculado = precioActualizado.multiply(cantidadActualizada).setScale(2, RoundingMode.HALF_UP);
+            // Actualizar el valor en la columna "TOTAL" (columna 5) con formato local
+            tableModel.setValueAt(decimalFormat.format(totalCalculado.setScale(2, RoundingMode.HALF_UP)), filaSeleccionada, 5);
+
+        } catch (ParseException e) {
+            // Si falla el parseo de precio o cantidad
+            System.err.println("Error de formato al editar fila " + filaSeleccionada + ": " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Ingrese valores numéricos válidos en Precio y Cantidad (fila " + (filaSeleccionada + 1) + ").", "Error de formato", JOptionPane.ERROR_MESSAGE);
+            // Resetear los valores invalidos a 0.00 o valor por defecto con formato local
+            tableModel.setValueAt(decimalFormat.format(BigDecimal.ZERO), filaSeleccionada, 3); // Precio a "0,00" o "0.00" segun el formato
+            tableModel.setValueAt("1", filaSeleccionada, 4); // Cantidad a "1"
+            tableModel.setValueAt(decimalFormat.format(BigDecimal.ZERO), filaSeleccionada, 5); // Total a "0,00" o "0.00"
+        } catch (Exception e) { // Capturar cualquier otra excepcion inesperada
+             System.err.println("Error inesperado al editar fila " + filaSeleccionada + ": " + e.getMessage());
+             e.printStackTrace();
+             // Resetear los valores problematicos
+             tableModel.setValueAt(decimalFormat.format(BigDecimal.ZERO), filaSeleccionada, 3);
+             tableModel.setValueAt("1", filaSeleccionada, 4);
+             tableModel.setValueAt(decimalFormat.format(BigDecimal.ZERO), filaSeleccionada, 5);
+        }
     }
 
     private void quitarProductoSeleccionado() {
@@ -945,12 +1595,19 @@ public class jifPagos extends javax.swing.JInternalFrame {
         if (nroFila != -1) {
             int retorno = Utils.mensajeConfirmacion(LiteralesTexto.ESTA_SEGURO_ELIMINAR_REGISTRO);
             switch (retorno) {
-                case JOptionPane.YES_OPTION: {
-                    tableModel.removeRow(nroFila);
+                case JOptionPane.YES_OPTION: {                  
 
-                    //actualizar el total
-                    actualizarTotalAPagar();
-                    activarBotonProcesoPago();
+                    // *** REMOVER EL OBJETO ProductoServicio DE LA LISTA PARALELA ***
+                    // La posicion en la lista es la misma que la fila en la tabla antes de removerla.
+                    if (nroFila < itemsProductosList.size()) {
+                        itemsProductosList.remove(nroFila);
+                    } else {
+                        Utils.mensajeError("Error lógico: No se encontró ProductoServicio en la lista paralela para la fila " + nroFila);
+                    }
+
+                    // Ahora remueve de la tabla Swing. Esto disparara el TableModelEvent.
+                    tableModel.removeRow(nroFila);// Elimina de la tabla Swing
+                    // La actualizacion del total y desgloses se maneja en el TableModelListener
                 }
                 break;
                 case JOptionPane.NO_OPTION: {
@@ -1135,13 +1792,18 @@ public class jifPagos extends javax.swing.JInternalFrame {
     }
 
     // Método para limpiar los campos relevantes después de un pago exitoso
-    private void limpiarFormularioPago() {
+    private void limpiarFormularioPago() {        
+
+        // *** LIMPIAR LA LISTA PARALELA ***
+        itemsProductosList.clear();// Elimina todos los objetos de la lista de Productos
+
+        // Limpiar tabla de ítems
+        tableModel.setRowCount(0);// Elimina todas las filas de la tabla Swing
+
         // Limpiar campos de persona y objetos asociados
         limpiarCamposBusquedaPersonaCompleta(); // Ahora usa el método completo
 
-        // Limpiar tabla de ítems
-        tableModel.setRowCount(0);
-        actualizarTotalAPagar(); // Esto pondrá el total en 0.00
+        actualizarTotalAPagar(); // Esto pondrá el total y los desgloses en 0.00
 
         // Limpiar campos de pago y objetos asociados
         jdchFechaPago.setDate(new Date()); // Resetear a la fecha actual
@@ -1151,9 +1813,7 @@ public class jifPagos extends javax.swing.JInternalFrame {
             cargarComboTipoComprobante(tiposComprobanteFacade.obtenerTiposComprobante()); // Recargar si no hay items
         }
         // jcbSerie se actualiza por el action listener de jcbTipoCpbte
-        txtPagoEfectivo.setText("0.00");
-        txtPagoYape.setText("0.00");
-        txtPagoPlin.setText("0.00");
+        reiniciaPrecioFormaPago();
         txtTotalPago.setText("0.00"); // Ya se hizo con actualizarTotalAPagar()
 
         // Limpiar campos de concepto y producto seleccionado
@@ -1168,5 +1828,43 @@ public class jifPagos extends javax.swing.JInternalFrame {
          cargarPanelMatricula();
 
 
+    }
+
+    // Para que el label de cambio (jLabel6) se actualice automáticamente al ingresar montos.
+    // Esto se hace mejor en el constructor o un metodo de inicializacion.
+    private void initPaymentFieldsListeners() {
+        DocumentListener paymentListener = new DocumentListener() {
+
+            public void changedUpdate(DocumentEvent e) {
+                actualizarLabelCambio();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                actualizarLabelCambio();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                actualizarLabelCambio();
+            }
+        };
+        txtPagoEfectivo.getDocument().addDocumentListener(paymentListener);
+        txtPagoYape.getDocument().addDocumentListener(paymentListener);
+        txtPagoPlin.getDocument().addDocumentListener(paymentListener);
+    }
+
+    private void reiniciaPrecioFormaPago(){
+        txtPagoEfectivo.setText(decimalFormat.format(BigDecimal.ZERO));
+        txtPagoYape.setText(decimalFormat.format(BigDecimal.ZERO));
+        txtPagoPlin.setText(decimalFormat.format(BigDecimal.ZERO));
+    }
+
+    private void reiniciarPreciosUI(){
+        lblOperacionGravada.setText(decimalFormat.format(BigDecimal.ZERO));
+        lblMontoIgv.setText(decimalFormat.format(BigDecimal.ZERO));
+        lblOperacionInafecta.setText(decimalFormat.format(BigDecimal.ZERO));
+        lblOperacionExonerada.setText(decimalFormat.format(BigDecimal.ZERO));
+        lblDescuento.setText(decimalFormat.format(BigDecimal.ZERO));
+        lblOperacionGratuita.setText(decimalFormat.format(BigDecimal.ZERO));
+        lblCambio.setText(decimalFormat.format(BigDecimal.ZERO));
     }
 }

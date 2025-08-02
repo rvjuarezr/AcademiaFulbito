@@ -294,38 +294,83 @@ public class JFLogin extends javax.swing.JFrame {
     private javax.swing.JPasswordField passwordField;
     // End of variables declaration//GEN-END:variables
 
+    // Metodo que realiza la validacion de credenciales usando el Facade
     private void validateUser() {
+        // Obtener la clave ingresada del campo de password
         String clave = new String(passwordField.getPassword());
-        String selectedRol = (String) cmbRol.getSelectedItem(); // Obtén el valor como String
+        // Obtener el Rol seleccionado del combo (el item seleccionado es un String)
+        String selectedRol = (String) cmbRol.getSelectedItem(); 
 
         Rol rolUser;
         try {
+            // Convertir el String seleccionado a un valor del Enum Rol
             rolUser = Rol.valueOf(selectedRol); // Convierte el String a Rol
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, "Rol no válido seleccionado.");
+            JOptionPane.showMessageDialog(this, "Rol seleccionado no válido.");
+            resetPassword(); // Limpiar clave si el rol es invalido
+            setEnabledNumericButtons(true); // Habilitar botones de nuevo
             return; // Sal del método si el rol no es válido
         }
         System.out.println("rolUser:" + rolUser.toString() + " - clave: " + clave);
 
-        boolean usuarioValido = usuarioFacade.validarUsuario("root", clave, rolUser);
+        // *** Llamar al Facade para autenticar y obtener el objeto Usuario ***
+        // Usamos el metodo del Facade que intenta autenticar y retorna el Usuario o null.
+        // Se asume que el Facade busca el usuario "root".
+        Usuario usuarioAutenticado = null;
+        try {
+             // Tu codigo ya tiene un usuarioFacade estatico, lo usaremos
+             usuarioAutenticado = JFLogin.usuarioFacade.autenticarUsuario(clave, rolUser); // <<-- Llamada al Facade
+        } catch (Exception e) {
+             // Capturar posibles excepciones lanzadas por el Facade (ej: error de BD)
+             System.err.println("Error al autenticar usuario en el Facade: " + e.getMessage());
+             e.printStackTrace(); // Imprimir stack trace
+             JOptionPane.showMessageDialog(this, "Error al intentar autenticar usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+             resetPassword(); // Limpiar clave tras error
+             setEnabledNumericButtons(true); // Habilitar botones de nuevo
+             return; // Salir del metodo
+        }
 
-        if (usuarioValido) {
+        if (usuarioAutenticado != null) {
+            // *** Autenticacion exitosa! ***
+            // *** ASIGNAR EL OBJETO USUARIO AUTENTICADO A LA VARIABLE ESTATICA ***
+            JFLogin.usuario = usuarioAutenticado; // <<<--- ESTO ES LO CRUCIAL
             setVisible(false);//se oculta la ventana
-            Utils.mensajeInformacion("Usuario válido. ¡Bienvenido!");
+            // Mostrar mensaje de bienvenida
+            Utils.mensajeInformacion("Usuario '" + usuarioAutenticado.getNombreUsuario() + "' autenticado. ¡Bienvenido!");
             principal = new jfPrincipal();
             principal.setVisible(true);
             principal.setTitle("ACADEMIA DE FULBTIO");
             principal.lblSesionUsuario.setText("HOLA : "+ rolUser.toString()+"  ");
         } else {
-            JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos.");
+            // *** Autenticacion fallida ***
+            JFLogin.usuario = null; // Aseguramos que la variable estatica sea null.
+
+            // Mostrar mensaje de error
+            JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos para el Rol seleccionado.", "Error de Autenticación", JOptionPane.ERROR_MESSAGE);
+
+            // Resetear la clave en el campo de password para intentar de nuevo.
+            resetPassword();
         }
 
+        // Re-habilitar los botones del teclado numerico (si se deshabilitaron)
+        setEnabledNumericButtons(true); // Implementar este metodo si no existe
         // Resetear la clave
         passwordField.setText("");
         passwordLength = 0;
     }
 
+    // Metodo para resetear el campo de clave
+    private void resetPassword() {
+         passwordField.setText("");
+         passwordLength = 0;
+          // Opcional: dar foco al campo passwordField
+          passwordField.requestFocusInWindow();
+    }
+
+    // Metodo que se llama al hacer clic en un boton del teclado numerico
     private void accionClicBoton(JButton button) {
+        // Añade el texto del boton al campo passwordField
+        // Tu logica actual limita a 4 digitos, lo cual es correcto.
         if (passwordLength < 4) {
             passwordField.setText(passwordField.getText() + button.getText());
             passwordLength++;
@@ -334,6 +379,21 @@ public class JFLogin extends javax.swing.JFrame {
             validateUser();
         }
     }
+
+    // Metodo auxiliar para habilitar/deshabilitar los botones del teclado numerico
+    // Necesitas implementar esto si deshabilitas los botones durante la validacion.
+     private void setEnabledNumericButtons(boolean enabled) {
+         // Asegurate que la lista `buttons` este populada (ej: llamando addBotonesALista en el constructor)
+         if (buttons != null) {
+             for (JButton btn : buttons) {
+                 btn.setEnabled(enabled);
+             }
+         }
+          // Tambien puedes deshabilitar el combo de Rol si quieres que no cambie durante la validacion
+          cmbRol.setEnabled(enabled);
+          // Y el passwordField (aunque ya es no editable, para asegurar)
+          passwordField.setEnabled(enabled);
+     }
 
     private void addBotonesALista() {
         // Añadir todos los botones a la lista

@@ -94,5 +94,8 @@ public class DetallePago {
         this.subtotal = subtotal;
     }
 
-    
+    @Override
+    public String toString() {
+        return "academiafulbito.modelo.entidades.DetallePago[ id=" + idDetalle + " ]";
+    }
 }

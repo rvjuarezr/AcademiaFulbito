@@ -12,8 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -75,7 +73,7 @@ public class ControlCorrelativo {
     public String toString() {
         return "ControlCorrelativo{" +
                 "idControlCorrelativo=" + idControlCorrelativo +
-                ", serie=" + (serie != null ? serie.getCodigo_serie() : "N/A") +
+                ", serie=" + (serie != null ? serie.getCodigoSerie() : "N/A") +
                 ", ultimoCorrelativo=" + ultimoCorrelativo +
                 '}';
     }

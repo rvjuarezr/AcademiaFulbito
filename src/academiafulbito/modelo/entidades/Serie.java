@@ -26,7 +26,7 @@ public class Serie {
     @Column(name = "ID_serie", nullable = false)
     private int idSerie;
     @Column(name = "codigo_serie", nullable = false, length = 10)
-    private String codigo_serie;
+    private String codigoSerie;
     @ManyToOne
     @JoinColumn(name = "ID_tipos_comprobante")
     private TiposComprobante tipoComprobantes;
@@ -35,16 +35,8 @@ public class Serie {
     }
 
     public Serie(String codigo_serie, TiposComprobante tipoComprobantes) {
-        this.codigo_serie = codigo_serie;
+        this.codigoSerie = codigo_serie;
         this.tipoComprobantes = tipoComprobantes;
-    }
-
-    public String getCodigo_serie() {
-        return codigo_serie;
-    }
-
-    public void setCodigo_serie(String codigo_serie) {
-        this.codigo_serie = codigo_serie;
     }
 
     public int getIdSerie() {
@@ -64,15 +56,15 @@ public class Serie {
     }
 
      public String getCodigoSerie() {
-        return codigo_serie;
+        return codigoSerie;
     }
 
     public void setCodigoSerie(String codigoSerie) {
-        this.codigo_serie = codigoSerie;
+        this.codigoSerie = codigoSerie;
     }
     @Override
     public String toString() {
-        return this.codigo_serie; // Muestra solo el nombre del tipo de comprobante
+        return this.codigoSerie; // Muestra solo el nombre del tipo de comprobante
     }
 
 }
